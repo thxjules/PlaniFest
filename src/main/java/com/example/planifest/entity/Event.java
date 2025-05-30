@@ -4,14 +4,20 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.example.planifest.enums.EventStatus;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -34,7 +40,7 @@ public class Event {
     @Column(nullable = false, length = 200)
     private String description;
 
-    @Column(name = "date", nullable = false)
+    @Column(nullable = false)
     private LocalDate date;
 
     @Column(name = "start_time", nullable = false)
@@ -49,15 +55,25 @@ public class Event {
     @Column(nullable = false, length = 100)
     private String location;
 
-    // Relationships
-    @OneToMany(mappedBy = "event")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private EventStatus status;
+
+    // Relación con Cliente
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    // Relación con Tareas
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
+    // Relación con Insumos
     @ManyToMany
-    @JoinTable(
-        name = "event_supply", 
-        joinColumns = @JoinColumn(name = "event_id"), 
-        inverseJoinColumns = @JoinColumn(name = "supply_id") 
-    )
-    private List<Supply> supplies; 
+    @JoinTable(name = "event_supply", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "supply_id"))
+    private List<Supply> supplies;
+
+    @ManyToMany
+    @JoinTable(name = "event_service", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private List<Service> services;
 }
