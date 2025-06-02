@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "services")
-public class Service {
+public class PlaniService {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
