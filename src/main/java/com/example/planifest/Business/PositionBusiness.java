@@ -1,4 +1,4 @@
-package com.example.planifest.Bussisnes;
+package com.example.planifest.Business;
 
 public class PositionBusiness {
 
