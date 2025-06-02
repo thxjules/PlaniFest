@@ -75,5 +75,5 @@ public class Event {
 
     @ManyToMany
     @JoinTable(name = "event_service", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
-    private List<Service> services;
+    private List<PlaniService> services;
 }

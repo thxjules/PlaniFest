@@ -1,5 +1,6 @@
 package com.example.planifest.service.dao;
 import java.util.List;
+
 public interface Idao <T, ID> {
 
     List<T> getAll();

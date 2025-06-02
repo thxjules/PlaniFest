@@ -2,10 +2,11 @@ package com.example.planifest.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.example.planifest.entity.PlaniService;
 import com.example.planifest.repository.PlaniServiceRepository;
 import com.example.planifest.service.dao.Idao;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PlaniServiceImp implements Idao<PlaniService, Long> {
@@ -28,7 +29,7 @@ public class PlaniServiceImp implements Idao<PlaniService, Long> {
 
     @Override
     public void update(PlaniService planiService) {
-        if (planiService.getId() != null && planiServiceRepository.existsById(planiService.getId())) {
+        if (planiService.getServiceId() != null && planiServiceRepository.existsById(planiService.getServiceId())) {
             planiServiceRepository.save(planiService);
         } else {
             throw new RuntimeException("El servicio no existe.");
