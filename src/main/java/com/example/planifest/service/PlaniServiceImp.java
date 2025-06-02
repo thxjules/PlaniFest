@@ -8,28 +8,28 @@ import com.example.planifest.service.dao.Idao;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServiceServiceImp implements Idao<Service, Long> {
+public class PlaniServiceImp implements Idao<PlaniService, Long> {
 
-    private final PlaniServiceRepository serviceRepository;
+    private final PlaniServiceRepository planiServiceRepository;
 
-    public ServiceServiceImp(PlaniServiceRepository serviceRepository) {
-        this.serviceRepository = serviceRepository;
+    public PlaniServiceImp(PlaniServiceRepository planiServiceRepository) {
+        this.planiServiceRepository = planiServiceRepository;
     }
 
     @Override
-    public List<Service> getAll() {
-        return serviceRepository.findAll();
+    public List<PlaniService> getAll() {
+        return planiServiceRepository.findAll();
     }
 
     @Override
-    public void create(Service service) {
-        serviceRepository.save(service);
+    public void create(PlaniService planiService) {
+        planiServiceRepository.save(planiService);
     }
 
     @Override
-    public void update(Service service) {
-        if (service.getId() != null && serviceRepository.existsById(service.getId())) {
-            serviceRepository.save(service);
+    public void update(PlaniService planiService) {
+        if (planiService.getId() != null && planiServiceRepository.existsById(planiService.getId())) {
+            planiServiceRepository.save(planiService);
         } else {
             throw new RuntimeException("El servicio no existe.");
         }
@@ -37,8 +37,8 @@ public class ServiceServiceImp implements Idao<Service, Long> {
 
     @Override
     public void deleteById(Long id) {
-        if (serviceRepository.existsById(id)) {
-            serviceRepository.deleteById(id);
+        if (planiServiceRepository.existsById(id)) {
+            planiServiceRepository.deleteById(id);
         } else {
             throw new RuntimeException("El servicio no existe.");
         }
