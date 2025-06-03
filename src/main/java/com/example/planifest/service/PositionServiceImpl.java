@@ -24,7 +24,9 @@ public class PositionServiceImpl implements Idao<Position, Long>{
 
     @Override
     public void create(Position position){
-         positionRepository.save(position);
+        if(position.getName()==null || position.getName().isBlank()){
+            throw new RuntimeException("No se puede crear una posicion sin un nombre asociado");
+        }
     }
 
     @Override

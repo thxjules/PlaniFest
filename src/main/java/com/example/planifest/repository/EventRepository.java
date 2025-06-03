@@ -1,4 +1,5 @@
 package com.example.planifest.repository;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,4 +23,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     // Buscar eventos posteriores a una fecha
     List<Event> findByDateAfter(LocalDate date);
+
 }
