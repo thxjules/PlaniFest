@@ -51,37 +51,38 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
         }
     }
 
-        private void stockMovementInfoRequired(StockMovement stockMovement) {
+    private void stockMovementInfoRequired(StockMovement stockMovement) {
 
-            if (stockMovement.getDate() == null  ) {
-                throw new RuntimeException("La fecha de creacion del movimiento del stock no puede ser nula" );
-            }
-            /* Si la fecha esta antes del dia en que se hizo */
-            if (stockMovement.getDate().isBefore(LocalDate.now())) {
-                throw new RuntimeException("La fecha en la que se crea el reporte no puede ser en el pasado");
-            }
-
-            if (stockMovement.getDate().isAfter(LocalDate.now())) {
-                throw new RuntimeException("La fecha del reporte de stock no pertenece a la fecha del dia de hoy");
-            }
-    
-
-            if (stockMovement.getQuantity() <= 0) {
-                throw new RuntimeException("La cantidad del movimiento stock debe ser mayor a cero, no Igual");
-            }
-
-            if(stockMovement.getType() == null) {
-                throw new RuntimeException("El tipo del movimiento que se esta haciendo no debe ser nulo ");
+        if (stockMovement.getDate() == null) {
+            throw new RuntimeException("La fecha de creacion del movimiento del stock no puede ser nula");
+        }
+        /* Si la fecha esta antes del dia en que se hizo */
+        if (stockMovement.getDate().isBefore(LocalDate.now())) {
+            throw new RuntimeException("La fecha en la que se crea el reporte no puede ser en el pasado");
         }
 
-        if(stockMovement.getRemarks() == null || stockMovement.getRemarks().isBlank()){
-            throw new RuntimeException("El movimiento Stock que estas creando no puede estar vacio, nesesitas una descripcion");
+        if (stockMovement.getDate().isAfter(LocalDate.now())) {
+            throw new RuntimeException("La fecha del reporte de stock no pertenece a la fecha del dia de hoy");
         }
 
-        if(stockMovement.getRemarks().length() > 200){
-            throw new RuntimeException("La descripcion de la observacion tiene que ser menos de 200 caracteres para ser creada");
+        if (stockMovement.getQuantity() <= 0) {
+            throw new RuntimeException("La cantidad del movimiento stock debe ser mayor a cero, no Igual");
+        }
+
+        if (stockMovement.getType() == null) {
+            throw new RuntimeException("El tipo del movimiento que se esta haciendo no debe ser nulo ");
+        }
+
+        if (stockMovement.getRemarks() == null || stockMovement.getRemarks().isBlank()) {
+            throw new RuntimeException(
+                    "El movimiento Stock que estas creando no puede estar vacio, nesesitas una descripcion");
+        }
+
+        if (stockMovement.getRemarks().length() > 200) {
+            throw new RuntimeException(
+                    "La descripcion de la observacion tiene que ser menos de 200 caracteres para ser creada");
+        }
+
     }
-
-        }
 
 }
