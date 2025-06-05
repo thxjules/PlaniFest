@@ -1,17 +1,14 @@
 package com.example.planifest.config;
 
-import java.util.Collections;
 import java.time.LocalDate;
-
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-
 import com.example.planifest.entity.Task;
 import com.example.planifest.enums.TaskStatus;
-import com.example.planifest.service.TaskServiceImp;
 import com.example.planifest.service.EventServiceImp;
+import com.example.planifest.service.TaskServiceImp;
 
 
 
@@ -36,9 +33,8 @@ public class TaskSeeder implements CommandLineRunner{
         task1.setStatus(TaskStatus.PENDING);
 
 
-        // para simplificar lista vacia
         
-        task1.setEvents(Collections.emptyList());
+       
 
         taskService.create(task1);
 
