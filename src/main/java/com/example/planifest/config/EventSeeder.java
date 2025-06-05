@@ -9,15 +9,19 @@ import org.springframework.stereotype.Component;
 
 import com.example.planifest.entity.Event;
 import com.example.planifest.enums.EventStatus;
+import com.example.planifest.service.ClientServiceImp;
 import com.example.planifest.service.EventServiceImp;
+
 
 @Component
 public class EventSeeder implements CommandLineRunner {
 
     private final EventServiceImp eventService;
+    private final ClientServiceImp clientService;
 
-    public EventSeeder(EventServiceImp eventService) {
+    public EventSeeder(EventServiceImp eventService, ClientServiceImp clientService) {
         this.eventService = eventService;
+        this.clientService=clientService;
     }
 
     @Override
@@ -32,6 +36,7 @@ public class EventSeeder implements CommandLineRunner {
         event1.setGuestCount(150);
         event1.setLocation("Auditorio Central");
         event1.setStatus(EventStatus.ACTIVE);
+    
 
         // Para simplificar, listas vacías
         event1.setTasks(Collections.emptyList());
