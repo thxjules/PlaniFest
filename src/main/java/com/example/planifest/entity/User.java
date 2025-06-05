@@ -1,6 +1,7 @@
 package com.example.planifest.entity;
 
 import java.util.List;
+
 import com.example.planifest.enums.Role;
 
 import jakarta.persistence.Column;
@@ -18,9 +19,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
+@Table(name = "users")
 public class User {
 
 

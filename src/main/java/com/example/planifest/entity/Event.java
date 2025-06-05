@@ -24,8 +24,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Setter
 @Getter
+@Setter
 @Table(name = "events")
 public class Event {
 

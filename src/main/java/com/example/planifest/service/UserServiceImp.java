@@ -45,7 +45,8 @@ public class UserServiceImp implements Idao<User,Long>{
         }
     }
 
-    private void validateUser(User user) {
+    private  void validateUser(User user) {
+
         if (user.getEmail() == null || user.getEmail().isBlank()) {
             throw new RuntimeException("El correo del usuario no puede estar vacío.");
         } if (user.getName() == null || user.getName().isBlank()) {
@@ -56,6 +57,8 @@ public class UserServiceImp implements Idao<User,Long>{
         if (user.getPhoneNumber()== null || user.getPhoneNumber().isBlank()) {
             throw new RuntimeException("El telefono del usuario no puede estar vacío.");
         }
+        
+
     }
 
 }
