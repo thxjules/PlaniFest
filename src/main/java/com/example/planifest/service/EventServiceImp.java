@@ -35,55 +35,47 @@ public class EventServiceImp implements Idao<Event, Long> {
         }
         validateEvent(event);
         eventRepository.save(event);
-
     }
 
     @Override
     public void deleteById(Long id) {
-        if (eventRepository.existsById(id)) {
-            eventRepository.deleteById(id);
-        } else {
+        if (!eventRepository.existsById(id)) {
             throw new RuntimeException("No se puede eliminar el evento porque no existe.");
         }
+        eventRepository.deleteById(id);
     }
 
     private void validateEvent(Event event) {
-        if (event.getEventName() == null || event.getEventName().isBlank()) {
-            throw new RuntimeException("No se puede crear un evento con un nombre vacío");
+        if (isBlank(event.getEventName())) {
+            throw new RuntimeException("El nombre del evento es obligatorio.");
         }
-
-        if (event.getDescription() == null || event.getDescription().isBlank()) {
-            throw new RuntimeException("No se puede crear un evento con una descripción vacía");
+        if (isBlank(event.getDescription())) {
+            throw new RuntimeException("La descripción del evento es obligatoria.");
         }
-
         if (event.getDate() == null) {
-            throw new RuntimeException("La fecha para crear un evento es obligatoria");
+            throw new RuntimeException("La fecha del evento es obligatoria.");
         }
-
         if (event.getStartTime() == null || event.getEndTime() == null) {
-            throw new RuntimeException("La hora de inicio y fin de el evento es obligatoria");
+            throw new RuntimeException("La hora de inicio y fin del evento es obligatoria.");
         }
-
         if (event.getEndTime().isBefore(event.getStartTime())) {
-            throw new RuntimeException("La hora de finalización no debe ser antes de la de inicio");
+            throw new RuntimeException("La hora de fin no puede ser anterior a la hora de inicio.");
         }
-
         if (event.getGuestCount() == null || event.getGuestCount() <= 0) {
-            throw new RuntimeException("El numero de invitados debe ser superior a cero");
+            throw new RuntimeException("El número de invitados debe ser mayor a cero.");
         }
-
         if (event.getLocation() == null) {
-            throw new RuntimeException("La ubicación del evento no puede ser nula");
+            throw new RuntimeException("La ubicación del evento es obligatoria.");
         }
-
         if (event.getStatus() == null) {
-            throw new RuntimeException("Se requiere añadirle un estado a el evento (Activo u Inactivo)");
-
+            throw new RuntimeException("El estado del evento es obligatorio.");
         }
-
         if (event.getClient() == null || event.getClient().getId() == null) {
-            throw new RuntimeException("Es necesario asignar un cliente valido a el evento");
-        } else
-            eventRepository.save(event);
+            throw new RuntimeException("El evento debe tener un cliente válido asignado.");
+        }
+    }
+
+    private boolean isBlank(String str) {
+        return str == null || str.isBlank();
     }
 }
