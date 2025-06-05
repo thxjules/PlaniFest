@@ -23,10 +23,13 @@ public class UserServiceImp implements Idao<User,Long>{
     }
     @Override
     public void create(User user) {
+        validateUser(user);
+        
         userRepository.save(user);
     }
     @Override
     public void update(User user) {
+        validateUser(user);
         if (user.getId() != null && userRepository.existsById(user.getId())) {
             userRepository.save(user);
         } else {
@@ -39,6 +42,19 @@ public class UserServiceImp implements Idao<User,Long>{
             userRepository.deleteById(id);
         } else {
             throw new RuntimeException("No se puede eliminar el usuario porque no existe.");
+        }
+    }
+
+    private void validateUser(User user) {
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new RuntimeException("El correo del usuario no puede estar vacío.");
+        } if (user.getName() == null || user.getName().isBlank()) {
+            throw new RuntimeException("El nombre del usuario no puede estar vacío.");
+        } if (user.getPassword() == null || user.getPassword().isBlank()) {
+            throw new RuntimeException("La contraseña del usuario no puede estar vacía.");
+        }
+        if (user.getPhoneNumber()== null || user.getPhoneNumber().isBlank()) {
+            throw new RuntimeException("El telefono del usuario no puede estar vacío.");
         }
     }
 

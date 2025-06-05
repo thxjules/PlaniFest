@@ -22,26 +22,25 @@ public class TaskServiceImp implements Idao<Task,Long> {
     @Override
     public void create(Task task) {
         taskRepository.save(task);
+       
     }
+        
     @Override
     public void update(Task task) {
         if (task.getId() != null && taskRepository.existsById(task.getId())) {
             taskRepository.save(task);
-        } else {
+
+        }  else {
             throw new RuntimeException("No se puede actualizar la tarea porque no se ha encontrado.");
         }
+
     }
     @Override
     public void deleteById(Long id) {
         if (taskRepository.existsById(id)) {
             taskRepository.deleteById(id);
-        } else {
+        }else {
             throw new RuntimeException("No se puede eliminar la tarea porque no existe.");
         }
     }
-
-
-
-
-
 }
