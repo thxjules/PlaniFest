@@ -1,0 +1,57 @@
+package com.example.planifest.config;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import com.example.planifest.entity.StockMovement;
+import com.example.planifest.entity.Supply;
+import com.example.planifest.enums.StockStatus;
+import com.example.planifest.service.StockMovementServiceImp;
+import com.example.planifest.service.SupplyServiceImp;
+
+
+
+@Component
+public class StockMovementSeeder implements CommandLineRunner {
+
+    private final StockMovementServiceImp stockMovementService;
+    private final SupplyServiceImp supplyService;
+    
+    public StockMovementSeeder(StockMovementServiceImp stockMovementService , SupplyServiceImp supplyService){
+        this.stockMovementService = stockMovementService;
+        this.supplyService = supplyService;
+
+    }
+
+    @Override
+    public void run(String...args) throws Exception{
+        /* SI- Al obtener los moviento stock por el Servicio esta vacio osea no hay nada */
+        if(stockMovementService.getAll().isEmpty()){
+
+            /* Le da a stockMovement los suministros pero listados por un get All */
+            List<Supply> supplies = supplyService.getAll();
+
+            
+            if(supplies.size() >= 1){
+
+            StockMovement stockMovement1 = new StockMovement();
+            /* El 0 demuestra la posicion del supply que se usara */
+            stockMovement1.setSupply(supplies.get(0)); 
+            stockMovement1.setDate(LocalDate.now());
+            stockMovement1.setQuantity(5);
+            stockMovement1.setType(StockStatus.ENTRY);
+            stockMovement1.setRemarks("Se daran entrada a 5 unidades mas de los Globos de Colores que estan con el ID numero 1");
+            stockMovementService.create(stockMovement1);
+            System.out.println("Seeder: El Stock Movement numero 1 se ha creado");
+
+            }else{
+                System.out.println("No se pudo crear ninguna Observacion ya que no existe ningun Suministro actualmente");
+            }
+        }
+    }
+    
+
+}
