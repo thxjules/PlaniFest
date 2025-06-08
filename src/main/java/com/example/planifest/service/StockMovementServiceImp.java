@@ -56,10 +56,7 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
         if (stockMovement.getDate() == null) {
             throw new RuntimeException("La fecha de creacion del movimiento del stock no puede ser nula");
         }
-        /* Si la fecha esta antes del dia en que se hizo */
-        if (stockMovement.getDate().isBefore(LocalDate.now())) {
-            throw new RuntimeException("La fecha en la que se crea el reporte no puede ser en el pasado");
-        }
+
 
         if (stockMovement.getDate().isAfter(LocalDate.now())) {
             throw new RuntimeException("La fecha del reporte de stock no pertenece a la fecha del dia de hoy");
