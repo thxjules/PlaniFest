@@ -22,6 +22,7 @@ public class EventServiceImp implements Idao<Event, Long> {
         return eventRepository.findAll();
     }
 
+    
     @Override
     public void create(Event event) {
         validateEvent(event);

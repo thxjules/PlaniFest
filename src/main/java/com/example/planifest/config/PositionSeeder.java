@@ -1,12 +1,14 @@
 package com.example.planifest.config;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.example.planifest.entity.Position;
 import com.example.planifest.service.PositionServiceImpl;
 
 @Component
+@Order(8)
 public class PositionSeeder implements CommandLineRunner {
 
     private final PositionServiceImpl positionService;

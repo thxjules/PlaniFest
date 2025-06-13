@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.example.planifest.entity.StockMovement;
@@ -12,8 +13,7 @@ import com.example.planifest.enums.StockStatus;
 import com.example.planifest.service.StockMovementServiceImp;
 import com.example.planifest.service.SupplyServiceImp;
 
-
-
+@Order(6)
 @Component
 public class StockMovementSeeder implements CommandLineRunner {
 

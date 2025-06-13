@@ -1,9 +1,10 @@
 package com.example.planifest.config;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.example.planifest.entity.Event;
@@ -13,6 +14,8 @@ import com.example.planifest.repository.EventRepository;
 import com.example.planifest.service.TaskServiceImp;
 
 @Component
+@Order(5)
+
 public class TaskSeeder implements CommandLineRunner {
 
     private final TaskServiceImp taskService;
@@ -25,59 +28,80 @@ public class TaskSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("Entrando al seeder de tareas");
 
-            // Crear la tarea y asociarla al evento
-            Task task1 = new Task();
-            task1.setName("Montaje del escenario");
-            task1.setDescription("Preparar el escenario para el evento");
-            task1.setDate(LocalDate.of(2025, 1, 20));
-            task1.setStatus(TaskStatus.PENDING);
-            task1.setEvent(event); // Asociar evento específico
+        // Buscar eventos por nombre
+        Optional<Event> eventoMusica = eventRepository.findByEventName("Evento de Música");
+        Optional<Event> bodasDePlata = eventRepository.findByEventName("Bodas de Plata");
+        Optional<Event> fiesta15 = eventRepository.findByEventName("Fiesta 15 años");
+        Optional<Event> feriaGastronomica = eventRepository.findByEventName("Feria Gastronómica");
+        Optional<Event> seminarioTech = eventRepository.findByEventName("Seminario de Tecnología");
 
-            taskService.create(task);
-
-            // Crear más tareas si es necesario
-        Task task2 = new Task();
-        task2.setName("Sonido y luces");
-        task2.setDescription("Configurar el sonido y las luces del evento");
-        task2.setDate(LocalDate.of(2025, 9, 20));
-        task2.setStatus(TaskStatus.PENDING);
-        task2.setEvent(event); // Asociar evento específico
-
-        taskService.create(task2);
-
-        Task task3 = new Task();
-        task3.setName("manteles y mesas");
-        task3.setDescription("colocar los manteles y sillas antes del evento ");
-        task3.setDate(LocalDate.of(2025, 9, 12));
-        task3.setStatus(TaskStatus.PENDING);
-        task3.setEvent(event); // Asociar evento específico
-
-        taskService.create(task3);
-
-        Task task4 = new Task();
-        task4.setName("Decoración del lugar");
-        task4.setDescription("Decorar el lugar para el evento");
-        task4.setDate(LocalDate.of(2025, 6, 20));
-        task4.setStatus(TaskStatus.ACTIVE);
-        task4.setEvent(event); // Asociar evento específico
-
-        taskService.create(task4);
-
-        Task task5 = new Task();
-        task5.setName("Revisión de seguridad");
-        task5.setDescription("Revisar la seguridad del lugar para el evento");
-        task5.setDate(LocalDate.of(2025, 8, 10));
-        task5.setStatus(TaskStatus.PENDING);
-        task5.setEvent(event); // Asociar evento específico
-
-        taskService.create(task4);
-
-
-
-       
+        // Tarea 1
+        if (taskService.findByName("Montaje del escenario").isEmpty()) {
+            eventoMusica.ifPresent(event -> {
+                Task task = new Task();
+                task.setName("Montaje del escenario");
+                task.setDescription("Preparar el escenario para el evento");
+                task.setDate(LocalDate.of(2025, 1, 20));
+                task.setStatus(TaskStatus.PENDING);
+                task.setEvent(event);
+                taskService.create(task);
+            });
         }
+
+        // Tarea 2
+        if (taskService.findByName("Sonido y luces").isEmpty()) {
+            bodasDePlata.ifPresent(event -> {
+                Task task = new Task();
+                task.setName("Sonido y luces");
+                task.setDescription("Configurar el sonido y las luces del evento");
+                task.setDate(LocalDate.of(2025, 9, 20));
+                task.setStatus(TaskStatus.PENDING);
+                task.setEvent(event);
+                taskService.create(task);
+            });
+        }
+
+        // Tarea 3
+        if (taskService.findByName("Manteles y mesas").isEmpty()) {
+            fiesta15.ifPresent(event -> {
+                Task task = new Task();
+                task.setName("Manteles y mesas");
+                task.setDescription("Colocar los manteles y sillas antes del evento");
+                task.setDate(LocalDate.of(2025, 9, 12));
+                task.setStatus(TaskStatus.PENDING);
+                task.setEvent(event);
+                taskService.create(task);
+            });
+        }
+
+        // Tarea 4
+        if (taskService.findByName("Decoración del lugar").isEmpty()) {
+            feriaGastronomica.ifPresent(event -> {
+                Task task = new Task();
+                task.setName("Decoración del lugar");
+                task.setDescription("Decorar el lugar para el evento");
+                task.setDate(LocalDate.of(2025, 6, 20));
+                task.setStatus(TaskStatus.IN_PROGRESS);
+                task.setEvent(event);
+                taskService.create(task);
+            });
+        }
+
+        // Tarea 5
+        if (taskService.findByName("Revisión de seguridad").isEmpty()) {
+            seminarioTech.ifPresent(event -> {
+                Task task = new Task();
+                task.setName("Revisión de seguridad");
+                task.setDescription("Revisar la seguridad del lugar para el evento");
+                task.setDate(LocalDate.of(2025, 8, 10));
+                task.setStatus(TaskStatus.PENDING);
+                task.setEvent(event);
+                taskService.create(task);
+            });
+        }
+
+        System.out.println("Seeder de tareas ejecutado (modo seguro por nombre).");
     }
-        
-
-
+}
