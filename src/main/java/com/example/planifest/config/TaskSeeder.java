@@ -14,7 +14,7 @@ import com.example.planifest.repository.EventRepository;
 import com.example.planifest.service.TaskServiceImp;
 
 @Component
-@Order(5)
+@Order(6)
 
 public class TaskSeeder implements CommandLineRunner {
 

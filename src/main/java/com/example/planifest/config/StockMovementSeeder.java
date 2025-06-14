@@ -13,7 +13,7 @@ import com.example.planifest.enums.StockStatus;
 import com.example.planifest.service.StockMovementServiceImp;
 import com.example.planifest.service.SupplyServiceImp;
 
-@Order(6)
+@Order(4)
 @Component
 public class StockMovementSeeder implements CommandLineRunner {
 
