@@ -2,6 +2,8 @@ package com.example.planifest.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,5 +34,6 @@ public class PlaniService {
     private String type;
 
     @ManyToMany(mappedBy = "services")
+    @JsonIgnore
     private List<Event> events;
 }

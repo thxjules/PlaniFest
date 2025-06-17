@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import com.example.planifest.enums.EventStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -66,6 +67,7 @@ public class Event {
 
     // Relación con Tareas
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Task> tasks;
 
     // Relación con Insumos
