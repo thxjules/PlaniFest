@@ -8,7 +8,7 @@ import com.example.planifest.entity.Position;
 import com.example.planifest.service.PositionServiceImpl;
 
 @Component
-@Order(8)
+@Order(6)
 public class PositionSeeder implements CommandLineRunner {
 
     private final PositionServiceImpl positionService;
@@ -19,6 +19,11 @@ public class PositionSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        if (positionService.count() > 0) {
+            System.out.println("El Seder ya se había ejecutado");
+            return;
+        }
 
         Position position1 = new Position();
         position1.setName("Mesero");
@@ -36,9 +41,7 @@ public class PositionSeeder implements CommandLineRunner {
         position4.setName("Cordinador");
         positionService.create(position4);
 
-         System.out.println("Seeder de Position Ejecutado");
+        System.out.println("Seeder de Position Ejecutado");
     }
-    
-   
 
 }

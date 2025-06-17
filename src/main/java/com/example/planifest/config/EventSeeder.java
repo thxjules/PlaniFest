@@ -36,13 +36,17 @@ public class EventSeeder implements CommandLineRunner {
     }
 
     @Override
-    @Order(4)
     public void run(String... args) throws Exception {
         if (eventService.getAll().isEmpty()) {
 
             List<Client> clients = clientService.getAll();
             List<Supply> supplies = supplyService.getAll();
             List<PlaniService> services = planiService.getAll();
+
+             if (eventService.count() > 0) {
+            System.out.println("El Seder ya se había ejecutado");
+             return; 
+        }
 
             if (clients.size() < 5) {
                 System.out.println("No hay suficientes clientes para asignar a los eventos.");

@@ -24,6 +24,10 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
         return stockMovementRepository.findAll();
 
     }
+    
+    public long count(){
+        return stockMovementRepository.count();
+    }
 
     @Override
     public void create(StockMovement stockMovement) {

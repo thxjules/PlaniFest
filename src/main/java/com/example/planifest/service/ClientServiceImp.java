@@ -29,6 +29,9 @@ public class ClientServiceImp implements Idao<Client, Long> {
         clientRepository.save(client);
     }
 
+    public long count(){
+        return clientRepository.count();
+    }
     @Override
     public void update(Client client) {
         if (client.getId() == null || !clientRepository.existsById(client.getId())) {

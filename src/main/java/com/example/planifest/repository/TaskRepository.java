@@ -11,4 +11,6 @@ import com.example.planifest.entity.Task;
 public interface TaskRepository extends JpaRepository<Task, Long> {
     Optional<Task> findByName(String name);
 
+    
+
 }

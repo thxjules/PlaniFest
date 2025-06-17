@@ -24,6 +24,9 @@ public class TaskServiceImp implements Idao<Task, Long> {
         return taskRepository.findAll();
     }
 
+     public long count() {
+        return taskRepository.count();
+    }
     
     public Optional<Task> findByName(String name) {
         return taskRepository.findByName(name);

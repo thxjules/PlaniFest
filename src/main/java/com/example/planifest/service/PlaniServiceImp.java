@@ -27,6 +27,10 @@ public class PlaniServiceImp implements Idao<PlaniService, Long> {
         validatePlaniService(planiService);
         planiServiceRepository.save(planiService);
     }
+    
+    public long count(){
+        return planiServiceRepository.count();
+    }
 
     @Override
     public void update(PlaniService planiService) {

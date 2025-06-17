@@ -1,6 +1,7 @@
 package com.example.planifest.config;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.boot.CommandLineRunner;
@@ -9,26 +10,41 @@ import org.springframework.stereotype.Component;
 
 import com.example.planifest.entity.Event;
 import com.example.planifest.entity.Task;
+import com.example.planifest.entity.User;
 import com.example.planifest.enums.TaskStatus;
 import com.example.planifest.repository.EventRepository;
 import com.example.planifest.service.TaskServiceImp;
+import com.example.planifest.service.UserServiceImp;
 
 @Component
-@Order(6)
+@Order(8)
 
 public class TaskSeeder implements CommandLineRunner {
 
     private final TaskServiceImp taskService;
+    private final UserServiceImp userService;
     private final EventRepository eventRepository;
 
-    public TaskSeeder(TaskServiceImp taskService, EventRepository eventRepository) {
+    public TaskSeeder(TaskServiceImp taskService, EventRepository eventRepository, UserServiceImp userService) {
         this.taskService = taskService;
+        this.userService = userService;
         this.eventRepository = eventRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Entrando al seeder de tareas");
+
+        if (taskService.count() > 0) {
+            System.out.println("El Seder ya se había ejecutado");
+            return;
+        }
+        // Traer Usuarios
+        List<User> users = userService.getAll();
+        if (users.size() < 5) {
+            System.out.println("No hay suficientes usuarios");
+            return;
+        }
 
         // Buscar eventos por nombre
         Optional<Event> eventoMusica = eventRepository.findByEventName("Evento de Música");
@@ -45,6 +61,7 @@ public class TaskSeeder implements CommandLineRunner {
                 task.setDescription("Preparar el escenario para el evento");
                 task.setDate(LocalDate.of(2025, 1, 20));
                 task.setStatus(TaskStatus.PENDING);
+                task.setUser(users.get(0));
                 task.setEvent(event);
                 taskService.create(task);
             });
@@ -58,6 +75,7 @@ public class TaskSeeder implements CommandLineRunner {
                 task.setDescription("Configurar el sonido y las luces del evento");
                 task.setDate(LocalDate.of(2025, 9, 20));
                 task.setStatus(TaskStatus.PENDING);
+                task.setUser(users.get(1));
                 task.setEvent(event);
                 taskService.create(task);
             });
@@ -71,6 +89,7 @@ public class TaskSeeder implements CommandLineRunner {
                 task.setDescription("Colocar los manteles y sillas antes del evento");
                 task.setDate(LocalDate.of(2025, 9, 12));
                 task.setStatus(TaskStatus.PENDING);
+                task.setUser(users.get(2));
                 task.setEvent(event);
                 taskService.create(task);
             });
@@ -84,6 +103,7 @@ public class TaskSeeder implements CommandLineRunner {
                 task.setDescription("Decorar el lugar para el evento");
                 task.setDate(LocalDate.of(2025, 6, 20));
                 task.setStatus(TaskStatus.IN_PROGRESS);
+                task.setUser(users.get(3));
                 task.setEvent(event);
                 taskService.create(task);
             });
@@ -97,6 +117,7 @@ public class TaskSeeder implements CommandLineRunner {
                 task.setDescription("Revisar la seguridad del lugar para el evento");
                 task.setDate(LocalDate.of(2025, 8, 10));
                 task.setStatus(TaskStatus.PENDING);
+                task.setUser(users.get(4));
                 task.setEvent(event);
                 taskService.create(task);
             });

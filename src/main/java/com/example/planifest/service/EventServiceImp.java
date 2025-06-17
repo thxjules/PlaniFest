@@ -22,7 +22,6 @@ public class EventServiceImp implements Idao<Event, Long> {
         return eventRepository.findAll();
     }
 
-    
     @Override
     public void create(Event event) {
         validateEvent(event);
@@ -44,6 +43,11 @@ public class EventServiceImp implements Idao<Event, Long> {
             throw new RuntimeException("No se puede eliminar el evento porque no existe.");
         }
         eventRepository.deleteById(id);
+    }
+
+    public long count() {
+        return eventRepository.count();
+
     }
 
     private void validateEvent(Event event) {

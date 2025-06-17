@@ -22,10 +22,11 @@ public class SupplySeeder implements CommandLineRunner {
     @Override
     /* Creacion de los Seeders */
     public void run(String... args) throws Exception {
-        /*
-         * En caso de que No Existan Suministros creador se insertan estos si estos no
-         * estan
-         */
+        if (supplyService.count() > 0) {
+            System.out.println("El seder de suministros ya había sido ejecutado");
+             return; 
+        }
+        
         if (supplyService.getAll().isEmpty()) {
 
             Supply supply1 = new Supply();

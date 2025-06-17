@@ -24,6 +24,11 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
         return supplyRepository.findAll();
 
     }
+    
+      public long count() {
+        return supplyRepository.count();
+    }
+    
 
     @Override
     public void create(Supply supply) {

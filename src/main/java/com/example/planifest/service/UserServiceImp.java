@@ -22,6 +22,11 @@ public class UserServiceImp implements Idao<User,Long>{
     public List<User> getAll() {
         return userRepository.findAll();
     }
+
+    public long count() {
+        return userRepository.count();
+    }
+
     @Override
     public void create(User user) {
         validateUser(user);
@@ -56,7 +61,7 @@ public class UserServiceImp implements Idao<User,Long>{
         } 
         
         // Validacion nombre de usuario    
-        if (user.getName() == null || user.getName().isBlank()) {
+        if (user.getUsername() == null || user.getUsername().isBlank()) {
             throw new RuntimeException("El nombre del usuario no puede estar vacío.");
 
         }

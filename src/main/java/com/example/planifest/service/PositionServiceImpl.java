@@ -28,6 +28,10 @@ public class PositionServiceImpl implements Idao<Position, Long> {
         positionRepository.save(position);
     }
 
+    public long count(){
+        return positionRepository.count();
+    }
+
     @Override
     public void update(Position position) {
         if (position.getId() == null || !positionRepository.existsById(position.getId())) {
