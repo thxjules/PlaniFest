@@ -18,7 +18,7 @@ import com.example.planifest.service.SupplyServiceImp;
 /* Define que la clase es un controlador para spring */
 @RestController
 /* Ruta base */
-@RequestMapping("/api/supplies")
+@RequestMapping("/supplies")
 public class SupplyController {
 
     /* Se trae y se define a Service como un Objeto?? */

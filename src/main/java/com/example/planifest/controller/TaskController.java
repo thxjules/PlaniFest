@@ -15,14 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.planifest.entity.Task;
 import com.example.planifest.service.TaskServiceImp;
 
-
-
-
-
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("/tasks")
 public class TaskController {
-    
+
     private final TaskServiceImp taskService;
 
     public TaskController(TaskServiceImp taskService) {
@@ -30,27 +26,27 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Task>> getAllTasks(){
+    public ResponseEntity<List<Task>> getAllTasks() {
         return ResponseEntity.ok(taskService.getAll()); // status 200 + lista de tareas
     }
+
     @PostMapping
-    public ResponseEntity<?> createTask(@RequestBody Task task){
+    public ResponseEntity<?> createTask(@RequestBody Task task) {
         taskService.create(task);
         return ResponseEntity.status(201).build(); // status 201 creado
     }
-    
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody Task task) {
         task.setId(id);
         taskService.update(task);
         return ResponseEntity.noContent().build(); // status 204 (sin contenido)
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTask(@PathVariable Long id) {
         taskService.deleteById(id);
         return ResponseEntity.ok().build(); // status 200 OK
     }
-    
-    
-    
+
 }

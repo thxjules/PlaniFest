@@ -16,7 +16,7 @@ import com.example.planifest.entity.User;
 import com.example.planifest.service.UserServiceImp;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserServiceImp userService;

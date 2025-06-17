@@ -16,7 +16,7 @@ import com.example.planifest.entity.StockMovement;
 import com.example.planifest.service.StockMovementServiceImp;
 
 @RestController
-@RequestMapping("/api/stockMovements")
+@RequestMapping("/stockMovements")
 public class StockMovementController {
 
     private final StockMovementServiceImp stockMovementService;

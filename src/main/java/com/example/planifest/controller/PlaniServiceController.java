@@ -16,7 +16,7 @@ import com.example.planifest.entity.PlaniService;
 import com.example.planifest.service.PlaniServiceImp;
 
 @RestController
-@RequestMapping("/api/services")
+@RequestMapping("/services")
 public class PlaniServiceController {
 
     private final PlaniServiceImp planiService;

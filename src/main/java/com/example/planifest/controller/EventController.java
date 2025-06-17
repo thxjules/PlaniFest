@@ -16,7 +16,7 @@ import com.example.planifest.entity.Event;
 import com.example.planifest.service.EventServiceImp;
 
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/events")
 public class EventController {
 
     private final EventServiceImp eventService;
