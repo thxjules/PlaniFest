@@ -3,7 +3,6 @@ package com.example.planifest.entity;
 import java.util.List;
 
 import com.example.planifest.enums.Role;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,7 +47,6 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user") 
-    @JsonManagedReference
     private List<Task> tasks;
 
     @ManyToOne

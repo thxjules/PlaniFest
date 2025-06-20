@@ -3,6 +3,7 @@ package com.example.planifest.entity;
 import java.util.List;
 
 import com.example.planifest.enums.SupplyStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -59,9 +60,11 @@ public class Supply {
     // Relationship
 
     @ManyToMany(mappedBy = "supplies")
+    @JsonIgnore
     private List<Event> events;
 
     @OneToMany(mappedBy = "supply")
+    @JsonIgnore
     private List<StockMovement> stockMovements;
 
 }
