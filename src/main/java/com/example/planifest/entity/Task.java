@@ -3,6 +3,7 @@ package com.example.planifest.entity;
 import java.time.LocalDate;
 
 import com.example.planifest.enums.TaskStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,6 +45,7 @@ public class Task {
     // Relationship
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     @ManyToOne
