@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.example.planifest.enums.EventStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -40,7 +42,8 @@ public class Event {
 
     @Column(nullable = false, length = 200)
     private String description;
-
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private LocalDate date;
 

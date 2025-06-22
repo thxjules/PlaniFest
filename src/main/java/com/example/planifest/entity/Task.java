@@ -2,6 +2,8 @@ package com.example.planifest.entity;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.example.planifest.enums.TaskStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -35,6 +37,7 @@ public class Task {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "date", nullable = false)
     private LocalDate date;
 

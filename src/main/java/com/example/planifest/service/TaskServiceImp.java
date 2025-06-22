@@ -31,28 +31,25 @@ public class TaskServiceImp implements Idao<Task, Long> {
     public Optional<Task> findByName(String name) {
         return taskRepository.findByName(name);
     }
+    public Optional<Task> findById(Long id) {
+    return taskRepository.findById(id);
+}
 
     @Override
     public void create(Task task) {
         validateUser(task);
-        if (task.getId() != null && taskRepository.existsById(task.getId())) {
-            throw new RuntimeException("La tarea ya existe.");
-        } else {
-            taskRepository.save(task);
-        }
+          taskRepository.save(task);
+}
 
-    }
+    
 
     @Override
     public void update(Task task) {
         validateUser(task);
-        if (task.getId() != null && taskRepository.existsById(task.getId())) {
-            taskRepository.save(task);
-        } else {
-            throw new RuntimeException("No se puede actualizar la tarea porque no se ha encontrado.");
-        }
+    taskRepository.save(task);
+}
 
-    }
+    
 
     @Override
     public void deleteById(Long id) {
@@ -67,6 +64,7 @@ public class TaskServiceImp implements Idao<Task, Long> {
         if (task.getName() == null || task.getName().isBlank()) {
             throw new RuntimeException("El nombre de la tarea no puede estar vacío.");
         }
+        
         if (task.getDescription() == null || task.getDescription().isBlank()) {
 
             throw new RuntimeException("La descripción de la tarea no puede estar vacía.");

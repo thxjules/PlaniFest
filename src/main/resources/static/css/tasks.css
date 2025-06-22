@@ -1,0 +1,78 @@
+/* Estilo base */
+body {
+    background-color: #fdf8f0;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header con logo y título centrado */
+.header-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.header-section img {
+    height: 100px;        /* Reduce tamaño del logo */
+    margin-bottom: 10px;
+}
+
+.header-section h1 {
+    font-size: 2.5rem;
+    color: #0097b2;
+    margin: 0;
+}
+
+.header-section p {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* Botón azul */
+.btn-outline-primary {
+    color: #0097b2;
+    border-color: #0097b2;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0097b2;
+    color: white;
+}
+
+/* Botón verde */
+.btn-success {
+    background-color: #84b200;
+    border-color: #84b200;
+}
+
+.btn-success:hover {
+    background-color: #6d9100;
+    border-color: #6d9100;
+}
+
+/* Tarjeta formulario */
+.card-header.bg-primary {
+    background-color: #0097b2 !important;
+    color: white;
+}
+
+/* Tabla y header */
+.card-header.bg-dark {
+    background-color: #84b200 !important;
+    color: white;
+}
+
+.table thead {
+    background-color: #0097b2;
+    color: white;
+}
+
+/* Etiquetas estado */
+.badge.bg-warning {
+    background-color: #ffc107;
+}
+
+.badge.bg-success {
+    background-color: #84b200;
+}
