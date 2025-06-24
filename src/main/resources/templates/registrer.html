@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrarse - PLaniFest</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #000;
+      color: #d2b48c;
+      font-family: Arial, sans-serif;
+    }
+
+    .register-container {
+      max-width: 500px;
+      margin: 10vh auto;
+      padding: 30px;
+      background-color: #1c1c1c;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(210,180,140,0.3);
+    }
+
+    .form-control {
+      background-color: #000;
+      color: #d2b48c;
+      border: 1px solid #d2b48c;
+    }
+
+    .form-control:focus {
+      box-shadow: 0 0 5px #d2b48c;
+    }
+
+    .btn-custom {
+      background-color: #c6996f;
+      color: white;
+      border-radius: 30px;
+    }
+
+    .btn-custom:hover {
+      background-color: #5d4037;
+    }
+
+    a {
+      color: #d2b48c;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #b8860b;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h2 class="text-center mb-4">Crear Cuenta</h2>
+    <form th:action="@{/register}" method="post">
+      <div class="mb-3">
+        <label for="username" class="form-label">Usuario</label>
+        <input type="text" class="form-control" id="username" name="username" required />
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo Electrónico</label>
+        <input type="email" class="form-control" id="email" name="email" required />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="password" name="password" required />
+      </div>
+      <div class="mb-3">
+        <label for="confirm" class="form-label">Confirmar Contraseña</label>
+        <input type="password" class="form-control" id="confirm" name="confirmPassword" required />
+      </div>
+      <button type="submit" class="btn btn-custom w-100">Registrarse</button>
+    </form>
+    <div class="text-center mt-3">
+      <span>¿Ya tienes cuenta?</span>
+      <a th:href="@{/login}">Inicia sesión</a>
+    </div>
+  </div>
+</body>
+</html>
