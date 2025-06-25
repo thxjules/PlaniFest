@@ -1,0 +1,29 @@
+ body {
+            background-color: #f9f6f0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .gold-title {
+            color: #d4af37;
+        }
+
+        .table thead {
+            background-color: #f8f9fa;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        .card-custom {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .badge-evento {
+            background-color: #d4af37;
+            color: #fff;
+            font-weight: 500;
+        }
