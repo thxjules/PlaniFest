@@ -22,10 +22,10 @@ public class HomeViewController {
         //this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping({"/", "/index"})
+    @GetMapping({ "/", "/index" })
     public String home(Model model) {
         model.addAttribute("user", new User());
-        return "index"; 
+        return "index";
     }
 
     @GetMapping("/registro")
@@ -36,10 +36,21 @@ public class HomeViewController {
 
     @PostMapping("/registro")
     public String procesarRegistro(@ModelAttribute("user") User user, Model model) {
-        if (userService.existsbyEmail(user.getEmail())) {
-            model.addAttribute("error", "El correo ya está registrado.");
+        try {
+            if (userService.existsbyEmail(user.getEmail())) {
+                model.addAttribute("error", "El correo ya está registrado.");
+                return "registro";
+            }
+
+            user.setRole(Role.EMPLOYEE);
+            userService.create(user);
+            return "redirect:/login";
+
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
             return "registro";
         }
+<<<<<<< HEAD
 
         user.setPassword((user.getPassword())); // encriptar contraseña
         user.setRole(Role.EMPLOYEE); // o el rol que tú definas por defecto
@@ -47,5 +58,7 @@ public class HomeViewController {
 
         model.addAttribute("success", "¡Registro exitoso!");
         return "redirect:/login";
+=======
+>>>>>>> 6f7f5c1b9c86c10a541f17aa2085f4990036a825
     }
 }

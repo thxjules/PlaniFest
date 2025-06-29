@@ -57,7 +57,7 @@
     <h2 class="text-center mb-4">Iniciar Sesión</h2>
     <form th:action="@{/login}" method="post">
       <div class="mb-3">
-        <label for="username" class="form-label">Correo o Usuario</label>
+        <label for="username" class="form-label">Correo</label>
         <input type="text" class="form-control" id="username" name="username" required />
       </div>
       <div class="mb-3">
@@ -68,7 +68,7 @@
     </form>
     <div class="text-center mt-3">
       <span>¿No tienes cuenta?</span>
-      <a href="./registro.html">Regístrate aquí</a>
+       <a th:href="@{/registro}">Registrate aquí</a>
     </div>
   </div>
 </body>

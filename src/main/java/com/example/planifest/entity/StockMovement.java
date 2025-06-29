@@ -43,7 +43,6 @@ public class StockMovement {
     private String remarks;
 
     // Relationships
-
     @ManyToOne
     @JoinColumn(name = "supply_id", nullable = false)
     private Supply supply;
