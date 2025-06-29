@@ -1,6 +1,6 @@
 package com.example.planifest.controller.controllerview;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +15,11 @@ import com.example.planifest.service.UserServiceImp;
 public class HomeViewController {
 
     private final UserServiceImp userService;
-    private final PasswordEncoder passwordEncoder;
+    //private final PasswordEncoder passwordEncoder;
 
-    public HomeViewController(UserServiceImp userService, PasswordEncoder passwordEncoder) {
+    public HomeViewController(UserServiceImp userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
+        //this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping({"/", "/index"})
@@ -41,7 +41,7 @@ public class HomeViewController {
             return "registro";
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // encriptar contraseña
+        user.setPassword((user.getPassword())); // encriptar contraseña
         user.setRole(Role.EMPLOYEE); // o el rol que tú definas por defecto
         userService.create(user);
 
