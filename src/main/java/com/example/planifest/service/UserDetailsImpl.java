@@ -18,7 +18,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // Aquí podrías retornar roles si los implementas en tu entidad
+        return Collections.emptyList(); 
     }
 
     @Override
@@ -28,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail(); // Autenticación por email
+        return user.getEmail(); 
     }
 
     @Override
