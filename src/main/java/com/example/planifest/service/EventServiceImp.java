@@ -1,6 +1,7 @@
 package com.example.planifest.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,10 @@ public class EventServiceImp implements Idao<Event, Long> {
     public long count() {
         return eventRepository.count();
 
+    }
+
+    public Optional<Event> findById(Long id) {
+        return eventRepository.findById(id);
     }
 
     private void validateEvent(Event event) {
