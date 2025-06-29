@@ -32,13 +32,13 @@ public class SupplyViewController {
     @GetMapping
     public String listarSupplies(Model model){
         model.addAttribute("supplies", supplyService.getAll() );
+        model.addAttribute("events", eventService.getAll());
         return "supplies";
     }
 
     @GetMapping("/create")
     public String nuevoSupply(Model model){
         model.addAttribute("supply", new Supply());
-        /* Arroja el formulario para crear */
         return "supplies";
     }
 
