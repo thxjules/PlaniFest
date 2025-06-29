@@ -24,8 +24,8 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
         return stockMovementRepository.findAll();
 
     }
-    
-    public long count(){
+
+    public long count() {
         return stockMovementRepository.count();
     }
 
@@ -34,6 +34,12 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
         stockMovementInfoRequired(stockMovement);
         stockMovementRepository.save(stockMovement);
 
+    }
+
+    public StockMovement getById(Long id) {
+        return stockMovementRepository.findById(id)
+                .orElseThrow(
+                        () -> new RuntimeException("El movimiento de stock no ha sido encontrado con este id " + id));
     }
 
     @Override
@@ -60,7 +66,6 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
         if (stockMovement.getDate() == null) {
             throw new RuntimeException("La fecha de creacion del movimiento del stock no puede ser nula");
         }
-
 
         if (stockMovement.getDate().isAfter(LocalDate.now())) {
             throw new RuntimeException("La fecha del reporte de stock no pertenece a la fecha del dia de hoy");

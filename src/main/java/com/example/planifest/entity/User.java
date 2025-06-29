@@ -50,6 +50,6 @@ public class User {
     private List<Task> tasks;
 
     @ManyToOne
-    @JoinColumn(name = "position_id") // FK
+    @JoinColumn(name = "position_id") 
     private Position position;
 }

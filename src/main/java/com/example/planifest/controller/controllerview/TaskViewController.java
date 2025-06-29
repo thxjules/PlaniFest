@@ -58,8 +58,6 @@ public String guardarTarea(@ModelAttribute Task task, Model model) {
     }
 }
 
-
-
     @GetMapping("/delete/{id}")
     public String eliminarTarea(@PathVariable Long id) {
         taskService.deleteById(id);

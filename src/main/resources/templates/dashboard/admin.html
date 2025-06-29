@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Catering Soft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div>
+            <h2>Catering Soft</h2>
+            <a th:href="@{/users}" class="active"><i class='bx bx-user'></i> Users</a>
+            <a th:href="@{/events}"><i class='bx bx-calendar'></i> Events</a>
+            <a th:href="@{/tasks}"><i class='bx bx-task'></i> Tasks</a>
+            <a th:href="@{/supplies}"><i class='bx bx-box'></i> Supplies</a>
+            <a href="#" th:onclick="|event.preventDefault(); document.getElementById('logout-form').submit();|" class="logout-button">
+                <i class='bx bx-log-out'></i> Logout
+            </a>
+            <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+        </div>
+        <div class="logo">
+            <img th:src="@{/img/home/planifest.png}" alt="Company Logo">
+        </div>
+    </div>
+
+    <div class="main">
+        <h1>Welcome, Admin</h1>
+
+        <div class="grid">
+            <div class="card">
+                <h3>Total Users</h3>
+                <p th:text="${totalUsers}">0</p>
+            </div>
+            <div class="card">
+                <h3>Total Events</h3>
+                <p th:text="${totalEvents}">0</p>
+            </div>
+            <div class="card">
+                <h3>Total Tasks</h3>
+                <p th:text="${totalTasks}">0</p>
+            </div>
+            <div class="card">
+                <h3>Pending Tasks</h3>
+                <p th:text="${pendingTasks}">0</p>
+            </div>
+            <div class="card">
+                <h3>Total Supplies</h3>
+                <p th:text="${totalSupplies}">0</p>
+            </div>
+        </div>
+
+        <div class="grid actions" style="margin-top: 40px;">
+            <a th:href="@{/users}"><i class='bx bx-user'></i> Manage Users</a>
+            <a th:href="@{/events}"><i class='bx bx-calendar'></i> Manage Events</a>
+            <a th:href="@{/tasks}"><i class='bx bx-task'></i> Manage Tasks</a>
+            <a th:href="@{/supplies}"><i class='bx bx-box'></i> View Supplies</a>
+        </div>
+
+        <div class="grid" style="margin-top: 40px;">
+            <div class="card">
+                <h3>Recent Activity</h3>
+                <ul th:if="${recentActivity}" style="list-style: none; padding-left: 0; text-align: left;">
+                    <li th:each="act : ${recentActivity}" th:text="${act}">Activity</li>
+                </ul>
+                <p th:if="${#lists.isEmpty(recentActivity)}">No recent activity.</p>
+            </div>
+
+            <div class="card">
+                <h3>Upcoming Events</h3>
+                <ul th:if="${upcomingEvents}" style="list-style: none; padding-left: 0; text-align: left;">
+                    <li th:each="event : ${upcomingEvents}" th:text="${#dates.format(event.date, 'dd/MM')} + ' - ' + ${event.name}">Event</li>
+                </ul>
+                <p th:if="${#lists.isEmpty(upcomingEvents)}">No upcoming events.</p>
+            </div>
+
+            <div class="card">
+                <h3>Notifications</h3>
+                <p th:each="n : ${notifications}" th:text="${n}">Notification</p>
+            </div>
+
+            <div class="card">
+                <h3>Employee of the Month</h3>
+                <p th:if="${employeeOfMonth}" th:text="'🎖️ ' + ${employeeOfMonth.name}">Employee</p>
+                <p th:unless="${employeeOfMonth}">Not available</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

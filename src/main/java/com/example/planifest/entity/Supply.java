@@ -58,7 +58,6 @@ public class Supply {
     private String packagingUnit;
 
     // Relationship
-
     @ManyToMany(mappedBy = "supplies")
     @JsonIgnore
     private List<Event> events;
