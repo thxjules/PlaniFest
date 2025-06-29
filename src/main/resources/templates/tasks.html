@@ -13,7 +13,7 @@
 
 
     <div class="header-section text-center mb-5">
-        <img src="../static/images/planifest.png" alt="Logo Planifest">
+        <img th:src="@{/images/planifest.png}" alt="Logo Planifest" style="max-height: 300px;">
         <h1>📝 Gestión de Tareas</h1>
         <p>Crea y organiza tareas para tus eventos</p>
     </div>
@@ -62,6 +62,7 @@
                             <select th:field="*{status}" class="form-select">
                                 <option value="PENDING">Pendiente</option>
                                 <option value="COMPLETED">Completado</option>
+                                <option value="IN_PROGRESS">En Progreso</option>
                             </select>
                         </div>
                         <div class="col-md-6">

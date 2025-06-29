@@ -1,6 +1,6 @@
 /* Estilo base */
 body {
-    background-color: #fdf8f0;
+    background-color: #fdf8f0 !important;
     font-family: 'Segoe UI', sans-serif;
     color: #333;
     margin: 0;
@@ -14,9 +14,12 @@ body {
 }
 
 .header-section img {
-    height: 100px;        /* Reduce tamaño del logo */
+    height: 200px;
+    width: auto;
+    object-fit: contain;
     margin-bottom: 10px;
 }
+
 
 .header-section h1 {
     font-size: 2.5rem;
@@ -37,7 +40,7 @@ body {
 
 .btn-outline-primary:hover {
     background-color: #0097b2;
-    color: white;
+    color:#fdf8f0;
 }
 
 /* Botón verde */
@@ -54,18 +57,18 @@ body {
 /* Tarjeta formulario */
 .card-header.bg-primary {
     background-color: #0097b2 !important;
-    color: white;
+    color: #fdf8f0;
 }
 
 /* Tabla y header */
 .card-header.bg-dark {
     background-color: #84b200 !important;
-    color: white;
+    color: #fdf8f0;
 }
 
 .table thead {
     background-color: #0097b2;
-    color: white;
+    color: #fdf8f0;
 }
 
 /* Etiquetas estado */

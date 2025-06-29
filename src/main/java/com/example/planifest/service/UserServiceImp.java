@@ -19,6 +19,7 @@ public class UserServiceImp implements Idao<User, Long> {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // 🔁 Constructor con inyección de dependencias
     public UserServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -41,8 +42,9 @@ public class UserServiceImp implements Idao<User, Long> {
     public void create(User user) {
         validateUser(user);
 
-        // Codificar la contraseña antes de guardar
+        // ✅ Codifica la contraseña con BCrypt antes de guardar
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         userRepository.save(user);
     }
 

@@ -50,15 +50,12 @@ public class HomeViewController {
             model.addAttribute("error", e.getMessage());
             return "registro";
         }
-<<<<<<< HEAD
 
-        user.setPassword((user.getPassword())); // encriptar contraseña
-        user.setRole(Role.EMPLOYEE); // o el rol que tú definas por defecto
-        userService.create(user);
+       // user.setPassword((user.getPassword())); // encriptar contraseña
+        //user.setRole(Role.EMPLOYEE); // o el rol que tú definas por defecto
+        //userService.create(user);
 
-        model.addAttribute("success", "¡Registro exitoso!");
-        return "redirect:/login";
-=======
->>>>>>> 6f7f5c1b9c86c10a541f17aa2085f4990036a825
+        //model.addAttribute("success", "¡Registro exitoso!");
+        //return "redirect:/login";
     }
 }
