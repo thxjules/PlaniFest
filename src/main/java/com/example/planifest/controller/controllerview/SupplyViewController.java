@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.planifest.entity.Supply;
-import com.example.planifest.service.EventServiceImp;
-import com.example.planifest.service.StockMovementServiceImp;
 import com.example.planifest.service.SupplyServiceImp;
 
 @Controller
@@ -18,49 +17,37 @@ import com.example.planifest.service.SupplyServiceImp;
 public class SupplyViewController {
 
     private final SupplyServiceImp supplyService;
-    private final EventServiceImp eventService;
-    private final StockMovementServiceImp StockMovementService;
 
-    public SupplyViewController(SupplyServiceImp supplyService, EventServiceImp eventService,
-            StockMovementServiceImp stockMovementService) {
+    public SupplyViewController(SupplyServiceImp supplyService) {
         this.supplyService = supplyService;
-        this.eventService = eventService;
-        this.StockMovementService = stockMovementService;
     }
 
     /* Metodo para traer los Suministros a la vista */
 
     @GetMapping
-    public String listarSupplies(Model model) {
-        model.addAttribute("supplies", supplyService.getAll());
+    public String listarSupplies(@RequestParam(name = "id", required= false) Long id, Model model) {
+        Supply supply = (id != null) ? supplyService.findById(id).orElse(new Supply()): new Supply();
+        model.addAttribute("supply", supply);
+        model.addAttribute("suministros", supplyService.getAll());
         return "supplies";
     }
 
-    @GetMapping("/create")
-    public String nuevoSupply(Model model) {
-        model.addAttribute("supply", new Supply());
-        /* Arroja el formulario para crear */
-        return "supplies";
-    }
-
+    /* Usan el mismo formulario (Por eso la condicional) */
     @PostMapping("/save")
     public String guardarSupply(@ModelAttribute Supply supply, Model model) {
         try {
             if (supply.getId() == null) {
-                supplyService.create(supply);
+                supplyService.create(supply);/* Creacion de un suministro */
             } else {
-                supplyService.update(supply);
+                supplyService.update(supply);/* Actualizacion */
             }
-            return "redirect:/supply/List";
+            return "redirect:/supplies-view";
         } catch (RuntimeException ex) {
             model.addAttribute("supply", supply);
             model.addAttribute("supplies", supplyService.getAll());
-            model.addAttribute("stockMovements", StockMovementService.getAll());
-            model.addAttribute("events", eventService.getAll());
             model.addAttribute("error", ex.getMessage());
-
-            /* Representa la ruda del request */
-            return "redirect:/supplies-view";
+            /* Vista de suministros*/
+            return "supplies";
         }
     }
 

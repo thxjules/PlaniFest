@@ -1,6 +1,7 @@
 package com.example.planifest.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,10 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
         return supplyRepository.count();
     }
     
+    /* Encontrar por Id */
+    public Optional<Supply> findById(Long id){
+        return supplyRepository.findById(id);
+    }
 
     @Override
     public void create(Supply supply) {
@@ -38,9 +43,6 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
 
     @Override
     public void update(Supply supply) {
-        if (supply.getId() != null && supplyRepository.existsById(supply.getId())) {
-            throw new RuntimeException("No se puede actualizar el Recurso porque no existe.");
-        }
         supplyInfoRequired(supply);
         supplyRepository.save(supply);
     }
