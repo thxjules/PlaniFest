@@ -1,0 +1,58 @@
+body {
+  background: url('/images/dashboard/3.png');
+  background-size: contain;
+  background-color: #000000;
+}
+
+
+.sidebar {
+  width: 270px;
+  background-color: #e7eed0;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar .brand img {
+  max-width: 250px;
+  height: auto;
+  display: block;
+  margin: 0 auto 2rem;
+  position: center;
+}
+
+.sidebar h4 {
+  text-align: center;
+  color: #025419;
+}
+
+.sidebar a,
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  margin: 10px auto;
+  border-radius: 10px;
+  color: #5271ff;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.logout-button {
+  background-color: #055801;
+  color: #ffffff;
+  font-weight: 600;
+  justify-content: center;
+  width: 100%;
+  border: none;
+}
+
+.sidebar a:hover,
+.logout-button:hover {
+  background-color: #c4ed98;
+  color: #000000;
+}

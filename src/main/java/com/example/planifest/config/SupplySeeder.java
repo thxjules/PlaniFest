@@ -37,7 +37,7 @@ public class SupplySeeder implements CommandLineRunner {
             supply1.setStorageLocation("Almacen numero 1");
             supply1.setStatus(SupplyStatus.AVAILABLE);
             supply1.setCurrentStock(20);
-            supply1.setMinStock(10);
+            supply1.setMinStock(5);
             supply1.setMaxStock(70);
             supply1.setPackagingUnit("Cajas de Espuma");
 
@@ -67,9 +67,9 @@ public class SupplySeeder implements CommandLineRunner {
                     "Precaucion: Uso de las fuentes de agua SOLO en eventos donde haya prescencia de Adultos y no eventos que tengan ningun tipo de menor de edad");
             supply3.setStorageLocation("Almacen numero 2");
             supply3.setStatus(SupplyStatus.AVAILABLE);
-            supply3.setCurrentStock(4);
+            supply3.setCurrentStock(5);
             supply3.setMinStock(2);
-            supply3.setMaxStock(8);
+            supply3.setMaxStock(10);
             supply3.setPackagingUnit("No tiene");
 
             supplyService.create(supply3);

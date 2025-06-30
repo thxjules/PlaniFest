@@ -3,92 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Catering Soft</title>
+    <title>Panel de Administración - Catering Soft</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+
 </head>
 <body>
-
-    <div class="sidebar">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
         <div>
-            <h2>Catering Soft</h2>
-            <a th:href="@{/users}" class="active"><i class='bx bx-user'></i> Users</a>
-            <a th:href="@{/events}"><i class='bx bx-calendar'></i> Events</a>
-            <a th:href="@{/tasks}"><i class='bx bx-task'></i> Tasks</a>
-            <a th:href="@{/supplies}"><i class='bx bx-box'></i> Supplies</a>
-            <a href="#" th:onclick="|event.preventDefault(); document.getElementById('logout-form').submit();|" class="logout-button">
-                <i class='bx bx-log-out'></i> Logout
+            <div class="brand px-2 mb-3">
+                <h2 class="fw-bold">Bienvenido Andministrador</h2>
+            </div>
+            <a th:href="@{/empleados}" th:classappend="${activePage == 'empleados'} ? 'active'">
+                <i class="bx bx-user"></i> Empleados
             </a>
-            <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+            <a th:href="@{/eventos}" th:classappend="${activePage == 'eventos'} ? 'active'">
+                <i class="bx bx-calendar"></i> Eventos
+            </a>
+            <a th:href="@{/tareas}" th:classappend="${activePage == 'tareas'} ? 'active'">
+                <i class="bx bx-task"></i> Tareas
+            </a>
+            <a th:href="@{/insumos}" th:classappend="${activePage == 'insumos'} ? 'active'">
+                <i class="bx bx-box"></i> Insumos
+            </a>
+            <!-- Botón logout -->
+            <form method="post" th:action="@{/logout}" class="mt-4 text-center">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="logout-button">
+                    <i class="bx bx-log-out"></i> Cerrar Sesión
+                </button>
+            </form>
         </div>
-        <div class="logo">
-            <img th:src="@{/img/home/planifest.png}" alt="Company Logo">
+        <div class="logo text-center mt-3">
+            <img th:src="@{/images/dashboard/admin.png}" alt="Logo de la Empresa">
         </div>
     </div>
 
+    <!-- Contenido -->
     <div class="main">
-        <h1>Welcome, Admin</h1>
+        <h1>Bienvenido Administrador</h1>
 
         <div class="grid">
             <div class="card">
-                <h3>Total Users</h3>
-                <p th:text="${totalUsers}">0</p>
+                <h3>Total de empleados</h3>
+                <p th:text="${totalEmpleados}">0</p>
             </div>
             <div class="card">
-                <h3>Total Events</h3>
-                <p th:text="${totalEvents}">0</p>
+                <h3>Total de eventos</h3>
+                <p th:text="${totalEventos}">0</p>
             </div>
             <div class="card">
-                <h3>Total Tasks</h3>
-                <p th:text="${totalTasks}">0</p>
+                <h3>Total de tareas</h3>
+                <p th:text="${totalTareas}">0</p>
             </div>
             <div class="card">
-                <h3>Pending Tasks</h3>
-                <p th:text="${pendingTasks}">0</p>
+                <h3>Tareas pendientes</h3>
+                <p th:text="${tareasPendientes}">0</p>
             </div>
             <div class="card">
-                <h3>Total Supplies</h3>
-                <p th:text="${totalSupplies}">0</p>
+                <h3>Total de insumos</h3>
+                <p th:text="${totalInsumos}">0</p>
             </div>
         </div>
 
-        <div class="grid actions" style="margin-top: 40px;">
-            <a th:href="@{/users}"><i class='bx bx-user'></i> Manage Users</a>
-            <a th:href="@{/events}"><i class='bx bx-calendar'></i> Manage Events</a>
-            <a th:href="@{/tasks}"><i class='bx bx-task'></i> Manage Tasks</a>
-            <a th:href="@{/supplies}"><i class='bx bx-box'></i> View Supplies</a>
-        </div>
-
-        <div class="grid" style="margin-top: 40px;">
+        <div class="grid mt-5">
             <div class="card">
-                <h3>Recent Activity</h3>
-                <ul th:if="${recentActivity}" style="list-style: none; padding-left: 0; text-align: left;">
-                    <li th:each="act : ${recentActivity}" th:text="${act}">Activity</li>
+                <h3>Actividad reciente</h3>
+                <ul th:if="${#lists.isEmpty(actividadReciente) == false}">
+                    <li th:each="act : ${actividadReciente}" th:text="${act}"></li>
                 </ul>
-                <p th:if="${#lists.isEmpty(recentActivity)}">No recent activity.</p>
+                <p th:if="${#lists.isEmpty(actividadReciente)}">No hay actividad reciente.</p>
             </div>
-
             <div class="card">
-                <h3>Upcoming Events</h3>
-                <ul th:if="${upcomingEvents}" style="list-style: none; padding-left: 0; text-align: left;">
-                    <li th:each="event : ${upcomingEvents}" th:text="${#dates.format(event.date, 'dd/MM')} + ' - ' + ${event.name}">Event</li>
+                <h3>Próximos eventos</h3>
+                <ul th:if="${proximosEventos != null and !proximosEventos.isEmpty()}">
+                    <li th:each="evento : ${proximosEventos}">
+                        <span th:text="${#temporals.format(evento.fecha, 'dd/MM')}"></span> - 
+                        <span th:text="${evento.nombre}"></span>
+                    </li>
                 </ul>
-                <p th:if="${#lists.isEmpty(upcomingEvents)}">No upcoming events.</p>
+                <p th:if="${proximosEventos == null or proximosEventos.isEmpty()}">No hay eventos próximos.</p>
             </div>
-
             <div class="card">
-                <h3>Notifications</h3>
-                <p th:each="n : ${notifications}" th:text="${n}">Notification</p>
+                <h3>Notificaciones</h3>
+                <p th:each="noti : ${notificaciones}" th:text="${noti}"></p>
             </div>
-
             <div class="card">
-                <h3>Employee of the Month</h3>
-                <p th:if="${employeeOfMonth}" th:text="'🎖️ ' + ${employeeOfMonth.name}">Employee</p>
-                <p th:unless="${employeeOfMonth}">Not available</p>
+                <h3>Empleado del mes</h3>
+                <p th:if="${empleadoDelMes != null}">🎖 <span th:text="${empleadoDelMes.name}"></span></p>
+                <p th:if="${empleadoDelMes == null}">No disponible</p>
             </div>
         </div>
     </div>
-
 </body>
 </html>

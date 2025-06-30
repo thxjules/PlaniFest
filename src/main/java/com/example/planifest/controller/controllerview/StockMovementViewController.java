@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.planifest.entity.StockMovement;
 import com.example.planifest.service.StockMovementServiceImp;
@@ -25,40 +26,42 @@ public class StockMovementViewController {
     }
 
     @GetMapping
-    public String listarStock(Model model) {
+    public String listarStock(@RequestParam(name = "id", required=false)Long id, Model model){
+        StockMovement stockMovement = (id != null) ? stockMovementService.findById(id).orElse(new StockMovement()): new StockMovement();
+
+        model.addAttribute("stockMovement", stockMovement);
         model.addAttribute("stockMovements", stockMovementService.getAll());
-        return "stockMovement/list";
+        model.addAttribute("supplies", supplyService.getAll());
+
+        return "stockMovement";
     }
 
-    @GetMapping("/create")
-    public String nuevoStock(Model model) {
-        model.addAttribute("stockMovement", new StockMovement());
-        return "stockMovement/formulario";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String editarStock(@PathVariable Long id, Model model) {
-        StockMovement stockMovement = stockMovementService.getById(id);
-        model.addAttribute("stockMovements", stockMovement);
-        return "stockMovement/formulario";
-
-    }
-
-    @PostMapping("save")
-    public String guardarStock(@ModelAttribute StockMovement stockMovement) {
+    @PostMapping("/save")
+    public String guardarStock(@ModelAttribute StockMovement stockMovement, Model model) {
+        try {
         if (stockMovement.getId() == null) {
             stockMovementService.create(stockMovement);
         } else {
             stockMovementService.update(stockMovement);
         }
-        return "redirect:/stockMovents";
+        return "redirect:/stock-view";
+        } catch (RuntimeException ex) {
 
+        model.addAttribute("stockMovement", stockMovement);
+        model.addAttribute("stockMovements", stockMovementService.getAll());
+        model.addAttribute("supply", supplyService.getAll());
+        model.addAttribute("error", ex.getMessage());
+
+        return "stockMovement";
+        }
     }
+
+
 
     @GetMapping("/delete/{id}")
     public String eliminarStock(@PathVariable Long id) {
         stockMovementService.deleteById(id);
-        return "redirect:/stockMovement";
+        return "redirect:/stock-view";
     }
 
 }

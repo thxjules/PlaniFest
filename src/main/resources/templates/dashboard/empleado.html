@@ -1,160 +1,138 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Dashboard - PLANIFEST</title>
+    <title>Empleado - Planifest</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/empleado.css}">
+
 </head>
 
 <body>
-    <div class="container">
+    <div class="dashboard-wrapper">
         <!-- Sidebar -->
-        <aside>
-            <div class="top">
-                <div class="logo">
-                    <img th:src="@{/images/home/logp.png}" alt="Logo">
-                    <h2>Plani<span class="danger">Fest</span></h2>
-                </div>
-                <div class="close" id="close-btn">
-                    <i class="bi bi-x-lg"></i>
-                </div>
+        <div class="sidebar" id="sidebar">
+            <div class="brand text-center">
+                <img th:src="@{/images/dashboard/empleado.png}" alt="Logo de la Empresa">
             </div>
 
-            <div class="sidebar">
-                <a th:href="@{/dashboard}" class="active"><i class="bi bi-grid"></i>
-                    <h3>Home</h3>
-                </a>
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit" class="logout-btn">
-                        <i class="bi bi-door-open"></i>
-                        <h3>Logout</h3>
+            <div class="text-center mt-auto">
+                <form method="post" th:action="@{/logout}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="logout-button">
+                        <i class="bx bx-log-out"></i> Cerrar Sesión
                     </button>
                 </form>
             </div>
-        </aside>
+        </div>
 
-        <!-- Main Content -->
-        <main>
-            <h1 class="text-center">Assigned Tasks</h1>
+        <!-- Contenido principal -->
+        <div id="content" class="main">
+            <nav class="navbar mb-4">
+                <i class="bx bx-menu" id="toggle-sidebar"></i>
+                <span class="fs-5 fw-bold text-gold">Panel Empleado</span>
+            </nav>
 
-            <!-- Filters -->
-            <div class="date">
+            <main>
+                <h2 class="text-gold text-center mb-4">Tareas Asignadas</h2>
+
+                <!-- Filtros -->
                 <div class="row mb-4 justify-content-center">
                     <div class="col-md-3">
-                        <label for="date" class="form-label fw-semibold">Date</label>
-                        <input type="date" id="date" class="form-control">
+                        <label for="fecha" class="form-label fw-semibold">Fecha</label>
+                        <input type="date" id="fecha" class="form-control">
                     </div>
                     <div class="col-md-3">
-                        <label for="status" class="form-label fw-semibold">Status</label>
-                        <select id="status" class="form-select">
-                            <option value="">All</option>
-                            <option value="pending">Pending</option>
-                            <option value="in progress">In Progress</option>
-                            <option value="completed">Completed</option>
+                        <label for="estado" class="form-label fw-semibold">Estado</label>
+                        <select id="estado" class="form-select">
+                            <option value="">Todos</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="en progreso">En progreso</option>
+                            <option value="completado">Completado</option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="event" class="form-label fw-semibold">Event</label>
-                        <input type="text" id="event" class="form-control" placeholder="Search event...">
+                        <label for="evento" class="form-label fw-semibold">Evento</label>
+                        <input type="text" id="evento" class="form-control" placeholder="Buscar evento...">
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
-                        <button onclick="filterTasks()" class="btn btn-gold w-100">Filter</button>
+                        <button onclick="filtrarTareas()" class="btn btn-gold w-100">Filtrar</button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Tasks Table -->
-            <div class="recent-orders">
-                <h2 class="text-center">Your Tasks</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Event</th>
-                            <th>Task</th>
-                            <th>Description</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="task-table-body">
-                        <tr th:each="task : ${assignedTasks}">
-                            <td th:text="${task.event.name}">Event Name</td>
-                            <td th:text="${task.name}">Task Name</td>
-                            <td th:text="${task.description}">Description</td>
-                            <td th:text="${task.taskDate}">Date</td>
-                            <td th:text="${task.status}">Status</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div th:replace="fragments/pagination :: pagination(${currentPage}, ${totalPages})"></div>
-            </div>
-        </main>
-
-        <!-- Right Section (optional) -->
-        <div class="right">
-            <div class="top">
-                <button id="menu-btn"><i class="bi bi-list"></i></button>
-                <div class="theme-toggler" id="theme-toggler">
-                    <i class="bi bi-sun active"></i>
-                    <i class="bi bi-moon-stars"></i>
+                <!-- Tabla de tareas -->
+                <div class="table-responsive bg-white rounded shadow p-3">
+                    <table class="table table-bordered table-hover">
+                        <thead class="text-center">
+                            <tr>
+                                <th>Evento</th>
+                                <th>Tarea</th>
+                                <th>Descripción</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-tareas-body">
+                            <tr th:each="tarea : ${tareasAsignadas}">
+                                <td th:text="${tarea.evento.nombre}"></td>
+                                <td th:text="${tarea.nombre}"></td>
+                                <td th:text="${tarea.descripcion}"></td>
+                                <td th:text="${tarea.fechaTarea}"></td>
+                                <td th:text="${tarea.estado}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="profile">
-                    <div class="info">
-                        <span th:if="${user != null}" th:text="${user.name}">Usuario</span>
-                        <small class="text-muted">Employee</small>
-                    </div>
-                    <div class="profile-photo">
-                        <img th:src="@{/images/.jpg}" alt="profile">
-                    </div>
-                </div>
-            </div>
+            </main>
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script th:src="@{/js/dashboard.js}"></script>
     <script>
-        document.getElementById('menu-btn').addEventListener('click', () => {
-            document.querySelector('aside').classList.toggle('showMenu');
+        document.getElementById('toggle-sidebar').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('show');
+            document.getElementById('content').classList.toggle('expanded');
         });
 
-        async function filterTasks() {
-            let date = document.getElementById('date').value;
-            let status = document.getElementById('status').value;
-            let event = document.getElementById('event').value;
+        async function filtrarTareas() {
+            let fecha = document.getElementById('fecha').value;
+            let estado = document.getElementById('estado').value;
+            let evento = document.getElementById('evento').value;
 
-            let query = new URLSearchParams({ date, status, event }).toString();
+            let query = new URLSearchParams({
+                fecha: fecha,
+                estado: estado,
+                evento: evento
+            }).toString();
 
-            try {
-                let response = await fetch(`/employee/filter?${query}`);
+                try {
+                let response = await fetch(`/empleado/filtro?${query}`);
                 let data = await response.json();
 
-                let tbody = document.getElementById('task-table-body');
+                let tbody = document.getElementById('tabla-tareas-body');
                 tbody.innerHTML = '';
 
                 if (data.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No tasks found for the selected filters.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay tareas para estos filtros.</td></tr>';
                     return;
                 }
 
-                data.data.forEach(task => {
+                data.data.forEach(tarea => {
                     tbody.innerHTML += `
                         <tr>
-                            <td>${task.event.name}</td>
-                            <td>${task.name}</td>
-                            <td>${task.description}</td>
-                            <td>${task.taskDate}</td>
-                            <td>${task.status}</td>
-                        </tr>`;
+                            <td>${tarea.evento.nombre}</td>
+                            <td>${tarea.nombre}</td>
+                            <td>${tarea.descripcion}</td>
+                            <td>${tarea.fechaTarea}</td>
+                            <td>${tarea.estado}</td>
+                        </tr>
+                    `;
                 });
             } catch (error) {
-                console.error('Error while filtering tasks:', error);
+                console.error('Error al filtrar tareas:', error);
             }
         }
     </script>
 </body>
-
 </html>

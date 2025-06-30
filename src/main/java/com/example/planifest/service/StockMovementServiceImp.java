@@ -2,6 +2,7 @@ package com.example.planifest.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,10 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
         return stockMovementRepository.count();
     }
 
+    public Optional<StockMovement> findById(Long id){
+        return stockMovementRepository.findById(id);
+    }
+
     @Override
     public void create(StockMovement stockMovement) {
         stockMovementInfoRequired(stockMovement);
@@ -38,16 +43,12 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
 
     public StockMovement getById(Long id) {
         return stockMovementRepository.findById(id)
-                .orElseThrow(
-                        () -> new RuntimeException("El movimiento de stock no ha sido encontrado con este id " + id));
+        .orElseThrow(
+        () -> new RuntimeException("El movimiento de stock no ha sido encontrado con este id " + id));
     }
 
     @Override
     public void update(StockMovement stockMovement) {
-        if (stockMovement.getId() != null && stockMovementRepository.existsById(stockMovement.getId())) {
-        } else {
-            throw new RuntimeException("No se puede actualizar el movimiento de stock porque no existe.");
-        }
         stockMovementInfoRequired(stockMovement);
         stockMovementRepository.save(stockMovement);
     }

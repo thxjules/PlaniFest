@@ -37,7 +37,7 @@ public class StockMovementSeeder implements CommandLineRunner {
 
             List<Supply> supplies = supplyService.getAll();
 
-            if (supplies.size() >= 1) {
+            if (supplies.size() >= 3) {
 
                 StockMovement stockMovement1 = new StockMovement();
                 /* El 0 demuestra la posicion del supply que se usara */
@@ -49,6 +49,37 @@ public class StockMovementSeeder implements CommandLineRunner {
                         "Se daran entrada a 5 unidades mas de los Globos de Colores que estan con el ID numero 1");
                 stockMovementService.create(stockMovement1);
                 System.out.println("Seeder: El Stock Movement numero 1 se ha creado");
+
+
+                StockMovement stockMovement2 = new StockMovement();
+                /* El 0 demuestra la posicion del supply que se usara */
+                stockMovement2.setSupply(supplies.get(1));
+                stockMovement2.setDate(LocalDate.now());
+                stockMovement2.setQuantity(10);
+                stockMovement2.setType(StockStatus.ENTRY);
+                stockMovement2.setRemarks(
+                        "Se agragara 10 bolsas con pulseras de neon con el id numero 2");
+                stockMovementService.create(stockMovement2);
+                System.out.println("Seeder: El Stock Movement numero 2 se ha creado");
+
+                 StockMovement stockMovement3 = new StockMovement();
+                /* El 0 demuestra la posicion del supply que se usara */
+                stockMovement3.setSupply(supplies.get(2));
+                stockMovement3.setDate(LocalDate.now());
+                stockMovement3.setQuantity(1);
+                stockMovement3.setType(StockStatus.EXIT);
+                stockMovement3.setRemarks(
+                        "Se quitaran/restaran 1 Fuente de agua por motivos de fallos");
+                stockMovementService.create(stockMovement3);
+                System.out.println("Seeder: El Stock Movement numero 3 se ha creado");
+
+
+
+
+
+
+
+
 
             } else {
                 System.out
