@@ -1,41 +1,64 @@
+/* Fondo general con verde más vistoso */
 body {
-    background-color: #f8f9fa;
+    background-color: #8bf46b; /* Verde claro más saturado */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Agrandar logo */
 .header-section img {
-    max-height: 100px;
+    max-height: 190px;
     margin-bottom: 15px;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(249, 225, 9, 0.782);
 }
 
+/* Título */
 .header-section h1 {
     font-weight: 700;
-    color: #0d6efd;
+    color: #fbd249;
 }
 
+.header-section p {
+    color: #000000;
+}
+
+/* Card contenedor de la tabla */
+.card {
+    border-radius: 10px;
+    background-color: #7ff2a5cc;
+}
+
+/* Encabezado de la tarjeta - la barra superior */
+.card-header {
+    background-color: #77dafa !important; /* Amarillo dorado pálido */
+    color: #a2f06a !important;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Título dentro del encabezado */
 .card-header h5 {
     font-weight: 600;
 }
 
-.card {
-    border-radius: 10px;
-}
-
+/* Celdas y columnas */
 .table td, .table th {
     vertical-align: middle;
 }
 
+/* Encabezado de la tabla (fila superior) */
 .table thead th {
-    background-color: #e9ecef;
+    background-color: #a2f29b; /* Muy suave para diferenciar del header */
+    color: #000000;
 }
 
+/* Botones */
 .btn-outline-primary, .btn-outline-danger {
     border-radius: 20px;
     padding: 4px 12px;
 }
 
+/* Estado (badge) */
 .badge {
     font-size: 0.9rem;
     padding: 5px 10px;
@@ -43,14 +66,17 @@ body {
     text-transform: capitalize;
 }
 
+/* Alertas */
 .alert {
     font-size: 0.95rem;
 }
 
+/* Textareas */
 textarea.form-control {
     resize: vertical;
 }
 
+/* Etiquetas del formulario */
 form .form-label {
     font-weight: 500;
 }
