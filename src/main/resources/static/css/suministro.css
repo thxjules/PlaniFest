@@ -1,5 +1,5 @@
  body {
-            background-color: #9c5c31;
+            background-color: #943a3a;
             font-family: 'Poppins', sans-serif;
         }
 
@@ -7,8 +7,13 @@
             color: #d4af37;
         }
 
-        .table thead {
-            background-color: #f8f9fa;
+        .card{
+            width: 100px;
+            height: 200px;
+        }
+        .table {
+            height: 400px;
+            width: 400px;
         }
 
         .table th,
