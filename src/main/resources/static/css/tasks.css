@@ -1,13 +1,25 @@
-/* Estilo base */
+/* Fondo con imagen */
 body {
-    background-color: #fdf8f0 !important;
-    font-family: 'Segoe UI', sans-serif;
-    color: #333;
+    background-image: url('/images/tareas/tareas.jpeg'); /* asegúrate que existe */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
 }
 
-/* Header con logo y título centrado */
+/* Contenedor transparente para dejar ver el fondo */
+.fondo-transparente {
+    background-color: rgba(255, 255, 255, 0.85); /* blanco con opacidad */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+/* Header con logo y título */
 .header-section {
     text-align: center;
     margin-bottom: 2rem;
@@ -20,11 +32,14 @@ body {
     margin-bottom: 10px;
 }
 
-
 .header-section h1 {
     font-size: 2.5rem;
     color: #0097b2;
-    margin: 0;
+    margin: 0 1rem 0 0;
+}
+
+.header-section .btn {
+    margin-top: 0.25rem;
 }
 
 .header-section p {
@@ -40,7 +55,7 @@ body {
 
 .btn-outline-primary:hover {
     background-color: #0097b2;
-    color:#fdf8f0;
+    color: #fdf8f0;
 }
 
 /* Botón verde */
@@ -54,24 +69,24 @@ body {
     border-color: #6d9100;
 }
 
-/* Tarjeta formulario */
+/* Card Headers */
 .card-header.bg-primary {
     background-color: #0097b2 !important;
     color: #fdf8f0;
 }
 
-/* Tabla y header */
 .card-header.bg-dark {
     background-color: #84b200 !important;
     color: #fdf8f0;
 }
 
+/* Tabla */
 .table thead {
     background-color: #0097b2;
     color: #fdf8f0;
 }
 
-/* Etiquetas estado */
+/* Etiquetas de estado */
 .badge.bg-warning {
     background-color: #ffc107;
 }

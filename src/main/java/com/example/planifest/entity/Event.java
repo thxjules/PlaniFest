@@ -81,4 +81,7 @@ public class Event {
     @ManyToMany
     @JoinTable(name = "event_service", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
     private List<PlaniService> services;
+
+    @Enumerated(EnumType.STRING)
+    private EventStatus eventStatus;
 }
