@@ -1,4 +1,3 @@
-css general 
 * {
   box-sizing: border-box;
   margin: 0;
@@ -12,11 +11,10 @@ css general
   min-height: 100vh;
 }
 
-
 .main {
   flex: 1;
   padding: 1rem;
-  background-color: #ffffffcc;
+  background-color: #ffffff84;
 }
 
 .main h2 {

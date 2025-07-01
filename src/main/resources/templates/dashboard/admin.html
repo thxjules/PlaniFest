@@ -8,27 +8,25 @@
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/admin.css}">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
-
-
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div>
             <div class="brand px-2 mb-3">
-                <h2 class="fw-bold">Bienvenido Andministrador</h2>
+                <h2 class="fw-bold">Bienvenido Administrador</h2>
             </div>
-            <a th:href="@{/empleados}" th:classappend="${activePage == 'empleados'} ? 'active'">
+            <a th:href="@{/employees-view}" th:classappend="${activePage == 'employees'} ? 'active'">
                 <i class="bx bx-user"></i> Empleados
             </a>
-            <a th:href="@{/eventos}" th:classappend="${activePage == 'eventos'} ? 'active'">
+            <a th:href="@{/events-view}" th:classappend="${activePage == 'events'} ? 'active'">
                 <i class="bx bx-calendar"></i> Eventos
             </a>
-            <a th:href="@{/tareas}" th:classappend="${activePage == 'tareas'} ? 'active'">
+            <a th:href="@{/tasks-view}" th:classappend="${activePage == 'tasks'} ? 'active'">
                 <i class="bx bx-task"></i> Tareas
             </a>
-            <a th:href="@{/insumos}" th:classappend="${activePage == 'insumos'} ? 'active'">
-                <i class="bx bx-box"></i> Insumos
+            <a th:href="@{/supplies-view}" th:classappend="${activePage == 'supplies'} ? 'active'">
+                <i class="bx bx-box"></i> Suministros
             </a>
             <!-- Botón logout -->
             <form method="post" th:action="@{/logout}" class="mt-4 text-center">
@@ -45,7 +43,7 @@
 
     <!-- Contenido -->
     <div class="main">
-        <h1>Bienvenido Administrador</h1>
+        <h1>Administrador</h1>
 
         <div class="grid">
             <div class="card">
@@ -65,7 +63,7 @@
                 <p th:text="${tareasPendientes}">0</p>
             </div>
             <div class="card">
-                <h3>Total de insumos</h3>
+                <h3>Total de suministros</h3>
                 <p th:text="${totalInsumos}">0</p>
             </div>
         </div>
@@ -82,8 +80,8 @@
                 <h3>Próximos eventos</h3>
                 <ul th:if="${proximosEventos != null and !proximosEventos.isEmpty()}">
                     <li th:each="evento : ${proximosEventos}">
-                        <span th:text="${#temporals.format(evento.fecha, 'dd/MM')}"></span> - 
-                        <span th:text="${evento.nombre}"></span>
+                        <span th:text="${#temporals.format(evento.date, 'dd/MM')}"></span> - 
+                        <span th:text="${evento.eventName}"></span>
                     </li>
                 </ul>
                 <p th:if="${proximosEventos == null or proximosEventos.isEmpty()}">No hay eventos próximos.</p>

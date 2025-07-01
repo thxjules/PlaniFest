@@ -28,7 +28,8 @@ public class SecurityConfig {
                     "/", "/home",
                     "/css/**", "/js/**", "/images/**",
                     "/registro", "/registro/**",
-                    "/login", "/error", "/dashboard/empleado"
+                    "/login", "/error", "/dashboard/admin",
+                    "/dashboard/empleado", "/dashboard/stock"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

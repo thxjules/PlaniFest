@@ -1,9 +1,8 @@
 body {
-  background: url('/images/dashboard/3.png');
+  background: url("/images/dashboard/3.png");
   background-size: contain;
   background-color: #000000;
 }
-
 
 .sidebar {
   width: 270px;
@@ -55,4 +54,21 @@ body {
 .logout-button:hover {
   background-color: #c4ed98;
   color: #000000;
+}
+
+.main h1 {
+  font-size: 2rem;
+  color: #ffff;
+  background: #2f6f06;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 10px;
+  font-family: "Poppins", sans-serif;
+
+}
+
+.btn-gold {
+  background-color: #5ccd2b;
+  color: #000;
+  border: none;
 }

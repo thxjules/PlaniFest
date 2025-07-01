@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.planifest.entity.User;
 import com.example.planifest.repository.UserRepository;
 import com.example.planifest.service.dao.Idao;
+import com.example.planifest.enums.Role;
 
 import jakarta.transaction.Transactional;
 
@@ -19,7 +20,6 @@ public class UserServiceImp implements Idao<User, Long> {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // 🔁 Constructor con inyección de dependencias
     public UserServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -38,11 +38,14 @@ public class UserServiceImp implements Idao<User, Long> {
         return userRepository.findByEmail(email).isPresent();
     }
 
+    public long countEmployees() {
+    return userRepository.countByRole(Role.EMPLOYEE);
+}
+
     @Override
     public void create(User user) {
         validateUser(user);
 
-        // ✅ Codifica la contraseña con BCrypt antes de guardar
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepository.save(user);

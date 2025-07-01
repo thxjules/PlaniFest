@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Report</title>
+    <style>
+        body {
+            background: url(../static/images/dashboard/2.png);
+            color: #ffffff;
+            font-family: "Cormorant Garamond", serif;
+            padding: 40px;
+        }
+
+        .report-container {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(210, 180, 140, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #af4c0fbe;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #af4c0fbe;
+            color: #ffffff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #1f1f1f;
+        }
+
+        .low-stock {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            text-align: center;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <h1>Reporte de Inventario - PlaniFest</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Descripción</th>
+                    <th>Ubicación</th>
+                    <th>Estado</th>
+                    <th>Stock Actual</th>
+                    <th>Stock Mínimo</th>
+                    <th>Stock Máximo</th>
+                    <th>Unidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="supply : ${supplies}">
+                    <td th:text="${supply.name}">Nombre</td>
+                    <td th:text="${supply.supplyType}">Tipo</td>
+                    <td th:text="${supply.description}">Descripción</td>
+                    <td th:text="${supply.storageLocation}">Ubicación</td>
+                    <td th:text="${supply.status}">Estado</td>
+                    <td th:text="${supply.currentStock}" 
+                    th:classappend="${supply.currentStock} &lt;= ${supply.minStock} ? 'low-stock' : ''">Actual</td>
+                    <td th:text="${supply.minStock}">Min</td>
+                    <td th:text="${supply.maxStock}">Max</td>
+                    <td th:text="${supply.packagingUnit}">Unidad</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            Reporte generado automáticamente por el sistema el <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
+        </div>
+    </div>
+</body>
+</html>

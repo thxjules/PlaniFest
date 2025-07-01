@@ -1,7 +1,6 @@
-admin css 
-/* Fondo y estructura general */
+
 body {
-  background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('../images/dashboard/1.png');
+  background: linear-gradient(rgba(255, 255, 255, 0.397), rgba(255, 255, 255, 0.293)), url('../images/dashboard/1.png');
   background-size:contain;
   background-attachment: fixed;
   overflow-x: hidden;
@@ -73,7 +72,7 @@ html, body {
 }
 
 .logout-button:hover {
-  background-color: #c4ed98;
+  background-color: #98dfed;
   color: #000;
 }
 
@@ -104,7 +103,7 @@ html, body {
 /* Tarjetas del dashboard */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
   margin-top: 1rem;
 }

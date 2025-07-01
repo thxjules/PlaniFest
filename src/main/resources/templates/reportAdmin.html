@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Report</title>
+    <style>
+        body {
+            background: url(../static/images/dashboard/1.png);
+            color: #ffffff;
+            font-family: "Cormorant Garamond", serif;
+            padding: 40px;
+        }
+
+        .report-container {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(210, 180, 140, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ffff;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #00373a;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        tr:nth-child(even) {
+            background-color: #1f1f1f;
+        }
+
+        .value {
+            font-weight: bold;
+            color: #d5fdff;
+            text-align: right;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            text-align: center;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="report-container">
+    <h1>Reporte de Administración - PlaniFest</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Métrica</th>
+            <th>Valor</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Total de empleados</td>
+            <td class="value" th:text="${totalEmpleados}">0</td>
+        </tr>
+        <tr>
+            <td>Total de eventos</td>
+            <td class="value" th:text="${totalEventos}">0</td>
+        </tr>
+        <tr>
+            <td>Total de tareas</td>
+            <td class="value" th:text="${totalTareas}">0</td>
+        </tr>
+        <tr>
+            <td>Tareas pendientes</td>
+            <td class="value" th:text="${tareasPendientes}">0</td>
+        </tr>
+        <tr>
+            <td>Total de suministros</td>
+            <td class="value" th:text="${totalInsumos}">0</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Reporte generado automáticamente por el sistema el <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
+    </div>
+</div>
+</body>
+</html>
