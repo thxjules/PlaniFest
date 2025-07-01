@@ -28,6 +28,9 @@
             <a th:href="@{/supplies-view}" th:classappend="${activePage == 'supplies'} ? 'active'">
                 <i class="bx bx-box"></i> Suministros
             </a>
+            <a th:href="@{/admin/report}" class="btn-gold">
+                📄 Descargar reporte PDF
+            </a>
             <!-- Botón logout -->
             <form method="post" th:action="@{/logout}" class="mt-4 text-center">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />

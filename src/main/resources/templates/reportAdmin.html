@@ -1,64 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Admin Report</title>
     <style>
         body {
-            background: url(../static/images/dashboard/1.png);
-            color: #ffffff;
-            font-family: "Cormorant Garamond", serif;
+            background-color: #ffffff;
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: #000000;
+            font-family: serif;
             padding: 40px;
         }
 
         .report-container {
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(210, 180, 140, 0.3);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #d2b48c;
         }
 
         h1 {
             text-align: center;
-            font-size: 2.2rem;
-            margin-bottom: 30px;
-            color: #ffffff;
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #000000;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 16px;
-            margin-top: 20px;
+            font-size: 12px;
         }
 
         th, td {
-            border: 1px solid #ffff;
-            padding: 12px;
-            text-align: left;
+            border: 1px solid #d2b48c;
+            padding: 6px;
+            text-align: center;
         }
 
         th {
-            background-color: #00373a;
+            background-color: #5a2e0f;
             color: #ffffff;
-            font-size: 1rem;
         }
 
         tr:nth-child(even) {
-            background-color: #1f1f1f;
+            background-color: #f3f2d3;
         }
 
-        .value {
+        .low-stock {
             font-weight: bold;
-            color: #d5fdff;
-            text-align: right;
+            color: #000000;
         }
 
         .footer {
-            margin-top: 40px;
-            font-size: 0.9rem;
+            margin-top: 30px;
+            font-size: 10px;
             text-align: center;
-            color: #ffffff;
+            color: #000000;
         }
     </style>
 </head>
@@ -98,7 +96,8 @@
     </table>
 
     <div class="footer">
-        Reporte generado automáticamente por el sistema el <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
+        Reporte generado automáticamente por el sistema el 
+        <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
     </div>
 </div>
 </body>
