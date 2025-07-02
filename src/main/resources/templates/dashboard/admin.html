@@ -22,6 +22,9 @@
             <a th:href="@{/events-view}" th:classappend="${activePage == 'events'} ? 'active'">
                 <i class="bx bx-calendar"></i> Eventos
             </a>
+             <a th:href="@{/clients-view}" th:classappend="${activePage == 'clients'} ? 'active'">
+                <i class="bx bx-user"></i> Clientes
+            </a>
             <a th:href="@{/tasks-view}" th:classappend="${activePage == 'tasks'} ? 'active'">
                 <i class="bx bx-task"></i> Tareas
             </a>
