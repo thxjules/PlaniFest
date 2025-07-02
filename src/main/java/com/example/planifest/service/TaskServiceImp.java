@@ -20,7 +20,7 @@ public class TaskServiceImp implements Idao<Task, Long> {
         this.taskRepository = taskRepository;
     }
 
-    // ----------------- CRUD BÁSICO -----------------
+  
 
     @Override
     public List<Task> getAll() {

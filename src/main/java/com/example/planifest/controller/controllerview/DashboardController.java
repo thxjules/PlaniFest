@@ -1,24 +1,108 @@
 package com.example.planifest.controller.controllerview;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.planifest.entity.Event;
+import com.example.planifest.entity.Supply;
+import com.example.planifest.entity.User;
+import com.example.planifest.enums.Role;
+import com.example.planifest.service.EventServiceImp;
+import com.example.planifest.service.StockMovementServiceImp;
+import com.example.planifest.service.SupplyServiceImp;
+import com.example.planifest.service.TaskServiceImp;
+import com.example.planifest.service.UserServiceImp;
 
 @Controller
 public class DashboardController {
 
+    @Autowired
+    private UserServiceImp userService;
+
+    @Autowired
+    private EventServiceImp eventService;
+
+    @Autowired
+    private TaskServiceImp taskService;
+
+    @Autowired
+    private SupplyServiceImp supplyService;
+
+    @Autowired
+    private StockMovementServiceImp stockService;
+
+    // Dashboard de administrador
     @GetMapping("/dashboard/admin")
-    public String adminDashboard() {
+    public String adminDashboard(Model model) {
+
+        long totalEmpleados = userService.countEmployees();
+        long totalEventos = eventService.count();
+        long totalTareas = taskService.count();
+        long totalInsumos = supplyService.count();
+        long tareasPendientes = taskService.getAll().stream()
+                .filter(task -> task.getStatus().name().equalsIgnoreCase("PENDING"))
+                .count();
+
+        List<String> actividadReciente = List.of(
+                "Se creó un nuevo evento empresarial",
+                "Se completó una tarea: Coordinación",
+                "Se actualizó el stock: Mantelería");
+
+        List<Event> proximosEventos = eventService.getAll().stream()
+                .filter(e -> e.getDate().isAfter(LocalDate.now()))
+                .limit(5)
+                .collect(Collectors.toList());
+
+        List<String> notificaciones = List.of(
+                "Nuevas tareas sin asignar",
+                "Stock bajo en bebidas");
+
+        List<User> empleados = userService.getAll().stream()
+                .filter(u -> u.getRole() == Role.EMPLOYEE)
+                .toList();
+        User empleadoDelMes = empleados.isEmpty() ? null : empleados.get(0);
+
+        model.addAttribute("totalEmpleados", totalEmpleados);
+        model.addAttribute("totalEventos", totalEventos);
+        model.addAttribute("totalTareas", totalTareas);
+        model.addAttribute("totalInsumos", totalInsumos);
+        model.addAttribute("tareasPendientes", tareasPendientes);
+        model.addAttribute("actividadReciente", actividadReciente);
+        model.addAttribute("proximosEventos", proximosEventos);
+        model.addAttribute("notificaciones", notificaciones);
+        model.addAttribute("empleadoDelMes", empleadoDelMes);
+        model.addAttribute("activePage", "dashboard");
+
         return "dashboard/admin";
     }
 
+    // Dashboard de empleado 
     @GetMapping("/dashboard/empleado")
     public String empleadoDashboard() {
         return "dashboard/empleado";
     }
 
+    // Dashboard de inventario
     @GetMapping("/dashboard/stock")
-    public String stockDashboard() {
-        return "dashboard/stock";
+    public String stockDashboard(Model model) {
+
+         long totalSupplies = supplyService.count();
+        model.addAttribute("totalSupplies", totalSupplies);
+
+        List<Supply> criticalSupplies = supplyService.getAll().stream()
+                .filter(s -> s.getCurrentStock() < s.getMinStock())
+                .collect(Collectors.toList());
+        model.addAttribute("criticalSupplies", criticalSupplies);
+        model.addAttribute("lowStockCount", criticalSupplies.size());
+
+        model.addAttribute("activePage", "stock");
+        
+        return "/dashboard/stock";
     }
 }
-
