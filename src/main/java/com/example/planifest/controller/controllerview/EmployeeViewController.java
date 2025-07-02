@@ -1,5 +1,7 @@
 package com.example.planifest.controller.controllerview;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.planifest.entity.User;
 import com.example.planifest.enums.Role;
 import com.example.planifest.service.PositionServiceImpl;
 import com.example.planifest.service.UserServiceImp;
@@ -24,14 +27,18 @@ public class EmployeeViewController {
         this.positionService = positionService;
     }
 
+    // Vista de empleados con filtro por posición
     @GetMapping
-    public String mostrarEmpleados(Model model) {
-        model.addAttribute("empleados", userService.getAll());
+    public String mostrarEmpleados(@RequestParam(required = false) Long positionId, Model model) {
+        List<User> empleados = userService.getEmployeesFilteredByPosition(positionId);
+        model.addAttribute("empleados", empleados);
         model.addAttribute("posiciones", positionService.getAll());
+        model.addAttribute("positionId", positionId); // para mantener seleccionada la posición
         model.addAttribute("activePage", "employees");
-        return "empleados"; // nombre del archivo .html
+        return "empleados"; 
     }
 
+    
     @PostMapping("/actualizar")
     public String actualizarCargo(
             @RequestParam("id") Long userId,

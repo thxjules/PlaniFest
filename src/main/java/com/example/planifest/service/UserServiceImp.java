@@ -65,9 +65,19 @@ public class UserServiceImp implements Idao<User, Long> {
         }
     }
 
+    public List<User> getEmployeesFilteredByPosition(Long positionId) {
+        List<User> empleados = userRepository.findAll().stream()
+                .filter(user -> user.getRole() == Role.EMPLOYEE)
+                .filter(user -> positionId == null ||
+                        (user.getPosition() != null &&
+                                user.getPosition().getId().equals(positionId)))
+                .toList();
+        return empleados;
+    }
+
     public void actualizarSoloPosicion(Long userId, Long positionId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
 
         if (user.getRole() == Role.ADMIN || user.getRole() == Role.STOCK_ADMIN) {
             throw new RuntimeException("No se puede cambiar la posición de un administrador.");
