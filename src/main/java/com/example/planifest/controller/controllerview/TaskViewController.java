@@ -42,49 +42,49 @@ public class TaskViewController {
             @RequestParam(required = false) Long usuarioId,
             Model model) {
 
+        // Filtrar tareas según los parámetros
         List<Task> tareas = taskService.filtrarPorNombreEstadoFechaYUsuario(nombre, estado, fechaTarea, usuarioId);
 
         model.addAttribute("tareas", tareas);
+        model.addAttribute("task", new Task()); // Para formulario nueva tarea
+
+        // Agregar los valores de filtro al modelo para mantenerlos seleccionados
         model.addAttribute("estado", estado);
         model.addAttribute("fechaTarea", fechaTarea);
         model.addAttribute("nombre", nombre);
         model.addAttribute("usuarioId", usuarioId);
-        model.addAttribute("task", new Task()); // formulario vacío
 
+        // 💡 Aquí está lo más importante
+        model.addAttribute("usuarios", userService.getAll());
+        model.addAttribute("eventos", eventService.getAll());
         return "tasks";
     }
 
     // CARGAR FORMULARIO CON UNA TAREA PARA EDITAR
-   @GetMapping(params = "id")
+    @GetMapping(params = "id")
 public String editarTarea(@RequestParam Long id,
                           @RequestParam(required = false) String estado,
-                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaTarea,
+                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
                           @RequestParam(required = false) String nombre,
                           @RequestParam(required = false) Long usuarioId,
-                          Model model,
-                          RedirectAttributes redirectAttributes) {
+                          Model model) {
 
-    Task tarea = taskService.findById(id).orElse(null);
+    Task tarea = taskService.findById(id)
+        .orElseThrow(() -> new RuntimeException("Tarea no encontrada con ID: " + id));
 
-    if (tarea == null) {
-        redirectAttributes.addFlashAttribute("errorMessage", "La tarea no fue encontrada.");
-        return "redirect:/tasks-view";
-    }
-
-    List<Task> tareas = taskService.filtrarPorNombreEstadoFechaYUsuario(nombre, estado, fechaTarea, usuarioId);
+    List<Task> tareas = taskService.filtrarPorNombreEstadoFechaYUsuario(nombre, estado, fecha, usuarioId);
 
     model.addAttribute("task", tarea);
     model.addAttribute("tareas", tareas);
     model.addAttribute("estado", estado);
-    model.addAttribute("fechaTarea", fechaTarea);
+    model.addAttribute("fecha", fecha);
     model.addAttribute("nombre", nombre);
     model.addAttribute("usuarioId", usuarioId);
-    
-   
+    model.addAttribute("usuarios", userService.getAll()); // <- usa getAll(), no findAll()
+    model.addAttribute("eventos", eventService.getAll()); // <- usa getAll(), no findAll()
 
     return "tasks";
 }
-
 
     // GUARDAR TAREA (CREAR O ACTUALIZAR)
     @PostMapping("/save")
