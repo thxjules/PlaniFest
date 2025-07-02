@@ -1,0 +1,73 @@
+body {
+    background: url('../images/fondoempleado.png');
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #008386;
+}
+.table > thead > tr > th {
+    background-color: #058774 !important;
+    color: white !important;
+    text-align: center;
+    font-weight: 600;
+    border-color: #058774;
+}
+
+h2 {
+    font-weight: bold;
+    color: #008386;
+    margin-bottom: 30px;
+}
+
+.table {
+    background-color: #058774;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table thead {
+    background-color: #058774 !important;
+    color: white;
+    text-align: center;
+    font-weight: 600;
+}
+
+.table tbody td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #058774;
+    color: #ffffff;
+    font-weight: 500;
+    border: 1px solid #058774;
+    border-radius: 6px;
+}
+
+.btn-primary {
+    background-color: #034e49;
+    border-color: #034e49;
+    font-weight: 500;
+}
+
+.btn-outline-secondary {
+    border-color: #058774;
+    color: #058774;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #058774;
+    color: white;
+}
+
+.form-select-sm {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    height: auto;
+}
+
+.text-muted {
+    font-style: normal;
+    font-weight: 700;
+    color: #057f7b !important;
+}
