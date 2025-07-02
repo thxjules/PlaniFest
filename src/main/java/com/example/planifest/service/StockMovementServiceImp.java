@@ -7,16 +7,21 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.example.planifest.entity.StockMovement;
+import com.example.planifest.entity.Supply;
+import com.example.planifest.enums.StockStatus;
 import com.example.planifest.repository.StockMovementRepository;
+import com.example.planifest.repository.SupplyRepository;
 import com.example.planifest.service.dao.Idao;
 
 @Service
 public class StockMovementServiceImp implements Idao<StockMovement, Long> {
 
     private final StockMovementRepository stockMovementRepository;
+    private final SupplyRepository supplyRepository;
 
-    public StockMovementServiceImp(StockMovementRepository stockMovementRepository) {
+    public StockMovementServiceImp(StockMovementRepository stockMovementRepository, SupplyRepository supplyRepository) {
         this.stockMovementRepository = stockMovementRepository;
+        this.supplyRepository = supplyRepository;
     }
 
     @Override
@@ -25,6 +30,7 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
         return stockMovementRepository.findAll();
 
     }
+    
 
     public long count() {
         return stockMovementRepository.count();
@@ -36,6 +42,30 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
 
     @Override
     public void create(StockMovement stockMovement) {
+        Supply supply = stockMovement.getSupply();
+
+            // Validar que no sea nulo
+        if (supply == null || supply.getId() == null) {
+            throw new IllegalArgumentException("El movimiento debe estar asociado a un insumo existente.");
+        }
+
+        // Buscar el supply actualizado
+        Supply existingSupply = supplyRepository.findById(supply.getId())
+                .orElseThrow(() -> new RuntimeException("Supply no encontrado"));
+
+        int quantity = stockMovement.getQuantity();
+        if (stockMovement.getType() == StockStatus.ENTRY) {
+            existingSupply.setCurrentStock(existingSupply.getCurrentStock() + quantity);
+        } else if (stockMovement.getType() == StockStatus.EXIT) {
+            if (existingSupply.getCurrentStock() < quantity) {
+                throw new RuntimeException("Stock insuficiente para salida");
+            }
+            existingSupply.setCurrentStock(existingSupply.getCurrentStock() - quantity);
+        }
+
+        // Guardar el stock actualizado
+        supplyRepository.save(existingSupply);
+
         stockMovementInfoRequired(stockMovement);
         stockMovementRepository.save(stockMovement);
 
