@@ -22,32 +22,31 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/", "/index",
-                    "/css/**", "/js/**", "/images/**",
-                    "/registro", "/registro/**",
-                    "/login", "/error", "/dashboard/empleado"
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .successHandler(successHandler)
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            );
+    http
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(
+                "/", "/index", "/css/**", "/js/**", "/images/**",
+                "/registro", "/registro/**", "/login", "/error"
+            ).permitAll()
+            .anyRequest().authenticated()
+        )
+        .formLogin(form -> form
+            .loginPage("/login")
+            .loginProcessingUrl("/login")
+            .successHandler(successHandler)
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+            .logoutSuccessUrl("/login?logout")
+            .permitAll()
+        );
 
-        return http.build();
+    return http.build();
     }
+
     @Bean
-public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder(); // O usa NoOpPasswordEncoder para pruebas
-}
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

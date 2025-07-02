@@ -1,6 +1,7 @@
 package com.example.planifest.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -54,4 +55,8 @@ public class PositionServiceImpl implements Idao<Position, Long> {
             throw new RuntimeException("El nombre de la posición es obligatorio.");
         }
     }
+
+    public Optional<Position> findById(Long id) {
+    return positionRepository.findById(id);
+}
 }

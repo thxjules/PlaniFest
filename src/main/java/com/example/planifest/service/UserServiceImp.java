@@ -1,15 +1,17 @@
 package com.example.planifest.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.planifest.entity.Position;
 import com.example.planifest.entity.User;
+import com.example.planifest.enums.Role;
 import com.example.planifest.repository.UserRepository;
 import com.example.planifest.service.dao.Idao;
-import com.example.planifest.enums.Role;
 
 import jakarta.transaction.Transactional;
 
@@ -38,16 +40,18 @@ public class UserServiceImp implements Idao<User, Long> {
         return userRepository.findByEmail(email).isPresent();
     }
 
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
     public long countEmployees() {
-    return userRepository.countByRole(Role.EMPLOYEE);
-}
+        return userRepository.countByRole(Role.EMPLOYEE);
+    }
 
     @Override
     public void create(User user) {
         validateUser(user);
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         userRepository.save(user);
     }
 
@@ -59,6 +63,20 @@ public class UserServiceImp implements Idao<User, Long> {
         } else {
             throw new RuntimeException("No se puede actualizar el usuario porque no se ha encontrado.");
         }
+    }
+
+    public void actualizarSoloPosicion(Long userId, Long positionId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
+
+        if (user.getRole() == Role.ADMIN || user.getRole() == Role.STOCK_ADMIN) {
+            throw new RuntimeException("No se puede cambiar la posición de un administrador.");
+        }
+
+        Position nueva = new Position();
+        nueva.setId(positionId);
+        user.setPosition(nueva);
+        userRepository.save(user);
     }
 
     @Override
@@ -75,7 +93,9 @@ public class UserServiceImp implements Idao<User, Long> {
             throw new RuntimeException("El correo del usuario no puede estar vacío.");
         }
 
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        // Solo lanzar error si es un nuevo registro o cambia el correo
+        Optional<User> existente = userRepository.findByEmail(user.getEmail());
+        if (existente.isPresent() && (user.getId() == null || !existente.get().getId().equals(user.getId()))) {
             throw new RuntimeException("El correo electrónico ya está en uso.");
         }
 
