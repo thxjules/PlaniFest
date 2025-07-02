@@ -39,13 +39,14 @@ public class TaskViewController {
 
         return "tasks"; // ← IMPORTANTE: debe coincidir con el nombre del archivo
     }
+
 @PostMapping("/save")
 public String guardarTarea(@ModelAttribute Task task, Model model) {
     try {
         if (task.getId() == null) {
-            taskService.create(task); // crear nueva
+            taskService.create(task); // la fecha ya viene del formulario
         } else {
-            taskService.update(task); // actualizar existente
+            taskService.update(task); // lo mismo aquí
         }
         return "redirect:/tasks-view";
     } catch (RuntimeException ex) {
@@ -57,6 +58,7 @@ public String guardarTarea(@ModelAttribute Task task, Model model) {
         return "tasks";
     }
 }
+
 
     @GetMapping("/delete/{id}")
     public String eliminarTarea(@PathVariable Long id) {
