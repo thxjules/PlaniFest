@@ -98,6 +98,14 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
             throw new RuntimeException("El stock maximo debe ser mayor a 0 y no puede ser menor al Stock minimo");
         }
 
+        if (supply.getCurrentStock() <= 0 || supply.getCurrentStock() > supply.getMaxStock()) {
+            throw new RuntimeException("El stock actual no puede ser mayor al stock minimo");
+        }
+
+        if (supply.getCurrentStock() <= 0 || supply.getCurrentStock() < supply.getMinStock()) {
+            throw new RuntimeException("El stock Actual no puede ser menor al stock minimo");
+        }
+
         if (supply.getPackagingUnit() == null || supply.getPackagingUnit().isBlank()) {
             throw new RuntimeException("El recurso tiene que tener la unidad de empaquetado para ser creado");
         }

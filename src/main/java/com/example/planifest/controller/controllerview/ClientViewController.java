@@ -2,6 +2,8 @@ package com.example.planifest.controller.controllerview;
 
 import com.example.planifest.entity.Client;
 import com.example.planifest.service.ClientServiceImp;
+import com.example.planifest.service.EventServiceImp;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +15,11 @@ import java.util.Optional;
 public class ClientViewController {
 
     private final ClientServiceImp clientService;
+    private final EventServiceImp  eventoService;
 
-    public ClientViewController(ClientServiceImp clientService) {
+    public ClientViewController(ClientServiceImp clientService, EventServiceImp  eventoService) {
         this.clientService = clientService;
+        this.eventoService = eventoService;
     }
 
     @GetMapping
@@ -52,9 +56,17 @@ public class ClientViewController {
         }
     }
 
-    @GetMapping("/delete/{id}")
-    public String eliminarCliente(@PathVariable Long id) {
-        clientService.deleteById(id);
-        return "redirect:/clients-view";
+@GetMapping("/delete/{id}")
+public String eliminarCliente(@PathVariable Long id, Model model) {
+    if (!eventoService.findByClientId(id).isEmpty()) {
+        model.addAttribute("client", new Client()); // ✅ Agregar esto
+        model.addAttribute("clientes", clientService.getAll());
+        model.addAttribute("error", "No se puede eliminar el cliente porque tiene eventos asociados.");
+        return "clients";
     }
+
+    clientService.deleteById(id);
+    return "redirect:/clients-view";
+}
+
 }

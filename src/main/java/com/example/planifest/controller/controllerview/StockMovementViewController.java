@@ -36,25 +36,25 @@ public class StockMovementViewController {
         return "stockMovement";
     }
 
-    @PostMapping("/save")
-    public String guardarStock(@ModelAttribute StockMovement stockMovement, Model model) {
-        try {
+@PostMapping("/save")
+public String guardarStock(@ModelAttribute StockMovement stockMovement, Model model) {
+    try {
         if (stockMovement.getId() == null) {
             stockMovementService.create(stockMovement);
         } else {
             stockMovementService.update(stockMovement);
         }
         return "redirect:/stock-view";
-        } catch (RuntimeException ex) {
-
+    } catch (RuntimeException ex) {
         model.addAttribute("stockMovement", stockMovement);
         model.addAttribute("stockMovements", stockMovementService.getAll());
-        model.addAttribute("supply", supplyService.getAll());
+        model.addAttribute("supplies", supplyService.getAll()); // ✅ nombre correcto
         model.addAttribute("error", ex.getMessage());
 
         return "stockMovement";
-        }
     }
+}
+
 
 
 

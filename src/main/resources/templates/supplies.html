@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Planifest - Lista de Suministros ⛺</title>
+    <link rel="stylesheet" th:href="@{/css/supply.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/suministro.css}" >
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
@@ -12,25 +12,31 @@
 <div class="container py-5">
     <div class="header-section text-center mb-5">
         <img th:src="@{/images/planifest.png}" alt="Logo Planifest" style="max-height: 300px;">
-        <h1>📝 Gestion de Suministros</h1>
+        <h1>📝 Gestión de Suministros</h1>
     </div>
 
-    <!-- MENSAJE DE ERROR Y BOTÓN NUEVo Suministro -->
+    <!-- MENSAJE DE ERROR Y BOTÓN NUEVO Suministro -->
     <div class="text-end mb-3">
         <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Error:</strong> <span th:text="${error}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
         </div>
-        <button class="btn btn-outline-primary" type="button"
-                data-bs-toggle="collapse" data-bs-target="#formularioSuministro"
-                aria-expanded="false" aria-controls="formularioSuministro">
-            <span th:text="${supply.id != null} ? '📝 Editar Suministro' : '➕ Nuevo Suministro'">➕ Nueva Suministro</span>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="/dashboard/stock" class="btn btn-outline-secondary btn-sm">🏠 Volver</a>
+        <button class="btn btn-outline-primary btn-sm"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#formularioTarea"
+                aria-expanded="false"
+                aria-controls="formularioTarea">
+            ➕ Nueva tarea
         </button>
+    </div>
     </div>
 
     <!-- FORMULARIO DE Suministro -->
     <div th:class="${supply.id != null} ? 'collapse show' : 'collapse'" id="formularioSuministro">
-        <div class="card shadow-sm border-0 mb-4">
+        <div class="card shadow-sm border-0 mb-4 fondo-transparente">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0" th:text="${supply.id != null} ? 'Editar Suministro' : 'Nuevo Suministro'">Formulario de Suministro</h5>
             </div>
@@ -44,15 +50,15 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Tipo de suministro</label>
-                            <input type="text" th:field="*{supplyType}"  class="form-control" required />
+                            <input type="text" th:field="*{supplyType}" class="form-control" required />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Descripción</label>
                             <textarea th:field="*{description}" class="form-control" rows="3" required></textarea>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Lugar del almacen</label>
-                            <input type="text" th:field="*{storageLocation}"  class="form-control" required />
+                            <label class="form-label">Lugar del almacén</label>
+                            <input type="text" th:field="*{storageLocation}" class="form-control" required />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Estado</label>
@@ -64,75 +70,78 @@
                         <div class="col-md-6">
                             <label class="form-label">Stock Mínimo</label>
                             <input type="number" min="0" th:field="*{minStock}" class="form-control" required />
-                    </div>
-                    <div class="col-md-6">
-                    <label class="form-label">Stock Actual</label>
-                    <input type="number" min="0" th:field="*{currentStock}" class="form-control" required />
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Stock Máximo</label>
-                    <input type="number" min="0" th:field="*{maxStock}" class="form-control" required />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Unidad de empaquetado</label>
-                    <input type="text" th:field="*{packagingUnit}" class="form-control" required />
-                    </div>
-            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Stock Actual</label>
+                            <input type="number" min="0" th:field="*{currentStock}" class="form-control" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Stock Máximo</label>
+                            <input type="number" min="0" th:field="*{maxStock}" class="form-control" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Unidad de empaquetado</label>
+                            <input type="text" th:field="*{packagingUnit}" class="form-control" required />
+                        </div>
                     </div>
                     <div class="mt-4 text-end">
-                        <button type="submit" class="btn btn-success">
-                            <span th:text="${supply.id != null} ? '🔄 Actualizar Suministro' : '💾 Guardar Suministro'">💾 Guardar tarea</span>
+                        <button type="submit" class="btn btn-success btn-sm">
+                            <span th:text="${supply.id != null} ? '🔄 Actualizar Suministro' : '💾 Guardar Suministro'">💾 Guardar Suministro</span>
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <!-- TABLA DE Suministros -->
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-dark text-white">
-            <h5 class="mb-0">📋 Lista de Suministros</h5>
-        </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Tipo de suministro</th>
-                            <th>Descripcion</th>
-                            <th>Almacen Localizado</th>
-                            <th>Estado</th>
-                            <th>Stock Actual</th>
-                            <th>Stock Minimo</th>
-                            <th>Stock Maximo</th>
-                            <th>Unidad de empaquetado</th>
-                            <th class="text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="t : ${suministros}">
-                            <td th:text="${t.name}"></td>
-                            <td th:text="${t.supplyType}"></td>
-                            <td th:text="${t.description}"></td>
-                            <td th:text="${t.storageLocation}"></td>
-                            <td>
-                                <span th:classappend="${t.status == 'AVAILABLE'} ? 'badge bg-success' : 'badge bg-warning text-dark'" th:text="${t.status}"></span>
-                            </td>
-                            <td th:text="${t.currentStock}"></td>
-                            <td th:text="${t.minStock}"></td>
-                            <td th:text="${t.maxStock}"></td>
-                            <td th:text="${t.packagingUnit}"></td>
-                            <td class="text-center">
-                                <a th:href="@{/supplies-view(id=${t.id})}" class="btn btn-sm btn-outline-primary me-1">✏️</a>
-                                <a th:href="@{/supplies-view/delete/{id}(id=${t.id})}" class="btn btn-sm btn-outline-danger">🗑</a>
 
-                            </td>
-                        </tr>
-                        </tr>
-                    </tbody>
-                </table>
+    <!-- TABLA DE Suministros -->
+    <div class="contenedor-tabla">
+        <div class="card shadow-sm border-0 fondo-transparente">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">📋 Lista de Suministros</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Tipo de suministro</th>
+                                <th>Descripción</th>
+                                <th>Almacén Localizado</th>
+                                <th>Estado</th>
+                                <th>Stock Actual</th>
+                                <th>Stock Mínimo</th>
+                                <th>Stock Máximo</th>
+                                <th>Unidad</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="t : ${suministros}">
+                                <td th:text="${t.name}"></td>
+                                <td th:text="${t.supplyType}"></td>
+                                <td th:text="${t.description}"></td>
+                                <td th:text="${t.storageLocation}"></td>
+                                <td>
+                                    <span th:classappend="${t.status == 'AVAILABLE'} ? 'badge bg-success' : 'badge bg-warning text-dark'" th:text="${t.status}"></span>
+                                </td>
+                                <td th:text="${t.currentStock}"></td>
+                                <td th:text="${t.minStock}"></td>
+                                <td th:text="${t.maxStock}"></td>
+                                <td th:text="${t.packagingUnit}"></td>
+                                <td class="text-center">
+                                    <a th:href="@{/supplies-view(id=${t.id})}" class="btn btn-sm btn-outline-primary me-1">✏️</a>
+                                    <a th:href="@{/supplies-view/delete/{id}(id=${t.id})}"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este suministro?');">
+                                    🗑</a>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

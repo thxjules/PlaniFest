@@ -23,6 +23,10 @@ public class EventServiceImp implements Idao<Event, Long> {
         return eventRepository.findAll();
     }
 
+    public List<Event> findByClientId(Long clientId) {
+    return eventRepository.findByClientId(clientId);
+}
+
     @Override
     public void create(Event event) {
         validateEvent(event);

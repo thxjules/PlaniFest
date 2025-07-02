@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Planifest - Gestión de Clientes</title>
+    <link rel="stylesheet" th:href="@{/css/clients.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container py-5">
 
-    <div class="text-center mb-4">
+    <div class="text-center mb-4 text-center">
+        <img src="/images/planifest.png" alt="Logo Planifest" style="max-height: 200px;">
         <h1>👥 Gestión de Clientes</h1>
         <p>Agrega, edita o elimina clientes</p>
     </div>
 
     <!-- BOTONES ENCIMA -->
     <div class="d-flex justify-content-between align-items-center mb-3">
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error:</strong> <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
         <a th:href="@{/dashboard/admin}" class="btn btn-outline-secondary btn-sm">🏠 Volver</a>
         <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#formularioCliente">
             ➕ Nuevo cliente
@@ -22,10 +28,10 @@
     </div>
 
     <!-- FORMULARIO -->
-    <div th:class="${client.id != null} ? 'collapse show' : 'collapse'" id="formularioCliente">
+    <div th:class="${client != null and client.id != null} ? 'collapse show' : 'collapse'" id="formularioCliente">
         <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0" th:text="${client.id != null} ? 'Editar Cliente' : 'Nuevo Cliente'">Formulario</h5>
+            <div class="card-header bg-ligth text-white">
+                <h5 class="mb-0" th:text="${client != null and client.id != null} ? 'Editar Cliente' : 'Nuevo Cliente'">Formulario</h5>
             </div>
             <div class="card-body">
                 <form th:action="@{/clients-view/save}" method="post" th:object="${client}">
@@ -44,7 +50,7 @@
                     </div>
                     <div class="text-end">
                         <button type="submit" class="btn btn-success">
-                            <span th:text="${client.id != null} ? 'Actualizar' : 'Guardar'">Guardar</span>
+                            <span th:text="${client != null and client.id != null} ? 'Actualizar' : 'Guardar'">Guardar</span>
                         </button>
                     </div>
                 </form>
@@ -73,7 +79,7 @@
                         <td th:text="${c.email}"></td>
                         <td th:text="${c.phone}"></td>
                         <td class="text-center">
-                            <a th:href="@{/clients-view(id=${c.id})}" class="btn btn-sm btn-outline-primary me-1">✏️</a>
+                            <a th:href="@{/clients-view(id=${c.id})}" class="btn btn-sm btn-outline-primary me-1">🖊️</a>
                             <a th:href="@{/clients-view/delete/{id}(id=${c.id})}" class="btn btn-sm btn-outline-danger">🗑️</a>
                         </td>
                     </tr>
