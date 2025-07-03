@@ -17,6 +17,7 @@
 
     <!-- MENSAJE DE ERROR Y BOTÓN NUEVO Suministro -->
     <div class="text-end mb-3">
+        
         <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Error:</strong> <span th:text="${error}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
@@ -26,9 +27,9 @@
         <button class="btn btn-outline-primary btn-sm"
                 type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#formularioTarea"
+                data-bs-target="#formularioSuministro"
                 aria-expanded="false"
-                aria-controls="formularioTarea">
+                aria-controls="formularioSuministro">
             ➕ Nueva tarea
         </button>
     </div>
@@ -93,6 +94,34 @@
             </div>
         </div>
     </div>
+<!-- FILTROS -->
+    <form method="get" th:action="@{/supplies-view}" class="mb-4">
+    <div class="row g-3 align-items-end">
+
+        <!-- Nombre -->
+        <div class="col-md-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" th:value="${nombre}" placeholder="Sillas blancas">
+        </div>
+
+        <div class="col-md-3">
+            <label for="lugarAlmacen" class="form-label">Lugar de Almacenaje</label>
+            <input type="text" id="lugarAlmacen" name="lugarAlmacen" class="form-control" th:value="${lugarAlmacen}" placeholder="EJ: Almacen numero x">
+        </div>
+
+        <div class="col-md-3">
+            <label for="lugarAlmacen" class="form-label">Cantidad del suministro</label>
+            <input type="number" id="stockActual" name="stockActual" class="form-control" th:value="${stockActual}" placeholder="5">
+        </div>
+
+        <!-- Botones -->
+        <div class="col-md-2 filtro-botones">
+    <button type="submit" class="btn btn-outline-primary btn-planifest"> Filtrar Suministro</button>
+    <a href="/supplies-view" class="btn btn-outline-secondary btn-planifest">Limpiar</a>
+</div>
+
+    </div>
+</form>
 
     <!-- TABLA DE Suministros -->
     <div class="contenedor-tabla">

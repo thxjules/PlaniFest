@@ -1,5 +1,7 @@
 package com.example.planifest.controller.controllerview;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,12 +28,23 @@ public class StockMovementViewController {
     }
 
     @GetMapping
-    public String listarStock(@RequestParam(name = "id", required=false)Long id, Model model){
-        StockMovement stockMovement = (id != null) ? stockMovementService.findById(id).orElse(new StockMovement()): new StockMovement();
+    public String listarStock(
+        @RequestParam(name = "id", required=false)Long id,
+        @RequestParam(required = false) Integer cantidad,
+        @RequestParam(required = false) String tipo,
+        @RequestParam(required = false) Long suministroId,
+        Model model){
 
+        StockMovement stockMovement = (id != null) ? stockMovementService.findById(id).orElse(new StockMovement()): new StockMovement();
+        List<StockMovement> stockMovements = stockMovementService.filtrosMultitabla(cantidad, tipo, suministroId);
+
+        model.addAttribute("cantidad", cantidad);
+        model.addAttribute("tipo", tipo);
         model.addAttribute("stockMovement", stockMovement);
-        model.addAttribute("stockMovements", stockMovementService.getAll());
+        model.addAttribute("stockMovements", stockMovements);
+        model.addAttribute("suministroId", suministroId);
         model.addAttribute("supplies", supplyService.getAll());
+
 
         return "stockMovement";
     }

@@ -31,13 +31,21 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
 
     }
     
-
     public long count() {
         return stockMovementRepository.count();
     }
 
     public Optional<StockMovement> findById(Long id){
         return stockMovementRepository.findById(id);
+    }
+
+    /* Filtros para esta entidad */
+    public List <StockMovement> filtrosMultitabla(Integer cantidad, String tipo, Long suministroId){
+        return stockMovementRepository.findAll().stream()
+        .filter(m -> cantidad == null || m.getQuantity() == cantidad)
+        .filter(m -> tipo == null || tipo.isBlank() || m.getType().name().equalsIgnoreCase(tipo))
+        .filter(m -> suministroId == null || (m.getSupply() !=null && m.getSupply().getId().equals(suministroId) ))
+        .toList();
     }
 
     @Override

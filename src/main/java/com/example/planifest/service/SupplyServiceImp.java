@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.planifest.Exceptions.SupplyDeletionException;
 import com.example.planifest.entity.Supply;
 import com.example.planifest.repository.SupplyRepository;
 import com.example.planifest.service.dao.Idao;
@@ -25,6 +26,17 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
         return supplyRepository.findAll();
 
     }
+
+    /* Filtros para insumos */
+
+    public List<Supply> filtrosMultiTabla(String nombre, String lugarAlmacen, Integer stockActual ){
+        return supplyRepository.findAll().stream()
+        .filter(s -> nombre == null || nombre.isBlank() || s.getName().toLowerCase().contains(nombre.toLowerCase())) 
+        .filter(s -> lugarAlmacen == null || lugarAlmacen.isBlank() || s.getStorageLocation().toLowerCase().contains(lugarAlmacen.toLowerCase()))
+        .filter(s -> stockActual == null || s.getCurrentStock() == stockActual)
+        .toList();
+
+    }
     
       public long count() {
         return supplyRepository.count();
@@ -41,6 +53,7 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
         supplyRepository.save(supply);
     }
 
+
     @Override
     public void update(Supply supply) {
         supplyInfoRequired(supply);
@@ -49,12 +62,30 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
 
     @Override
     public void deleteById(Long id) {
-        if (supplyRepository.existsById(id)) {
-            supplyRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("No se puede eliminar el Recurso porque no existe.");
-        }
+
+         Optional<Supply> optionalSupply = supplyRepository.findById(id);
+
+    if (optionalSupply.isEmpty()) {
+        throw new RuntimeException("No se puede eliminar el recurso porque no existe.");
     }
+
+    Supply supply = optionalSupply.get();
+
+    try {
+        // Eliminar relaciones con eventos (desvincular)
+        supply.getEvents().forEach(event -> event.getSupplies().remove(supply));
+        supply.getEvents().clear();
+        supplyRepository.save(supply);
+
+        // Eliminar el suministro
+        supplyRepository.deleteById(id);
+    } catch (Exception e) {
+        throw new SupplyDeletionException("No se puede eliminar el suministro porque está vinculado a eventos.");
+    }
+
+    
+}
+
 
     private void supplyInfoRequired(Supply supply) {
 

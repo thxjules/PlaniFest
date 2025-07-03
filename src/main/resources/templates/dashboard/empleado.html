@@ -7,7 +7,6 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
     <link rel="stylesheet" th:href="@{/css/empleado.css}">
-
 </head>
 
 <body>
@@ -31,7 +30,7 @@
         <div id="content" class="main">
             <main>
                 <h1>Empleado</h1>
-                
+
                 <!-- Filtros -->
                 <div class="row mb-4 justify-content-center">
                     <div class="col-md-3">
@@ -42,9 +41,9 @@
                         <label for="estado" class="form-label fw-semibold">Estado</label>
                         <select id="estado" class="form-select">
                             <option value="">Todos</option>
-                            <option value="pendiente">Pendiente</option>
-                            <option value="en progreso">En progreso</option>
-                            <option value="completado">Completado</option>
+                            <option value="PENDING">Pendiente</option>
+                            <option value="IN_PROGRESS">En progreso</option>
+                            <option value="COMPLETED">Completado</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -70,11 +69,11 @@
                         </thead>
                         <tbody id="tabla-tareas-body">
                             <tr th:each="tarea : ${tareasAsignadas}">
-                                <td th:text="${tarea.evento.nombre}"></td>
-                                <td th:text="${tarea.nombre}"></td>
-                                <td th:text="${tarea.descripcion}"></td>
-                                <td th:text="${tarea.fechaTarea}"></td>
-                                <td th:text="${tarea.estado}"></td>
+                                <td th:text="${tarea.event == null ? 'Sin evento' : tarea.event.eventName}"></td>
+                                <td th:text="${tarea.name}"></td>
+                                <td th:text="${tarea.description}"></td>
+                                <td th:text="${#temporals.format(tarea.date, 'dd/MM/yyyy')}"></td>
+                                <td th:text="${tarea.status}"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -84,7 +83,7 @@
     </div>
 
     <script>
-        document.getElementById('toggle-sidebar').addEventListener('click', () => {
+        document.getElementById('toggle-sidebar')?.addEventListener('click', () => {
             document.getElementById('sidebar').classList.toggle('show');
             document.getElementById('content').classList.toggle('expanded');
         });
@@ -100,7 +99,7 @@
                 evento: evento
             }).toString();
 
-                try {
+            try {
                 let response = await fetch(`/empleado/filtro?${query}`);
                 let data = await response.json();
 
@@ -115,11 +114,11 @@
                 data.data.forEach(tarea => {
                     tbody.innerHTML += `
                         <tr>
-                            <td>${tarea.evento.nombre}</td>
-                            <td>${tarea.nombre}</td>
-                            <td>${tarea.descripcion}</td>
-                            <td>${tarea.fechaTarea}</td>
-                            <td>${tarea.estado}</td>
+                            <td>${tarea.event?.name || 'Sin evento'}</td>
+                            <td>${tarea.name}</td>
+                            <td>${tarea.description}</td>
+                            <td>${tarea.date}</td>
+                            <td>${tarea.status}</td>
                         </tr>
                     `;
                 });
