@@ -10,11 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.planifest.service.ReportService;
 import com.example.planifest.service.EventServiceImp;
-import com.example.planifest.service.UserServiceImp;
-import com.example.planifest.service.TaskServiceImp;
+import com.example.planifest.service.ReportService;
 import com.example.planifest.service.SupplyServiceImp;
+import com.example.planifest.service.TaskServiceImp;
+import com.example.planifest.service.UserServiceImp;
 
 @Controller
 @RequestMapping("/admin")
@@ -46,6 +46,7 @@ public class AdminReportController {
         data.put("totalEmpleados", empleadoService.countEmployees());
         data.put("totalEventos", eventoService.count());
         data.put("totalTareas", tareaService.count());
+        data.put("tareasPendientes", tareaService.getAll().stream().filter(task -> task.getStatus().name().equalsIgnoreCase("PENDING")).count());
         data.put("totalInsumos", supplyService.count());
 
         byte[] pdf = reportService.generatePdf("reportAdmin", data);

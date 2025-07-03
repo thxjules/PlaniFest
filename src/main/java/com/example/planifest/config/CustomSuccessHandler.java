@@ -30,17 +30,19 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         String email = authentication.getName();
         User user = userRepository.findByEmail(email).orElse(null);
 
-        if (user != null) {
-            String redirectURL = switch (user.getRole()) {
-
-                case ADMIN -> "/dashboard/admin";
-                case EMPLOYEE -> "/dashboard/empleado";
-                case STOCK_ADMIN -> "/dashboard/stock";
-            };
-
-            response.sendRedirect(redirectURL);
-        } else {
-            response.sendRedirect("/login?error=true");
+        if (user == null) {
+            // Usuario autenticado pero no existe en la base de datos
+            response.sendRedirect("/error");
+            return;
         }
+
+        // Redireccionar según el rol del usuario
+        String redirectURL = switch (user.getRole()) {
+            case ADMIN -> "/dashboard/admin";
+            case EMPLOYEE -> "/dashboard/empleado";
+            case STOCK_ADMIN -> "/dashboard/stock";
+        };
+
+        response.sendRedirect(redirectURL);
     }
 }
