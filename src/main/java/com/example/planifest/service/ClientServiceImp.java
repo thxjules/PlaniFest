@@ -1,6 +1,7 @@
 package com.example.planifest.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
@@ -22,6 +23,21 @@ public class ClientServiceImp implements Idao<Client, Long> {
     public List<Client> getAll() {
         return clientRepository.findAll();
     }
+
+    /* Encontrar por ID */
+        public Optional<Client> findById(Long id){
+        return clientRepository.findById(id);
+    }
+
+    /* Filtro para empleados */
+    public List<Client> filtroNombreEmail(String nombre, String email){
+
+        return clientRepository.findAll().stream()
+        .filter(c -> nombre == null || nombre.isBlank() || c.getName().toLowerCase().contains(nombre.toLowerCase()))
+        .filter(c -> email == null || email.isBlank() || c.getEmail().toLowerCase().contains(email.toLowerCase()))
+        .toList();
+    }
+
 
     @Override
     public void create(Client client) {

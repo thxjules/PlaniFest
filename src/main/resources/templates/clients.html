@@ -58,6 +58,32 @@
         </div>
     </div>
 
+    <!-- Filtros multitbla -->
+
+    <form method="get" th:action="@{/clients-view}" class="mb-4">
+    <div class="row g-3 align-items-end">
+
+        <!-- Nombre -->
+        <div class="col-md-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" th:value="${nombre}" placeholder="Diana ...">
+        </div>
+
+        <div class="col-md-3">
+            <label for="nombre" class="form-label">Email</label>
+            <input type="email" id="email" name="email" class="form-control" th:value="${email}" placeholder="nombre@gmail.com">
+        </div>
+
+        <!-- Botones -->
+        <div class="col-md-2 filtro-botones">
+    <button type="submit" class="btn btn-outline-primary btn-planifest"> Filtrar 🔎</button>
+    <a href="/clients-view" class="btn btn-outline-secondary btn-planifest">Limpiar 🧹</a>
+</div>
+    </div>
+</form>
+
+
+
     <!-- TABLA DE CLIENTES -->
     <div class="card">
         <div class="card-header bg-dark text-white">

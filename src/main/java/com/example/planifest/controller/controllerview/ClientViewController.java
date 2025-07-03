@@ -1,14 +1,19 @@
 package com.example.planifest.controller.controllerview;
 
-import com.example.planifest.entity.Client;
-import com.example.planifest.service.ClientServiceImp;
-import com.example.planifest.service.EventServiceImp;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Optional;
+import com.example.planifest.entity.Client;
+import com.example.planifest.service.ClientServiceImp;
+import com.example.planifest.service.EventServiceImp;
 
 @Controller
 @RequestMapping("/clients-view")
@@ -23,19 +28,19 @@ public class ClientViewController {
     }
 
     @GetMapping
-    public String mostrarClientes(@RequestParam(name = "id", required = false) Long id, Model model) {
-        Client client = new Client();
-        if (id != null) {
-            Optional<Client> optionalClient = clientService.getAll().stream()
-                    .filter(c -> c.getId().equals(id))
-                    .findFirst();
-            if (optionalClient.isPresent()) {
-                client = optionalClient.get();
-            }
-        }
+    public String mostrarClientes(
+        @RequestParam(name = "id", required = false) Long id,
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) String email,
+        Model model) {
+        Client client = (id != null) ? clientService.findById(id).orElse(new Client()):new Client();
 
+        List<Client> clients = clientService.filtroNombreEmail(nombre, email);
+
+        model.addAttribute("nombre", nombre);
+        model.addAttribute("email", email);
         model.addAttribute("client", client);
-        model.addAttribute("clientes", clientService.getAll());
+        model.addAttribute("clientes", clients);
         return "clients";
     }
 
