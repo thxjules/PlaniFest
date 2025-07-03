@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.planifest.entity.Event;
 import com.example.planifest.entity.Supply;
+import com.example.planifest.entity.Task;
 import com.example.planifest.entity.User;
 import com.example.planifest.enums.Role;
 import com.example.planifest.service.EventServiceImp;
@@ -82,9 +85,28 @@ public class DashboardController {
         return "dashboard/admin";
     }
 
-    // Dashboard de empleado 
+    // Dashboard de empleado
     @GetMapping("/dashboard/empleado")
-    public String empleadoDashboard() {
+    public String empleadoDashboard(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); // email
+
+        User empleado = userService.getAll().stream()
+                .filter(u -> u.getEmail().equalsIgnoreCase(username))
+                .findFirst()
+                .orElse(null);
+
+        if (empleado != null) {
+            List<Task> tareasEmpleado = taskService.getAll().stream()
+                    .filter(task -> task.getUser() != null &&
+                            task.getUser().getId().equals(empleado.getId()))
+                    .toList();
+            model.addAttribute("tareasAsignadas", tareasEmpleado);
+        } else{
+                model.addAttribute("tareasAsignadas", List.of()); 
+        }
+
+        model.addAttribute("activePage", "empleado");
         return "dashboard/empleado";
     }
 
@@ -92,7 +114,7 @@ public class DashboardController {
     @GetMapping("/dashboard/stock")
     public String stockDashboard(Model model) {
 
-         long totalSupplies = supplyService.count();
+        long totalSupplies = supplyService.count();
         model.addAttribute("totalSupplies", totalSupplies);
 
         List<Supply> criticalSupplies = supplyService.getAll().stream()
@@ -102,7 +124,7 @@ public class DashboardController {
         model.addAttribute("lowStockCount", criticalSupplies.size());
 
         model.addAttribute("activePage", "stock");
-        
+
         return "/dashboard/stock";
     }
 }
