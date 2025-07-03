@@ -30,6 +30,10 @@
           <input type="password" class="form-control" id="password" name="password" required />
         </div>
         <button type="submit" class="btn btn-custom w-100">Entrar</button>
+
+        <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
+        Usuario o contraseña incorrectos. Por favor, intenta de nuevo.
+        </div>
       </form>
 
       <div class="text-center mt-3">
