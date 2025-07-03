@@ -3,6 +3,7 @@ package com.example.planifest.controller.controllerview;
 import com.example.planifest.entity.Event;
 import com.example.planifest.service.ClientServiceImp;
 import com.example.planifest.service.EventServiceImp;
+import com.example.planifest.service.SupplyServiceImp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +17,12 @@ public class EventViewController {
 
     private final EventServiceImp eventService;
     private final ClientServiceImp clientService;
+    private final SupplyServiceImp supplyService; // 👈 Añadir servicio de suministros
 
-    public EventViewController(EventServiceImp eventService, ClientServiceImp clientService) {
+    public EventViewController(EventServiceImp eventService, ClientServiceImp clientService, SupplyServiceImp supplyService) {
         this.eventService = eventService;
         this.clientService = clientService;
+        this.supplyService = supplyService;
     }
 
     @GetMapping
@@ -55,6 +58,7 @@ public class EventViewController {
         model.addAttribute("event", event);
         model.addAttribute("eventos", eventos);
         model.addAttribute("clientes", clientService.getAll());
+        model.addAttribute("suministros", supplyService.getAll()); //Supply 
 
         return "events";
     }
@@ -72,6 +76,7 @@ public class EventViewController {
             model.addAttribute("event", event);
             model.addAttribute("eventos", eventService.getAll());
             model.addAttribute("clientes", clientService.getAll());
+            model.addAttribute("suministros", supplyService.getAll()); // Supply
             model.addAttribute("error", ex.getMessage());
             return "events";
         }
