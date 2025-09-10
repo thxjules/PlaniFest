@@ -32,16 +32,16 @@
 
     <!-- BOTONES ENCIMA DE LA TABLA -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-    <a href="/dashboard/admin" class="btn btn-outline-secondary btn-planifest">🏠 Volver</a>
-    <button class="btn btn-outline-primary btn-planifest"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#formularioTarea"
-            aria-expanded="false"
-            aria-controls="formularioTarea">
-        ➕ Nueva tarea
-    </button>
-</div>
+        <a href="/dashboard/admin" class="btn btn-outline-secondary btn-planifest">🏠 Volver</a>
+        <button class="btn btn-outline-primary btn-planifest"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#formularioTarea"
+                aria-expanded="false"
+                aria-controls="formularioTarea">
+            ➕ Nueva tarea
+        </button>
+    </div>
 
     <!-- FORMULARIO DE TAREA -->
     <div th:class="${task.id != null} ? 'collapse show' : 'collapse'" id="formularioTarea">
@@ -74,6 +74,10 @@
                             <input type="text" id="fecha-evento" class="form-control" readonly />
                         </div>
                         <div class="col-md-6">
+                            <label class="form-label">Ubicación del Evento</label>
+                            <input type="text" id="ubicacion-evento" class="form-control" readonly />
+                        </div>
+                        <div class="col-md-6">
                             <label class="form-label">Estado</label>
                             <select th:field="*{status}" class="form-select">
                                 <option value="PENDING">Pendiente</option>
@@ -82,8 +86,8 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Fecha de la tarea</label>
-                            <input type="date" th:field="*{date}" class="form-control" required />
+                            <label class="form-label">Fecha y hora de la tarea</label>
+                            <input type="datetime-local" th:field="*{date}" class="form-control" required />
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Descripción</label>
@@ -99,51 +103,41 @@
             </div>
         </div>
     </div>
+
     <!-- FILTRO DE BÚSQUEDA -->
-<form method="get" th:action="@{/tasks-view}" class="mb-4">
-    <div class="row g-3 align-items-end">
-        <!-- Fecha -->
-        <div class="col-md-3">
-            <label for="fechaTarea" class="form-label">Fecha de la tarea</label>
-            <input type="date" class="form-control" id="fechaTarea" name="fechaTarea" th:value="${fechaTarea}">
+    <form method="get" th:action="@{/tasks-view}" class="mb-4">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label for="fechaTarea" class="form-label">Fecha de la tarea</label>
+                <input type="date" class="form-control" id="fechaTarea" name="fechaTarea" th:value="${fechaTarea}">
+            </div>
+            <div class="col-md-2">
+                <label for="estado" class="form-label">Estado</label>
+                <select class="form-select" id="estado" name="estado">
+                    <option value="">Todos</option>
+                    <option value="PENDING" th:selected="${estado == 'PENDING'}">Pendiente</option>
+                    <option value="IN_PROGRESS" th:selected="${estado == 'IN_PROGRESS'}">En progreso</option>
+                    <option value="COMPLETED" th:selected="${estado == 'COMPLETED'}">Completado</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" th:value="${nombre}">
+            </div>
+            <div class="col-md-2">
+                <label for="usuario" class="form-label">Usuario</label>
+                <select class="form-select" id="usuario" name="usuarioId">
+                    <option value="">Todos</option>
+                    <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.username}"
+                            th:selected="${usuario.id == usuarioId}"></option>
+                </select>
+            </div>
+            <div class="col-md-2 filtro-botones">
+                <button type="submit" class="btn btn-custom-primary btn-planifest">🔍 Filtrar</button>
+                <a href="/tasks-view" class="btn btn-custom-secondary btn-planifest">♻ Limpiar</a>
+            </div>
         </div>
-
-        <!-- Estado -->
-        <div class="col-md-2">
-            <label for="estado" class="form-label">Estado</label>
-            <select class="form-select" id="estado" name="estado">
-                <option value="">Todos</option>
-                <option value="PENDING" th:selected="${estado == 'PENDING'}">Pendiente</option>
-                <option value="IN_PROGRESS" th:selected="${estado == 'IN_PROGRESS'}">En progreso</option>
-                <option value="COMPLETED" th:selected="${estado == 'COMPLETED'}">Completado</option>
-            </select>
-        </div>
-
-        <!-- Nombre -->
-        <div class="col-md-3">
-            <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" id="nombre" name="nombre" class="form-control" th:value="${nombre}">
-        </div>
-
-        <!-- Usuario -->
-        <div class="col-md-2">
-            <label for="usuario" class="form-label">Usuario</label>
-            <select class="form-select" id="usuario" name="usuarioId">
-                <option value="">Todos</option>
-                <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.username}"
-                        th:selected="${usuario.id == usuarioId}"></option>
-            </select>
-        </div>
-
-        <!-- Botones -->
-        <div class="col-md-2 filtro-botones">
-    <button type="submit" class="btn btn-custom-primary btn-planifest">🔍 Filtrar</button>
-    <a href="/tasks-view" class="btn btn-custom-secondary btn-planifest">♻ Limpiar</a>
-</div>
-
-    </div>
-</form>
-
+    </form>
 
     <!-- TABLA DE TAREAS -->
     <div class="card shadow-sm border-0 fondo-transparente">
@@ -159,9 +153,11 @@
                             <th>Descripción</th>
                             <th>Usuario</th>
                             <th>Evento</th>
+                            <th>Ubicación</th> <!-- Nueva columna -->
                             <th>Fecha del Evento</th>
                             <th>Estado</th>
                             <th>Fecha</th>
+                            <th>Hora</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -171,19 +167,21 @@
                             <td th:text="${t.description}"></td>
                             <td th:text="${t.user.username}"></td>
                             <td th:text="${t.event.eventName}"></td>
+                            <td th:text="${t.event.location} ?: 'Sin ubicación'"></td> <!-- Ubicación -->
                             <td th:text="${#temporals.format(t.event.date, 'dd/MM/yyyy')}"></td>
                             <td>
                                 <span th:classappend="${t.status == 'COMPLETED'} ? 'badge bg-success' : 'badge bg-warning text-dark'"
                                       th:text="${t.status}"></span>
                             </td>
                             <td th:text="${#temporals.format(t.date, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${#temporals.format(t.date, 'HH:mm')}"></td>
                             <td class="text-center">
                                 <a th:href="@{/tasks-view(id=${t.id})}" class="btn btn-sm btn-outline-primary me-1">✏️</a>
                                 <a th:href="@{/tasks-view/delete/{id}(id=${t.id})}" class="btn btn-sm btn-outline-danger">🗑</a>
                             </td>
                         </tr>
                         <tr th:if="${tareas.size() == 0}">
-                            <td colspan="8" class="text-center text-muted">No hay tareas registradas.</td>
+                            <td colspan="10" class="text-center text-muted">No hay tareas registradas.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -192,23 +190,31 @@
     </div>
 </div>
 
-<!-- SCRIPT para mostrar la fecha del evento -->
+<!-- SCRIPT para mostrar fecha y ubicación del evento -->
 <script th:inline="javascript">
     const eventos = /*[[${eventos}]]*/ [];
     const fechasEvento = {};
-    eventos.forEach(e => fechasEvento[e.id] = e.date);
+    const ubicacionesEvento = {};
+    
+    eventos.forEach(e => {
+        fechasEvento[e.id] = e.date;
+        ubicacionesEvento[e.id] = e.location;
+    });
 
     const selectEvento = document.getElementById('evento-select');
     const inputFechaEvento = document.getElementById('fecha-evento');
+    const inputUbicacionEvento = document.getElementById('ubicacion-evento');
 
     selectEvento.addEventListener('change', function () {
         const id = this.value;
         inputFechaEvento.value = fechasEvento[id] || '';
+        inputUbicacionEvento.value = ubicacionesEvento[id] || '';
     });
 
     window.addEventListener('DOMContentLoaded', () => {
         const id = selectEvento.value;
         inputFechaEvento.value = fechasEvento[id] || '';
+        inputUbicacionEvento.value = ubicacionesEvento[id] || '';
     });
 </script>
 

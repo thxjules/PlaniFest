@@ -1,6 +1,6 @@
 package com.example.planifest.config;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +18,6 @@ import com.example.planifest.service.UserServiceImp;
 
 @Component
 @Order(8)
-
 public class TaskSeeder implements CommandLineRunner {
 
     private final TaskServiceImp taskService;
@@ -36,9 +35,10 @@ public class TaskSeeder implements CommandLineRunner {
         System.out.println("Entrando al seeder de tareas");
 
         if (taskService.count() > 0) {
-            System.out.println("El Seder ya se había ejecutado");
+            System.out.println("El Seeder ya se había ejecutado");
             return;
         }
+
         // Traer Usuarios
         List<User> users = userService.getAll();
         if (users.size() < 5) {
@@ -59,7 +59,7 @@ public class TaskSeeder implements CommandLineRunner {
                 Task task = new Task();
                 task.setName("Montaje del escenario");
                 task.setDescription("Preparar el escenario para el evento");
-                task.setDate(LocalDate.of(2025, 1, 20));
+                task.setDate(LocalDateTime.of(2025, 1, 20, 10, 0)); // 10:00 am
                 task.setStatus(TaskStatus.PENDING);
                 task.setUser(users.get(0));
                 task.setEvent(event);
@@ -73,7 +73,7 @@ public class TaskSeeder implements CommandLineRunner {
                 Task task = new Task();
                 task.setName("Sonido y luces");
                 task.setDescription("Configurar el sonido y las luces del evento");
-                task.setDate(LocalDate.of(2025, 9, 20));
+                task.setDate(LocalDateTime.of(2025, 9, 20, 15, 30)); // 3:30 pm
                 task.setStatus(TaskStatus.PENDING);
                 task.setUser(users.get(1));
                 task.setEvent(event);
@@ -87,7 +87,7 @@ public class TaskSeeder implements CommandLineRunner {
                 Task task = new Task();
                 task.setName("Manteles y mesas");
                 task.setDescription("Colocar los manteles y sillas antes del evento");
-                task.setDate(LocalDate.of(2025, 9, 12));
+                task.setDate(LocalDateTime.of(2025, 9, 12, 9, 0)); // 9:00 am
                 task.setStatus(TaskStatus.PENDING);
                 task.setUser(users.get(2));
                 task.setEvent(event);
@@ -101,7 +101,7 @@ public class TaskSeeder implements CommandLineRunner {
                 Task task = new Task();
                 task.setName("Decoración del lugar");
                 task.setDescription("Decorar el lugar para el evento");
-                task.setDate(LocalDate.of(2025, 6, 20));
+                task.setDate(LocalDateTime.of(2025, 6, 20, 8, 0)); // 8:00 am
                 task.setStatus(TaskStatus.IN_PROGRESS);
                 task.setUser(users.get(3));
                 task.setEvent(event);
@@ -115,7 +115,7 @@ public class TaskSeeder implements CommandLineRunner {
                 Task task = new Task();
                 task.setName("Revisión de seguridad");
                 task.setDescription("Revisar la seguridad del lugar para el evento");
-                task.setDate(LocalDate.of(2025, 8, 10));
+                task.setDate(LocalDateTime.of(2025, 8, 10, 14, 0)); // 2:00 pm
                 task.setStatus(TaskStatus.PENDING);
                 task.setUser(users.get(4));
                 task.setEvent(event);

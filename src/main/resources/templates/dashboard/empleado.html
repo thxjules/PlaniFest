@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <title>Empleado - Planifest</title>
@@ -11,12 +13,19 @@
 
 <body>
 <div class="dashboard-wrapper">
+    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <div class="brand text-center">
-            <img th:src="@{/images/dashboard/empleado.png}" alt="Logo de la Empresa">
+        <div class="brand text-center p-3">
+            <img th:src="@{/images/dashboard/empleado.png}" alt="Perfil" class="rounded-circle mb-2" width="80" height="80">
+            <h5 class="mb-0"><span sec:authentication="name">Empleado</span></h5>
+            
+            <p class="text-muted" th:text="${empleado.position != null ? empleado.position.name : 'Sin asignar'}">Cargo</p>
+            <p class="text-muted" th:text="${empleado?.email} ?: 'empleado@ejemplo.com'">empleado@ejemplo.com</p>
+            <a th:href="@{/employee-profile/edit}" class="btn btn-outline-light btn-sm mt-2">
+                <i class="bx bx-edit"></i> Editar perfil
+            </a>
         </div>
-
-        <div class="text-center mt-auto">
+        <div class="text-center mt-auto mb-3">
             <form method="post" th:action="@{/logout}">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit" class="logout-button">
@@ -28,10 +37,50 @@
 
     <!-- Contenido principal -->
     <div id="content" class="main">
-        <main>
-            <h1>Empleado</h1>
+        <main class="p-4">
+            <h1 class="mb-4">Perfil del empleado</h1>
 
-            <!-- Filtros -->
+            <!-- Formulario colapsable -->
+            <div class="collapse" id="formPerfil">
+                <div class="card shadow p-4 mb-4">
+                    <h4 class="mb-3">Editar perfil</h4>
+                    <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bx bx-check-circle"></i>
+                        <span th:text="${mensajeExito}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bx bx-error-circle"></i>
+                        <span th:text="${mensajeError}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <form th:action="@{/employees-view/perfil/update}" th:object="${empleado}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <input type="hidden" th:field="*{id}" />
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nombre</label>
+                            <input type="text" id="username" th:field="*{username}" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo</label>
+                            <input type="email" id="email" th:field="*{email}" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Teléfono</label>
+                            <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control">
+                        </div>
+
+                        <p><strong>Rol:</strong> <span th:text="${empleado.role}"></span></p>
+                        <p><strong>Posición:</strong> <span th:text="${empleado.position != null ? empleado.position.name : 'Sin asignar'}"></span></p>
+
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Filtros de tareas -->
             <div class="row mb-4 justify-content-center">
                 <div class="col-md-3">
                     <label for="fecha" class="form-label fw-semibold">Fecha</label>
@@ -48,11 +97,11 @@
                 </div>
                 <div class="col-md-3">
                     <label for="evento" class="form-label fw-semibold">Evento</label>
-                    <input type="text" id="evento" class="form-control" placeholder="Buscar evento...">
+                    <input type="text" id="evento" class="form-control" placeholder="Buscar evento o ubicación...">
                 </div>
                 <div class="col-md-2 d-flex align-items-end gap-2">
-                    <button onclick="filtrarTareas()" class="btn btn-gold w-100">Filtrar</button>
-                    <button onclick="limpiarFiltros()" class="btn btn-secondary w-100">Limpiar</button>
+                    <button type="button" onclick="filtrarTareas()" class="btn btn-gold w-100">Filtrar</button>
+                    <button type="button" onclick="limpiarFiltros()" class="btn btn-secondary w-100">Limpiar</button>
                 </div>
             </div>
 
@@ -62,40 +111,50 @@
                     <thead class="text-center">
                     <tr>
                         <th>Evento</th>
+                        <th>Ubicación</th>
                         <th>Tarea</th>
                         <th>Descripción</th>
                         <th>Fecha</th>
+                        <th>Hora</th>
                         <th>Estado</th>
                     </tr>
                     </thead>
                     <tbody id="tabla-tareas-body">
                     <tr th:each="tarea : ${tareasAsignadas}">
-                        <td th:text="${tarea.event == null ? 'Sin evento' : tarea.event.eventName}"></td>
+                        <td th:text="${tarea.event?.eventName} ?: 'Sin evento'"></td>
+                        <td th:text="${tarea.event?.location} ?: 'Sin ubicación'"></td>
                         <td th:text="${tarea.name}"></td>
                         <td th:text="${tarea.description}"></td>
                         <td th:text="${#temporals.format(tarea.date, 'yyyy-MM-dd')}"></td>
+                        <td th:text="${#temporals.format(tarea.date, 'HH:mm')}"></td>
                         <td th:text="${tarea.status}"></td>
+                    </tr>
+                    <tr th:if="${tareasAsignadas == null or #lists.isEmpty(tareasAsignadas)}">
+                        <td colspan="7" class="text-center text-muted">No hay tareas asignadas</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- JS con las tareas cargadas -->
+            <!-- JS con las tareas -->
             <script th:inline="javascript">
-                let tareasOriginales = /*[[${tareasAsignadas}]]*/ [];
+                /*<![CDATA[*/
+                let tareasOriginales = /*[[${tareasAsignadas}]]*/[];
+                /*]]>*/
             </script>
 
-            <!-- Función JS para filtrar -->
             <script>
                 function filtrarTareas() {
-                    const fecha = document.getElementById('fecha').value;
-                    const estado = document.getElementById('estado').value;
-                    const evento = document.getElementById('evento').value.toLowerCase();
+                    const fechaFiltro = document.getElementById('fecha').value;
+                    const estadoFiltro = document.getElementById('estado').value;
+                    const eventoFiltro = document.getElementById('evento').value.toLowerCase();
 
                     const tareasFiltradas = tareasOriginales.filter(t => {
-                        const coincideFecha = !fecha || t.date === fecha;
-                        const coincideEstado = !estado || t.status === estado;
-                        const coincideEvento = !evento || (t.event && t.event.eventName.toLowerCase().includes(evento));
+                        const coincideFecha = !fechaFiltro || (t.date && t.date.startsWith(fechaFiltro));
+                        const coincideEstado = !estadoFiltro || (t.status && t.status === estadoFiltro);
+                        const coincideEvento = !eventoFiltro || 
+                            (t.event && ((t.event.eventName && t.event.eventName.toLowerCase().includes(eventoFiltro)) ||
+                                        (t.event.location && t.event.location.toLowerCase().includes(eventoFiltro))));
                         return coincideFecha && coincideEstado && coincideEvento;
                     });
 
@@ -103,27 +162,25 @@
                     tbody.innerHTML = '';
 
                     if (tareasFiltradas.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay tareas para estos filtros.</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No hay tareas para estos filtros.</td></tr>';
                         return;
                     }
 
                     tareasFiltradas.forEach(t => {
+                        const fecha = t.date ? t.date.substring(0, 10) : '';
+                        const hora = t.date ? t.date.substring(11, 16) : '';
                         tbody.innerHTML += `
                             <tr>
                                 <td>${t.event ? t.event.eventName : 'Sin evento'}</td>
-                                <td>${t.name}</td>
-                                <td>${t.description}</td>
-                                <td>${formatearFecha(t.date)}</td>
+                                <td>${t.event ? t.event.location : 'Sin ubicación'}</td>
+                                <td>${t.name || '-'}</td>
+                                <td>${t.description || '-'}</td>
+                                <td>${fecha}</td>
+                                <td>${hora}</td>
                                 <td>${formatearEstado(t.status)}</td>
                             </tr>
                         `;
                     });
-                }
-
-                function formatearFecha(fecha) {
-                    if (!fecha) return '';
-                    const [y, m, d] = fecha.split('-');
-                    return `${d}/${m}/${y}`;
                 }
 
                 function formatearEstado(status) {
@@ -131,7 +188,7 @@
                         case 'PENDING': return 'Pendiente';
                         case 'IN_PROGRESS': return 'En progreso';
                         case 'COMPLETED': return 'Completado';
-                        default: return status;
+                        default: return status || '-';
                     }
                 }
 
@@ -142,8 +199,11 @@
                     filtrarTareas();
                 }
             </script>
+
         </main>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

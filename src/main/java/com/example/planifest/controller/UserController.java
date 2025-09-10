@@ -1,8 +1,10 @@
 package com.example.planifest.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,5 +50,13 @@ public class UserController {
         userService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-}
 
+    @GetMapping("/empleados")
+    public String empleados(Model model, Principal principal) {
+        // Principal te da el usuario autenticado
+        String username = principal.getName();
+
+        model.addAttribute("usuario", username);
+        return "empleados";
+    }
+}

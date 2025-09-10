@@ -1,6 +1,6 @@
 package com.example.planifest.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -37,9 +37,9 @@ public class Task {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @Column(name = "date", nullable = false)
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -52,10 +52,9 @@ public class Task {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name= "event_id", nullable=false)
+    @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
     
 
 }
-

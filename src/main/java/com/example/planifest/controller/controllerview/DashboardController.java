@@ -1,6 +1,7 @@
 package com.example.planifest.controller.controllerview;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,110 +22,140 @@ import com.example.planifest.service.StockMovementServiceImp;
 import com.example.planifest.service.SupplyServiceImp;
 import com.example.planifest.service.TaskServiceImp;
 import com.example.planifest.service.UserServiceImp;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class DashboardController {
 
-    @Autowired
-    private UserServiceImp userService;
+        @Autowired
+        private UserServiceImp userService;
 
-    @Autowired
-    private EventServiceImp eventService;
+        @Autowired
+        private EventServiceImp eventService;
 
-    @Autowired
-    private TaskServiceImp taskService;
+        @Autowired
+        private TaskServiceImp taskService;
 
-    @Autowired
-    private SupplyServiceImp supplyService;
+        @Autowired
+        private SupplyServiceImp supplyService;
 
-    @Autowired
-    private StockMovementServiceImp stockService;
+        @Autowired
+        private StockMovementServiceImp stockService;
 
-    // Dashboard de administrador
-    @GetMapping("/dashboard/admin")
-    public String adminDashboard(Model model) {
+        // Dashboard de administrador
+        @GetMapping("/dashboard/admin")
+        public String adminDashboard(Model model) throws Exception {
 
-        long totalEmpleados = userService.countEmployees();
-        long totalEventos = eventService.count();
-        long totalTareas = taskService.count();
-        long totalInsumos = supplyService.count();
-        long tareasPendientes = taskService.getAll().stream()
-                .filter(task -> task.getStatus().name().equalsIgnoreCase("PENDING"))
-                .count();
+                // --- Estadísticas generales ---
+                long totalEmpleados = userService.countEmployees();
+                long totalEventos = eventService.count();
+                long totalTareas = taskService.count();
+                long totalInsumos = supplyService.count();
 
-        List<String> actividadReciente = List.of(
-                "Se creó un nuevo evento empresarial",
-                "Se completó una tarea: Coordinación",
-                "Se actualizó el stock: Mantelería");
+                long eventosFuturos = eventService.getAll().stream().filter(e -> e.getDate().isAfter(LocalDate.now()))
+                                .count();
+                long eventosRealizados = totalEventos - eventosFuturos;
 
-        List<Event> proximosEventos = eventService.getAll().stream()
-                .filter(e -> e.getDate().isAfter(LocalDate.now()))
-                .limit(5)
-                .collect(Collectors.toList());
+                // Tareas pendientes y completadas
+                long tareasPendientes = taskService.getAll().stream()
+                                .filter(task -> task.getStatus().name().equalsIgnoreCase("PENDING")).count();
+                long tareasCompletadas = taskService.getAll().stream()
+                                .filter(task -> task.getStatus().name().equalsIgnoreCase("COMPLETED")).count();
 
-        List<String> notificaciones = List.of(
-                "Nuevas tareas sin asignar",
-                "Stock bajo en bebidas");
+                // Actividad reciente y próximos eventos
+                List<String> actividadReciente = List.of("Se creó un nuevo evento empresarial",
+                                "Se completó una tarea: Coordinación", "Se actualizó el stock: Mantelería");
 
-        List<User> empleados = userService.getAll().stream()
-                .filter(u -> u.getRole() == Role.EMPLOYEE)
-                .toList();
-        User empleadoDelMes = empleados.isEmpty() ? null : empleados.get(0);
+                List<Event> proximosEventos = eventService.getAll().stream()
+                                .filter(e -> e.getDate().isAfter(LocalDate.now())).limit(5)
+                                .collect(Collectors.toList());
 
-        model.addAttribute("totalEmpleados", totalEmpleados);
-        model.addAttribute("totalEventos", totalEventos);
-        model.addAttribute("totalTareas", totalTareas);
-        model.addAttribute("totalInsumos", totalInsumos);
-        model.addAttribute("tareasPendientes", tareasPendientes);
-        model.addAttribute("actividadReciente", actividadReciente);
-        model.addAttribute("proximosEventos", proximosEventos);
-        model.addAttribute("notificaciones", notificaciones);
-        model.addAttribute("empleadoDelMes", empleadoDelMes);
-        model.addAttribute("activePage", "dashboard");
+                // Empleados por rol
+                long empleadosAdmin = userService.getAll().stream().filter(u -> u.getRole() == Role.ADMIN).count();
+                long empleadosEmployee = userService.getAll().stream().filter(u -> u.getRole() == Role.EMPLOYEE)
+                                .count();
+                long empleadosOther = totalEmpleados - (empleadosAdmin + empleadosEmployee);
 
-        return "dashboard/admin";
-    }
+                List<User> empleados = userService.getAll().stream().filter(u -> u.getRole() == Role.EMPLOYEE).toList();
 
-    // Dashboard de empleado
-    @GetMapping("/dashboard/empleado")
-    public String empleadoDashboard(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName(); // email
+                User empleadoDelMes = empleados.isEmpty() ? null
+                                : empleados.get((int) (Math.random() * empleados.size()));
 
-        User empleado = userService.getAll().stream()
-                .filter(u -> u.getEmail().equalsIgnoreCase(username))
-                .findFirst()
-                .orElse(null);
+                model.addAttribute("empleadoDelMes", empleadoDelMes);
 
-        if (empleado != null) {
-            List<Task> tareasEmpleado = taskService.getAll().stream()
-                    .filter(task -> task.getUser() != null &&
-                            task.getUser().getId().equals(empleado.getId()))
-                    .toList();
-            model.addAttribute("tareasAsignadas", tareasEmpleado);
-        } else{
-                model.addAttribute("tareasAsignadas", List.of()); 
+                // Notificaciones
+                List<String> notificaciones = List.of("Nuevas tareas sin asignar", "Stock bajo en bebidas");
+
+                // JSON para gráficos de eventos
+                ObjectMapper mapper = new ObjectMapper();
+                String eventLabelsJson = mapper.writeValueAsString(proximosEventos.stream()
+                                .map(e -> e.getEventName() + " - "
+                                                + e.getDate().format(DateTimeFormatter.ofPattern("dd/MM")))
+                                .collect(Collectors.toList()));
+                String eventDataJson = mapper
+                                .writeValueAsString(proximosEventos.stream().map(e -> 1).collect(Collectors.toList()));
+
+                // --- Agregar atributos al modelo ---
+                model.addAttribute("totalEmpleados", totalEmpleados);
+                model.addAttribute("totalEventos", totalEventos);
+                model.addAttribute("totalTareas", totalTareas);
+                model.addAttribute("totalInsumos", totalInsumos);
+                model.addAttribute("tareasPendientes", tareasPendientes);
+                model.addAttribute("tareasCompletadas", tareasCompletadas);
+                model.addAttribute("actividadReciente", actividadReciente);
+                model.addAttribute("proximosEventos", proximosEventos);
+                model.addAttribute("empleadosAdmin", empleadosAdmin);
+                model.addAttribute("empleadosEmployee", empleadosEmployee);
+                model.addAttribute("empleadosOther", empleadosOther);
+                model.addAttribute("empleadoDelMes", empleadoDelMes); // ✅ Dinámico
+                model.addAttribute("notificaciones", notificaciones);
+                model.addAttribute("eventLabelsJson", eventLabelsJson);
+                model.addAttribute("eventDataJson", eventDataJson);
+                model.addAttribute("eventosFuturos", eventosFuturos);
+                model.addAttribute("eventosRealizados", eventosRealizados);
+                model.addAttribute("activePage", "dashboard");
+
+                return "dashboard/admin";
         }
 
-        model.addAttribute("activePage", "empleado");
-        return "dashboard/empleado";
-    }
+        // Dashboard de empleado
+        @GetMapping("/dashboard/empleado")
+        public String empleadoDashboard(Model model) {
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                String username = auth.getName(); // email
 
-    // Dashboard de inventario
-    @GetMapping("/dashboard/stock")
-    public String stockDashboard(Model model) {
+                User empleado = userService.getAll().stream().filter(u -> u.getEmail().equalsIgnoreCase(username))
+                                .findFirst().orElse(null);
 
-        long totalSupplies = supplyService.count();
-        model.addAttribute("totalSupplies", totalSupplies);
+                model.addAttribute("empleado", empleado); // <-- agregar al modelo
 
-        List<Supply> criticalSupplies = supplyService.getAll().stream()
-                .filter(s -> s.getCurrentStock() < s.getMinStock())
-                .collect(Collectors.toList());
-        model.addAttribute("criticalSupplies", criticalSupplies);
-        model.addAttribute("lowStockCount", criticalSupplies.size());
+                List<Task> tareasEmpleado = (empleado != null)
+                                ? taskService.getAll().stream()
+                                                .filter(task -> task.getUser() != null
+                                                                && task.getUser().getId().equals(empleado.getId()))
+                                                .toList()
+                                : List.of();
 
-        model.addAttribute("activePage", "stock");
+                model.addAttribute("tareasAsignadas", tareasEmpleado);
+                model.addAttribute("activePage", "empleado");
 
-        return "/dashboard/stock";
-    }
+                return "dashboard/empleado";
+        }
+
+        // Dashboard de inventario
+        @GetMapping("/dashboard/stock")
+        public String stockDashboard(Model model) {
+
+                long totalSupplies = supplyService.count();
+                model.addAttribute("totalSupplies", totalSupplies);
+
+                List<Supply> criticalSupplies = supplyService.getAll().stream()
+                                .filter(s -> s.getCurrentStock() < s.getMinStock()).collect(Collectors.toList());
+                model.addAttribute("criticalSupplies", criticalSupplies);
+                model.addAttribute("lowStockCount", criticalSupplies.size());
+
+                model.addAttribute("activePage", "stock");
+
+                return "/dashboard/stock";
+        }
 }

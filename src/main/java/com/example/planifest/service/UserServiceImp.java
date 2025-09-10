@@ -138,4 +138,18 @@ public class UserServiceImp implements Idao<User, Long> {
         String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return Pattern.matches(regex, email);
     }
+
+    public User findByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("Usuario no encontrado con username: " + username);
+        }
+        return user;
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + email));
+    }
+
 }

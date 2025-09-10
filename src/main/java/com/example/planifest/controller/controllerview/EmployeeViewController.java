@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,25 +28,33 @@ public class EmployeeViewController {
         this.positionService = positionService;
     }
 
-    // Vista de empleados con filtro por posición
+    // Mostrar empleados con filtro por posición
     @GetMapping
     public String mostrarEmpleados(@RequestParam(required = false) Long positionId, Model model) {
         List<User> empleados = userService.getEmployeesFilteredByPosition(positionId);
         model.addAttribute("empleados", empleados);
         model.addAttribute("posiciones", positionService.getAll());
-        model.addAttribute("positionId", positionId); // para mantener seleccionada la posición
+        model.addAttribute("positionId", positionId);
         model.addAttribute("activePage", "employees");
-        return "empleados"; 
+        return "empleados";
     }
 
-    
-    @PostMapping("/actualizar")
-    public String actualizarCargo(
-            @RequestParam("id") Long userId,
-            @RequestParam("positionId") Long positionId,
-            RedirectAttributes redirectAttributes) {
+    // Ver detalle de un empleado
+    @GetMapping("/detalle/{id}")
+    public String verPerfil(@PathVariable Long id, Model model) {
+        User empleado = userService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Empleado no encontrado."));
+        model.addAttribute("empleado", empleado);
+        model.addAttribute("tareas", empleado.getTasks());
+        return "perfil-empleado";
+    }
 
-        var user = userService.findById(userId)
+    // Actualizar posición de un empleado
+    @PostMapping("/actualizar")
+    public String actualizarCargo(@RequestParam("id") Long userId,
+                                  @RequestParam("positionId") Long positionId,
+                                  RedirectAttributes redirectAttributes) {
+        User user = userService.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
 
         if (user.getRole() == Role.ADMIN || user.getRole() == Role.STOCK_ADMIN) {
@@ -62,4 +71,5 @@ public class EmployeeViewController {
 
         return "redirect:/employees-view";
     }
+   
 }

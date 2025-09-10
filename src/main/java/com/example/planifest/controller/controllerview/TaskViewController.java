@@ -40,6 +40,7 @@ public class TaskViewController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaTarea,
             @RequestParam(required = false) String nombre,
             @RequestParam(required = false) Long usuarioId,
+            
             Model model) {
 
         // Filtrar tareas según los parámetros
@@ -54,7 +55,6 @@ public class TaskViewController {
         model.addAttribute("nombre", nombre);
         model.addAttribute("usuarioId", usuarioId);
 
-        // 💡 Aquí está lo más importante
         model.addAttribute("usuarios", userService.getAll());
         model.addAttribute("eventos", eventService.getAll());
         return "tasks";
@@ -62,29 +62,29 @@ public class TaskViewController {
 
     // CARGAR FORMULARIO CON UNA TAREA PARA EDITAR
     @GetMapping(params = "id")
-public String editarTarea(@RequestParam Long id,
-                          @RequestParam(required = false) String estado,
-                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
-                          @RequestParam(required = false) String nombre,
-                          @RequestParam(required = false) Long usuarioId,
-                          Model model) {
+    public String editarTarea(@RequestParam Long id,
+                              @RequestParam(required = false) String estado,
+                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaTarea,
+                              @RequestParam(required = false) String nombre,
+                              @RequestParam(required = false) Long usuarioId,
+                              Model model) {
 
-    Task tarea = taskService.findById(id)
-        .orElseThrow(() -> new RuntimeException("Tarea no encontrada con ID: " + id));
+        Task tarea = taskService.findById(id)
+            .orElseThrow(() -> new RuntimeException("Tarea no encontrada con ID: " + id));
 
-    List<Task> tareas = taskService.filtrarPorNombreEstadoFechaYUsuario(nombre, estado, fecha, usuarioId);
+        List<Task> tareas = taskService.filtrarPorNombreEstadoFechaYUsuario(nombre, estado, fechaTarea, usuarioId);
 
-    model.addAttribute("task", tarea);
-    model.addAttribute("tareas", tareas);
-    model.addAttribute("estado", estado);
-    model.addAttribute("fecha", fecha);
-    model.addAttribute("nombre", nombre);
-    model.addAttribute("usuarioId", usuarioId);
-    model.addAttribute("usuarios", userService.getAll()); // <- usa getAll(), no findAll()
-    model.addAttribute("eventos", eventService.getAll()); // <- usa getAll(), no findAll()
+        model.addAttribute("task", tarea);
+        model.addAttribute("tareas", tareas);
+        model.addAttribute("estado", estado);
+        model.addAttribute("fechaTarea", fechaTarea);
+        model.addAttribute("nombre", nombre);
+        model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("usuarios", userService.getAll());
+        model.addAttribute("eventos", eventService.getAll());
 
-    return "tasks";
-}
+        return "tasks";
+    }
 
     // GUARDAR TAREA (CREAR O ACTUALIZAR)
     @PostMapping("/save")

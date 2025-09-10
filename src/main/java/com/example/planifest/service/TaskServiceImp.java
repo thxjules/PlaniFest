@@ -20,8 +20,6 @@ public class TaskServiceImp implements Idao<Task, Long> {
         this.taskRepository = taskRepository;
     }
 
-  
-
     @Override
     public List<Task> getAll() {
         return taskRepository.findAll();
@@ -61,7 +59,6 @@ public class TaskServiceImp implements Idao<Task, Long> {
     }
 
     // ----------------- VALIDACIÓN -----------------
-
     private void validateTask(Task task) {
         if (task.getName() == null || task.getName().isBlank()) {
             throw new RuntimeException("El nombre de la tarea no puede estar vacío.");
@@ -85,33 +82,34 @@ public class TaskServiceImp implements Idao<Task, Long> {
 
     // ----------------- FILTROS -----------------
 
-   public List<Task> filtrarPorNombreEstadoFechaYUsuario(String nombre, String estado, LocalDate fecha, Long usuarioId) {
-    return taskRepository.findAll().stream()
-        .filter(t -> nombre == null || nombre.isBlank() || t.getName().toLowerCase().contains(nombre.toLowerCase()))
-        .filter(t -> estado == null || estado.isBlank() || t.getStatus().name().equalsIgnoreCase(estado))
-        .filter(t -> fecha == null || t.getDate().isEqual(fecha))
-        .filter(t -> usuarioId == null || (t.getUser() != null && t.getUser().getId().equals(usuarioId)))
-        .toList();
-}
+    // Filtro por nombre, estado, fecha (solo día) y usuario
+    public List<Task> filtrarPorNombreEstadoFechaYUsuario(String nombre, String estado, LocalDate fecha, Long usuarioId) {
+        return taskRepository.findAll().stream()
+            .filter(t -> nombre == null || nombre.isBlank() || t.getName().toLowerCase().contains(nombre.toLowerCase()))
+            .filter(t -> estado == null || estado.isBlank() || t.getStatus().name().equalsIgnoreCase(estado))
+            .filter(t -> fecha == null || t.getDate().toLocalDate().isEqual(fecha)) // ✅ LocalDateTime → LocalDate
+            .filter(t -> usuarioId == null || (t.getUser() != null && t.getUser().getId().equals(usuarioId)))
+            .toList();
+    }
 
-    // Filtro por rango de fechas + estado (más común)
+    // Filtro por rango de fechas + estado (compara solo la fecha, ignora hora)
     public List<Task> getFilteredTasks(LocalDate fechaDesde, LocalDate fechaHasta, String estado) {
         return taskRepository.findAll().stream()
             .filter(task ->
-                (fechaDesde == null || !task.getDate().isBefore(fechaDesde)) &&
-                (fechaHasta == null || !task.getDate().isAfter(fechaHasta)) &&
+                (fechaDesde == null || !task.getDate().toLocalDate().isBefore(fechaDesde)) &&
+                (fechaHasta == null || !task.getDate().toLocalDate().isAfter(fechaHasta)) &&
                 (estado == null || estado.isEmpty() || task.getStatus().name().equalsIgnoreCase(estado))
             )
             .collect(Collectors.toList());
     }
 
-    // Filtro por nombre, usuario, fecha evento y fecha tarea (filtro avanzado)
+    // Filtro por nombre, usuario, fecha del evento y fecha de la tarea
     public List<Task> buscarPorFiltros(String nombre, Long usuarioId, LocalDate fechaEvento, LocalDate fechaTarea) {
         return taskRepository.findAll().stream()
             .filter(t -> nombre == null || t.getName().toLowerCase().contains(nombre.toLowerCase()))
             .filter(t -> usuarioId == null || (t.getUser() != null && t.getUser().getId().equals(usuarioId)))
             .filter(t -> fechaEvento == null || (t.getEvent() != null && fechaEvento.equals(t.getEvent().getDate())))
-            .filter(t -> fechaTarea == null || fechaTarea.equals(t.getDate()))
+            .filter(t -> fechaTarea == null || fechaTarea.equals(t.getDate().toLocalDate())) // ✅ Conversión
             .toList();
     }
 }
