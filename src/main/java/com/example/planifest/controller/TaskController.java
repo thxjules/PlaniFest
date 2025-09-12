@@ -13,17 +13,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.planifest.entity.Task;
+import com.example.planifest.service.TaskExcelService;
 import com.example.planifest.service.TaskServiceImp;
 
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
-
+    
+//    carga masiva 
     private final TaskServiceImp taskService;
+    private final TaskExcelService taskExcelService;
 
-    public TaskController(TaskServiceImp taskService) {
+    public TaskController(TaskServiceImp taskService, TaskExcelService taskExcelService) {
         this.taskService = taskService;
+        this.taskExcelService = taskExcelService;
     }
+
+   // public TaskController(TaskServiceImp taskService) {
+     //   this.taskService = taskService;
+   // }
 
     @GetMapping
     public ResponseEntity<List<Task>> getAllTasks() {
@@ -50,3 +58,9 @@ public class TaskController {
     }
 
 }
+
+
+
+    
+
+

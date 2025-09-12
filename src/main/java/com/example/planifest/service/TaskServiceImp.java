@@ -112,4 +112,12 @@ public class TaskServiceImp implements Idao<Task, Long> {
             .filter(t -> fechaTarea == null || fechaTarea.equals(t.getDate().toLocalDate())) // ✅ Conversión
             .toList();
     }
+    // ----------------- CARGA MASIVA -----------------
+public void createAll(List<Task> tasks) {
+    for (Task task : tasks) {
+        validateTask(task); // ✅ validamos cada tarea
+    }
+    taskRepository.saveAll(tasks); // ✅ guarda todas en una sola operación
+}
+
 }

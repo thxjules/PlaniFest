@@ -42,6 +42,12 @@
             ➕ Nueva tarea
         </button>
     </div>
+    <form th:action="@{/tasks-view/bulk-excel}" method="post" enctype="multipart/form-data">
+    <label for="file">Selecciona archivo Excel:</label>
+    <input type="file" id="file" name="file" accept=".xls,.xlsx" required>
+    <button type="submit">Cargar Excel</button>
+</form>
+</form>
 
     <!-- FORMULARIO DE TAREA -->
     <div th:class="${task.id != null} ? 'collapse show' : 'collapse'" id="formularioTarea">

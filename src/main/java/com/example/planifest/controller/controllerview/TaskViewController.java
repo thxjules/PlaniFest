@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,25 +13,33 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.planifest.entity.Task;
 import com.example.planifest.service.EventServiceImp;
+import com.example.planifest.service.TaskExcelService;
 import com.example.planifest.service.TaskServiceImp;
 import com.example.planifest.service.UserServiceImp;
 
 @Controller
 @RequestMapping("/tasks-view")
 public class TaskViewController {
+    //    carga masiva
+  
+
+
 
     private final TaskServiceImp taskService;
     private final UserServiceImp userService;
     private final EventServiceImp eventService;
+      private final TaskExcelService taskExcelService;
 
-    public TaskViewController(TaskServiceImp taskService, UserServiceImp userService, EventServiceImp eventService) {
+    public TaskViewController(TaskServiceImp taskService, UserServiceImp userService, EventServiceImp eventService, TaskExcelService taskExcelService) {
         this.taskService = taskService;
         this.userService = userService;
         this.eventService = eventService;
+        this.taskExcelService = taskExcelService;
     }
 
     // MOSTRAR LISTA DE TAREAS Y FORMULARIO VACÍO
@@ -114,4 +123,10 @@ public class TaskViewController {
         }
         return "redirect:/tasks-view";
     }
+  @PostMapping("/bulk-excel")
+public ResponseEntity<?> uploadExcel(@RequestParam("file") MultipartFile file) {
+    List<Task> tasks = taskExcelService.parseExcelFile(file);
+    taskService.createAll(tasks);
+    return ResponseEntity.status(201).body("Tareas cargadas desde Excel: " + tasks.size());
+}
 }
