@@ -20,18 +20,22 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.planifest.entity.Event;
 import com.example.planifest.entity.Task;
 import com.example.planifest.entity.User;
-import com.example.planifest.enums.TaskStatus;   
+import com.example.planifest.enums.TaskStatus;
+import com.example.planifest.repository.TaskRepository;
 
-
-
-
-
-    // Método para convertir Excel en lista de tareas
 @Service
 public class TaskExcelService {
 
-    public List<Task> parseExcelFile(MultipartFile file) {
-        List<Task> tasks = new ArrayList<>();
+    private final TaskRepository taskRepository;
+
+    public TaskExcelService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
+    // Método principal para importar tareas y devolver duplicadas
+    public List<String> importarTareasDesdeExcel(MultipartFile file) {
+        List<Task> nuevasTareas = new ArrayList<>();
+        List<String> duplicadas = new ArrayList<>();
 
         try (InputStream is = file.getInputStream();
              Workbook workbook = WorkbookFactory.create(is)) {
@@ -51,13 +55,15 @@ public class TaskExcelService {
                 Task task = new Task();
 
                 // Fecha
-                task.setDate(parseDateCell(row.getCell(1)));
+                LocalDateTime fecha = parseDateCell(row.getCell(1));
+                task.setDate(fecha);
 
                 // Descripción
                 task.setDescription(getCellStringValue(row.getCell(2)));
 
                 // Nombre
-                task.setName(getCellStringValue(row.getCell(3)));
+                String nombre = getCellStringValue(row.getCell(3));
+                task.setName(nombre);
 
                 // Estado
                 String statusStr = getCellStringValue(row.getCell(4)).toUpperCase();
@@ -79,7 +85,21 @@ public class TaskExcelService {
                 event.setId(eventId);
                 task.setEvent(event);
 
-                tasks.add(task);
+                // ✅ Verificar si ya existe
+                boolean exists = taskRepository.existsByNameAndDateAndUser_IdAndEvent_Id(
+                        nombre,
+                        fecha,
+                        userId,
+                        eventId
+                );
+
+                if (exists) {
+                    duplicadas.add(nombre + " (usuario " + userId + ", evento " + eventId + ")");
+                } else {
+                    nuevasTareas.add(task);
+                    taskRepository.save(task); // guardar la tarea
+                }
+
                 rowNumber++;
             }
 
@@ -87,7 +107,7 @@ public class TaskExcelService {
             throw new RuntimeException("Error leyendo el archivo Excel: " + e.getMessage(), e);
         }
 
-        return tasks;
+        return duplicadas;
     }
 
     // ===== HELPERS =====
@@ -114,4 +134,3 @@ public class TaskExcelService {
         }
     }
 }
-

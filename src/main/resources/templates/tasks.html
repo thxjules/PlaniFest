@@ -42,11 +42,21 @@
             ➕ Nueva tarea
         </button>
     </div>
-    <form th:action="@{/tasks-view/bulk-excel}" method="post" enctype="multipart/form-data">
-    <label for="file">Selecciona archivo Excel:</label>
-    <input type="file" id="file" name="file" accept=".xls,.xlsx" required>
-    <button type="submit">Cargar Excel</button>
-</form>
+    <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="bi bi-file-earmark-excel-fill"></i> Importar tareas desde Excel</h5>
+    </div>
+    <div class="card-body">
+        <form th:action="@{/tasks-view/import-excel}" method="post" enctype="multipart/form-data" class="d-flex align-items-center gap-3">
+            <div class="flex-grow-1">
+                <input class="form-control" type="file" id="file" name="file" accept=".xls,.xlsx" required>
+            </div>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-upload"></i> Importar
+            </button>
+        </form>
+    </div>
+</div>
 </form>
 
     <!-- FORMULARIO DE TAREA -->

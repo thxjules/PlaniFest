@@ -25,17 +25,16 @@ import com.example.planifest.service.UserServiceImp;
 @Controller
 @RequestMapping("/tasks-view")
 public class TaskViewController {
-    //    carga masiva
-  
-
-
 
     private final TaskServiceImp taskService;
     private final UserServiceImp userService;
     private final EventServiceImp eventService;
-      private final TaskExcelService taskExcelService;
+    private final TaskExcelService taskExcelService;
 
-    public TaskViewController(TaskServiceImp taskService, UserServiceImp userService, EventServiceImp eventService, TaskExcelService taskExcelService) {
+    public TaskViewController(TaskServiceImp taskService,
+                              UserServiceImp userService,
+                              EventServiceImp eventService,
+                              TaskExcelService taskExcelService) {
         this.taskService = taskService;
         this.userService = userService;
         this.eventService = eventService;
@@ -49,24 +48,22 @@ public class TaskViewController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaTarea,
             @RequestParam(required = false) String nombre,
             @RequestParam(required = false) Long usuarioId,
-            
             Model model) {
 
-        // Filtrar tareas según los parámetros
         List<Task> tareas = taskService.filtrarPorNombreEstadoFechaYUsuario(nombre, estado, fechaTarea, usuarioId);
 
         model.addAttribute("tareas", tareas);
         model.addAttribute("task", new Task()); // Para formulario nueva tarea
+        model.addAttribute("usuarios", userService.getAll());
+        model.addAttribute("eventos", eventService.getAll());
 
-        // Agregar los valores de filtro al modelo para mantenerlos seleccionados
+        // Para mantener filtros seleccionados
         model.addAttribute("estado", estado);
         model.addAttribute("fechaTarea", fechaTarea);
         model.addAttribute("nombre", nombre);
         model.addAttribute("usuarioId", usuarioId);
 
-        model.addAttribute("usuarios", userService.getAll());
-        model.addAttribute("eventos", eventService.getAll());
-        return "tasks";
+        return "tasks"; // tu vista Thymeleaf
     }
 
     // CARGAR FORMULARIO CON UNA TAREA PARA EDITAR
@@ -79,23 +76,25 @@ public class TaskViewController {
                               Model model) {
 
         Task tarea = taskService.findById(id)
-            .orElseThrow(() -> new RuntimeException("Tarea no encontrada con ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada con ID: " + id));
 
         List<Task> tareas = taskService.filtrarPorNombreEstadoFechaYUsuario(nombre, estado, fechaTarea, usuarioId);
 
         model.addAttribute("task", tarea);
         model.addAttribute("tareas", tareas);
+        model.addAttribute("usuarios", userService.getAll());
+        model.addAttribute("eventos", eventService.getAll());
+
+        // Para mantener filtros seleccionados
         model.addAttribute("estado", estado);
         model.addAttribute("fechaTarea", fechaTarea);
         model.addAttribute("nombre", nombre);
         model.addAttribute("usuarioId", usuarioId);
-        model.addAttribute("usuarios", userService.getAll());
-        model.addAttribute("eventos", eventService.getAll());
 
         return "tasks";
     }
 
-    // GUARDAR TAREA (CREAR O ACTUALIZAR)
+    // GUARDAR TAREA
     @PostMapping("/save")
     public String guardarTarea(@ModelAttribute Task task, RedirectAttributes redirectAttributes) {
         try {
@@ -123,10 +122,30 @@ public class TaskViewController {
         }
         return "redirect:/tasks-view";
     }
-  @PostMapping("/bulk-excel")
+
+    // CARGA MASIVA SIN VALIDAR DUPLICADOS
+   @PostMapping("/bulk-excel")
 public ResponseEntity<?> uploadExcel(@RequestParam("file") MultipartFile file) {
-    List<Task> tasks = taskExcelService.parseExcelFile(file);
-    taskService.createAll(tasks);
-    return ResponseEntity.status(201).body("Tareas cargadas desde Excel: " + tasks.size());
+    List<String> duplicadas = taskExcelService.importarTareasDesdeExcel(file);
+
+    if (!duplicadas.isEmpty()) {
+        return ResponseEntity.status(409).body("⚠️ Estas tareas ya existen: " + String.join(", ", duplicadas));
+    }
+
+    return ResponseEntity.status(201).body("✅ Todas las tareas se importaron correctamente.");
 }
+
+    // IMPORTACIÓN VALIDANDO DUPLICADOS
+    @PostMapping("/import-excel")
+    public String importarExcel(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        List<String> duplicadas = taskExcelService.importarTareasDesdeExcel(file);
+
+        if (!duplicadas.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "⚠️ Estas tareas ya existen y no se importaron: " + String.join(", ", duplicadas));
+        } else {
+            redirectAttributes.addFlashAttribute("successMessage", "✅ Todas las tareas se importaron correctamente.");
+        }
+
+        return "redirect:/tasks-view";
+    }
 }
