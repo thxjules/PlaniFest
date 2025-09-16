@@ -33,6 +33,13 @@ public class EventServiceImp implements Idao<Event, Long> {
         eventRepository.save(event);
     }
 
+    
+    public Event createAndReturn(Event event) {
+    validateEvent(event);
+    return eventRepository.save(event);
+}
+
+
     @Override
     public void update(Event event) {
         if (event.getId() == null || !eventRepository.existsById(event.getId())) {

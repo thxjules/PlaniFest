@@ -64,6 +64,9 @@
 <div class="report-container">
     <h1>Reporte de Administración - PlaniFest</h1>
 
+    <div class="report-container">
+    <h1>Reporte de Administración - PlaniFest</h1>
+
     <table>
         <thead>
         <tr>
@@ -74,31 +77,42 @@
         <tbody>
         <tr>
             <td>Total de empleados</td>
-            <td class="value" th:text="${totalEmpleados}">0</td>
+            <td th:text="${totalEmpleados}">0</td>
         </tr>
         <tr>
             <td>Total de eventos</td>
-            <td class="value" th:text="${totalEventos}">0</td>
+            <td th:text="${totalEventos}">0</td>
         </tr>
         <tr>
             <td>Total de tareas</td>
-            <td class="value" th:text="${totalTareas}">0</td>
+            <td th:text="${totalTareas}">0</td>
         </tr>
         <tr>
             <td>Tareas pendientes</td>
-            <td class="value" th:text="${tareasPendientes}">0</td>
+            <td th:text="${tareasPendientes}">0</td>
         </tr>
         <tr>
             <td>Total de suministros</td>
-            <td class="value" th:text="${totalInsumos}">0</td>
+            <td th:text="${totalInsumos}">0</td>
         </tr>
         </tbody>
     </table>
+
+    <!-- NUEVO: GRÁFICAS -->
+    <div style="margin-top: 30px;">
+        <h3>Distribución de empleados</h3>
+        <img src="/images/graficos/empleadosChart.png" alt="Gráfico de empleados" width="400"/>
+
+        <h3>Estado de tareas</h3>
+        <img src="/images/graficos/tareasChart.png" alt="Gráfico de tareas" width="400"/>
+    </div>
 
     <div class="footer">
         Reporte generado automáticamente por el sistema el 
         <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
     </div>
 </div>
+
+  </div>
 </body>
 </html>

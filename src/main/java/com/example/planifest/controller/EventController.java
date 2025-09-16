@@ -13,39 +13,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.planifest.entity.Event;
+import com.example.planifest.service.EmailServiceUser;
 import com.example.planifest.service.EventServiceImp;
 
 @RestController
 @RequestMapping("/events")
 public class EventController {
 
+    private final EmailServiceUser emailService;
     private final EventServiceImp eventService;
 
-    public EventController(EventServiceImp eventService) {
+    public EventController(EventServiceImp eventService, EmailServiceUser emailService) {
         this.eventService = eventService;
+        this.emailService = emailService;
     }
 
     @GetMapping
     public ResponseEntity<List<Event>> getAllEvents() {
-        return ResponseEntity.ok(eventService.getAll()); // status 200 + lista de eventos
+        return ResponseEntity.ok(eventService.getAll());
     }
 
     @PostMapping
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
-        eventService.create(event);
-        return ResponseEntity.status(201).build(); // status 201 creado
+     Event newEvent = eventService.createAndReturn(event);
+     
+    emailService.enviarCorreoACliente(
+        newEvent.getClient().getEmail(),
+        "Confirmación de evento: " + newEvent.getEventName(),
+        "Hola " + newEvent.getClient().getName() +
+        ", tu evento ha sido registrado exitosamente para el " + newEvent.getDate() + "."
+    );
+
+        return ResponseEntity.status(201).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody Event event) {
         event.setId(id);
         eventService.update(event);
-        return ResponseEntity.noContent().build(); // status 204 (sin contenido)
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
         eventService.deleteById(id);
-        return ResponseEntity.ok().build(); // status 200 OK
+        return ResponseEntity.ok().build();
     }
 }
