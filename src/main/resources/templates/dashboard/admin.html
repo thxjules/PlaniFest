@@ -111,6 +111,140 @@
         </div>
     </div>
 
+<script th:inline="javascript">
+             /* Valores del modelo seguros para JS */
+        const totalInsumos = /*[[${totalInsumos}]]*/ 0;
+        const tareasPendientes = /*[[${tareasPendientes}]]*/ 0;
+        const tareasCompletadas = /*[[${tareasCompletadas}]]*/ 0;
+        const totalTareas = /*[[${totalTareas}]]*/ 0;
+        const empleadosAdmin = /*[[${empleadosAdmin}]]*/ 0;
+        const empleadosEmployee = /*[[${empleadosEmployee}]]*/ 0;
+        const empleadosOther = /*[[${empleadosOther}]]*/ 0;
+        const eventLabels = /*[[${eventLabelsJson}]]*/[];
+        const eventData = /*[[${eventDataJson}]]*/[];
+        const eventosFuturos = /*[[${eventosFuturos}]]*/ 0;
+        const eventosRealizados = /*[[${eventosRealizados}]]*/ 0;
+
+        // Tareas
+        new Chart(document.getElementById('tasksChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Pendientes', 'Completadas'],
+                datasets: [{ data: [tareasPendientes, tareasCompletadas], backgroundColor: ['#FF6384', '#36A2EB'] }]
+            },
+            options: { responsive: true, plugins: { title: { display: true, text: 'Total de tareas: ' + totalTareas } } }
+        });
+
+        // Empleados
+        new Chart(document.getElementById('employeesChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Admin', 'Empleado', 'Otros'],
+                datasets: [{ data: [empleadosAdmin, empleadosEmployee, empleadosOther], backgroundColor: ['#FFCE56', '#36A2EB', '#FF6384'] }]
+            },
+            options: { responsive: true, plugins: { title: { display: true, text: 'Total empleados' } } }
+        });
+
+        // Eventos próximos
+     new Chart(document.getElementById('eventsChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+        labels: ['Eventos desarrollados', 'Eventos que faltan'],
+        datasets: [{
+            label: 'Cantidad de eventos',
+            data: [eventosRealizados, eventosFuturos],
+            backgroundColor: ['#36A2EB', '#FF6384']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            title: { display: true, text: 'Total de eventos: ' + (eventosRealizados + eventosFuturos) },
+            tooltip: { enabled: true }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                precision: 0 // Para que muestre números enteros
+            }
+        }
+    }
+});
+        // Gráfico solo de Tareas pendientes
+        new Chart(document.getElementById('tasksPendingChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Pendientes', 'Completadas'],
+                datasets: [{
+                    data: [tareasPendientes, totalTareas - tareasPendientes],
+                    backgroundColor: ['#FF6384', '#E0E0E0'] // gris para completadas
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: true, text: 'Tareas pendientes: ' + tareasPendientes }
+                }
+            }
+        });
+
+        // Suministros
+        new Chart(document.getElementById('suppliesChart').getContext('2d'), {
+            type: 'doughnut',
+            data: { labels: ['Total'], datasets: [{ data: [totalInsumos], backgroundColor: ['#FFCE56'] }] },
+            options: { responsive: true, plugins: { title: { display: true, text: 'Total suministros' } } }
+        });
+        function getDashboardData() {
+    const charts = ['tasksChart', 'tasksPendingChart', 'employeesChart', 'eventsChart', 'suppliesChart'];
+    const images = {};
+
+    charts.forEach(id => {
+        const canvas = document.getElementById(id);
+        images[id] = canvas.toDataURL('image/png');
+    });
+
+    const data = {
+        charts: images,
+        totalTareas: /*[[${totalTareas}]]*/ 0,
+        tareasPendientes: /*[[${tareasPendientes}]]*/ 0,
+        totalEmpleados: /*[[${empleadosAdmin + empleadosEmployee + empleadosOther}]]*/ 0,
+        totalInsumos: /*[[${totalInsumos}]]*/ 0,
+        eventosRealizados: /*[[${eventosRealizados}]]*/ 0,
+        eventosFuturos: /*[[${eventosFuturos}]]*/ 0
+    };
+
+    return data;
+}
+
+document.getElementById('downloadPdf').addEventListener('click', () => {
+    fetch('/admin/report/pdf/full', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(getDashboardData())
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'reporte_dashboard.pdf'; a.click();
+    });
+});
+
+document.getElementById('downloadExcel').addEventListener('click', () => {
+    fetch('/admin/report/excel/full', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(getDashboardData())
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'reporte_dashboard.xlsx'; a.click();
+    });
+});
+    </script>
 </body>
 
 </html>

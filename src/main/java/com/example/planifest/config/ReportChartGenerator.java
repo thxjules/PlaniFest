@@ -1,11 +1,11 @@
 package com.example.planifest.config;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.ChartUtils;
-import org.jfree.data.general.DefaultPieDataset;
-
 import java.io.File;
 import java.io.IOException;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
 
 public class ReportChartGenerator {
 
@@ -26,7 +26,7 @@ public class ReportChartGenerator {
 
     public static void generarGraficoTareas(int pendientes, int completadas) throws IOException {
         DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("Pendientes", pendientes);g
+        dataset.setValue("Pendientes", pendientes);
         dataset.setValue("Completadas", completadas);
 
         JFreeChart chart = ChartFactory.createPieChart(
