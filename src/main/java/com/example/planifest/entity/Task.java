@@ -16,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,8 +28,9 @@ import lombok.Setter;
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "task_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_seq")
+    @SequenceGenerator(name = "task_seq", sequenceName = "task_seq", allocationSize = 1)
+    @Column(name = "task_id", nullable = false, updatable = false, insertable = true)
     private Long id;
 
     @Column(length = 50, nullable = false)
@@ -54,7 +56,5 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
-
-    
 
 }

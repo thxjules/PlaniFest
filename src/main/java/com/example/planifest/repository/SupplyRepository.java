@@ -18,4 +18,6 @@ public interface SupplyRepository extends JpaRepository<Supply, Long> {
 
     //Consulta por el stock actual
     List<Supply> findByCurrentStock(int currentStock);
+
+     boolean existsByName(String name);
 }
