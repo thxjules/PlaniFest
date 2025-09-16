@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -124,16 +123,16 @@ public class TaskViewController {
     }
 
     // CARGA MASIVA SIN VALIDAR DUPLICADOS
-   @PostMapping("/bulk-excel")
-public ResponseEntity<?> uploadExcel(@RequestParam("file") MultipartFile file) {
-    List<String> duplicadas = taskExcelService.importarTareasDesdeExcel(file);
+  // @PostMapping("/bulk-excel")
+//public ResponseEntity<?> uploadExcel(@RequestParam("file") MultipartFile file) {
+   // List<String> duplicadas = taskExcelService.importarTareasDesdeExcel(file);
 
-    if (!duplicadas.isEmpty()) {
-        return ResponseEntity.status(409).body("⚠️ Estas tareas ya existen: " + String.join(", ", duplicadas));
-    }
+    //if (!duplicadas.isEmpty()) {
+       // return ResponseEntity.status(409).body("⚠️ Estas tareas ya existen: " + String.join(", ", duplicadas));
+   // }
 
-    return ResponseEntity.status(201).body("✅ Todas las tareas se importaron correctamente.");
-}
+  //  return ResponseEntity.status(201).body("✅ Todas las tareas se importaron correctamente.");
+//}
 
     // IMPORTACIÓN VALIDANDO DUPLICADOS
     @PostMapping("/import-excel")
