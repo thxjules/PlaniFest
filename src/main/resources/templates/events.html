@@ -18,6 +18,17 @@
         <p class="mt-2">Crea y organiza los eventos</p>
     </div>
 
+    <!-- MENSAJES DE ALERTA -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <!-- BOTONES ENCIMA DEL FORMULARIO -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <a th:href="@{/dashboard/admin}" class="btn btn-outline-secondary btn-sm">
@@ -33,7 +44,7 @@
         </button>
     </div>
 
-    <!-- FORMULARIO -->
+    <!-- FORMULARIO EVENTO -->
     <div th:class="${event.id != null} ? 'collapse show' : 'collapse'" id="formularioEvento">
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-primary text-white">
@@ -43,6 +54,7 @@
                 <form th:action="@{/events-view/save}" method="post" th:object="${event}">
                     <input type="hidden" th:field="*{id}" />
                     <div class="row g-3">
+                        <!-- Datos básicos -->
                         <div class="col-md-6">
                             <label class="form-label">Nombre</label>
                             <input type="text" th:field="*{eventName}" class="form-control" required />
@@ -73,10 +85,20 @@
                             <label class="form-label">Número de invitados</label>
                             <input type="number" th:field="*{guestCount}" class="form-control" required />
                         </div>
+
+                        <!-- Ubicación y mapa -->
                         <div class="col-md-6">
                             <label class="form-label">Ubicación</label>
                             <input type="text" th:field="*{location}" class="form-control" required />
                         </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Mapa de ubicación</label>
+                            <div id="mapContainer" style="width: 100%; height: 300px; border: 1px solid #ccc;">
+                                <iframe id="mapFrame" th:src="${mapUrl}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            </div>
+                        </div>
+
+                        <!-- Estado -->
                         <div class="col-md-6">
                             <label class="form-label">Estado</label>
                             <select th:field="*{status}" class="form-select" required>
@@ -87,14 +109,17 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Suministros</label>
-                            <select multiple th:field="*{supplies}" class="form-select">
-                                <option th:each="s : ${suministros}" th:value="${s.id}" th:text="${s.name}"></option>
-                            </select>
-                            <small class="text-muted">Usa Ctrl (Windows) o Cmd (Mac) para seleccionar múltiples.</small>
+
+                        <!-- Suministros -->
+                        <div class="col-md-12 mb-2">
+                            <button type="button" class="btn btn-outline-success" id="addSupplyBtn">
+                                ➕ Nuevo suministro
+                            </button>
                         </div>
+                        <div id="suministrosContainer"></div>
+
                     </div>
+
                     <div class="mt-4 text-end">
                         <button type="submit" class="btn btn-success">
                             <span th:text="${event.id != null} ? '🔄 Actualizar evento' : '💾 Guardar evento'">💾 Guardar evento</span>
@@ -139,7 +164,7 @@
                             </td>
                             <td>
                                 <ul class="mb-0 ps-3">
-                                    <li th:each="s : ${e.supplies}" th:text="${s.name}"></li>
+                                    <li th:each="supply : ${e.supplies}" th:text="${supply.name}"></li>
                                 </ul>
                             </td>
                             <td class="text-center">
@@ -156,6 +181,50 @@
         </div>
     </div>
 
+    <!-- Template de Suministros -->
+    <template id="supplyTemplate">
+        <div class="row mb-2 supply-entry">
+            <div class="col-md-6">
+                <label class="form-label">Suministro</label>
+                <select name="supplies[_INDEX_].id" class="form-select" required>
+                    <option value="">-- Selecciona --</option>
+                    <option th:each="s : ${suministros}" th:value="${s.id}" th:text="${s.name}"></option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="button" class="btn btn-danger removeSupplyBtn">🗑</button>
+            </div>
+        </div>
+    </template>
 </div>
+
+<!-- Los Scripts -->
+<script>
+    // Suministros un poquito más dinámicos
+    let supplyIndex = 0;
+    document.getElementById('addSupplyBtn').addEventListener('click', () => {
+        const template = document.getElementById('supplyTemplate').innerHTML;
+        const newSupply = template.replace(/_INDEX_/g, supplyIndex);
+        supplyIndex++;
+
+        const container = document.getElementById('suministrosContainer');
+        container.insertAdjacentHTML('beforeend', newSupply);
+
+        container.querySelectorAll('.removeSupplyBtn').forEach(btn => {
+            btn.onclick = (e) => e.target.closest('.supply-entry').remove();
+        });
+    });
+
+    // Actualizar mapa de forma dinámica
+    const locationInput = document.querySelector('input[th\\:field="*{location}"]');
+    const mapFrame = document.getElementById('mapFrame');
+
+    locationInput.addEventListener('input', () => {
+        const address = locationInput.value.trim();
+        if (address.length > 3) {
+            mapFrame.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyCgZPwudO2MG358I1CqrzctaVrIfclADcQ&q=${encodeURIComponent(address)}`;
+        }
+    });
+</script>
 </body>
 </html>

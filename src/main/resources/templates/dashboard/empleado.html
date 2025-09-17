@@ -26,10 +26,16 @@
         </div>
     </div>
 
-    <!-- Contenido principal -->
     <div id="content" class="main">
         <main>
             <h1>Empleado</h1>
+
+            <div th:if="${mapEmbed}" class="mb-4">
+                <iframe th:src="${mapEmbed}" width="100%" height="300"
+                        style="border:0; border-radius: 10px;" loading="lazy"
+                        allowfullscreen referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
 
             <!-- Filtros -->
             <div class="row mb-4 justify-content-center">
@@ -80,12 +86,10 @@
                 </table>
             </div>
 
-            <!-- JS con las tareas cargadas -->
             <script th:inline="javascript">
                 let tareasOriginales = /*[[${tareasAsignadas}]]*/ [];
             </script>
 
-            <!-- Función JS para filtrar -->
             <script>
                 function filtrarTareas() {
                     const fecha = document.getElementById('fecha').value;

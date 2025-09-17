@@ -85,11 +85,11 @@ public class DashboardController {
         return "dashboard/admin";
     }
 
-    // Dashboard de empleado
+    // Dashboard de empleado (con el mapa)
     @GetMapping("/dashboard/empleado")
     public String empleadoDashboard(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName(); // email
+        String username = auth.getName(); 
 
         User empleado = userService.getAll().stream()
                 .filter(u -> u.getEmail().equalsIgnoreCase(username))
@@ -101,9 +101,19 @@ public class DashboardController {
                     .filter(task -> task.getUser() != null &&
                             task.getUser().getId().equals(empleado.getId()))
                     .toList();
+
             model.addAttribute("tareasAsignadas", tareasEmpleado);
-        } else{
-                model.addAttribute("tareasAsignadas", List.of()); 
+
+            if (!tareasEmpleado.isEmpty()) {
+                Event evento = tareasEmpleado.get(0).getEvent();
+                if (evento != null && evento.getLocation() != null) {
+                    String mapEmbedUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyCgZPwudO2MG358I1CqrzctaVrIfclADcQ&q="
+                            + evento.getLocation().replace(" ", "+");
+                    model.addAttribute("mapEmbed", mapEmbedUrl);
+                }
+            }
+        } else {
+            model.addAttribute("tareasAsignadas", List.of());
         }
 
         model.addAttribute("activePage", "empleado");
