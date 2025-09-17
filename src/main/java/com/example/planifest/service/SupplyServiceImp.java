@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.example.planifest.Exceptions.SupplyDeletionException;
+import com.example.planifest.entity.Event;
 import com.example.planifest.entity.Supply;
 import com.example.planifest.repository.SupplyRepository;
 import com.example.planifest.service.dao.Idao;
@@ -72,16 +73,19 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
     Supply supply = optionalSupply.get();
 
     try {
-        // Eliminar relaciones con eventos (desvincular)
-        supply.getEvents().forEach(event -> event.getSupplies().remove(supply));
-        supply.getEvents().clear();
-        supplyRepository.save(supply);
+    // Eliminar relaciones con eventos (desvincular desde eventSupplies)
+    supply.getEventSupplies().forEach(eventSupply -> {
+        Event event = eventSupply.getEvent();
+        event.getEventSupplies().remove(eventSupply);
+    });
+    supply.getEventSupplies().clear();
+    supplyRepository.save(supply);
 
-        // Eliminar el suministro
-        supplyRepository.deleteById(id);
-    } catch (Exception e) {
-        throw new SupplyDeletionException("No se puede eliminar el suministro porque está vinculado a eventos.");
-    }
+    // Eliminar el suministro
+    supplyRepository.deleteById(id);
+} catch (Exception e) {
+    throw new SupplyDeletionException("No se puede eliminar el suministro porque está vinculado a eventos.");
+}
 
     
 }

@@ -6,7 +6,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/events.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+    </script>
 </head>
 <body>
 <div class="container py-5">
@@ -17,6 +18,18 @@
         <h1 class="mb-0">📅 Gestión de Eventos</h1>
         <p class="mt-2">Crea y organiza los eventos</p>
     </div>
+
+    <!-- MENSAJES DE ALERTA -->
+<div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span th:text="${successMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+
+<div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${errorMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 
     <!-- BOTONES ENCIMA DEL FORMULARIO -->
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -33,7 +46,7 @@
         </button>
     </div>
 
-    <!-- FORMULARIO -->
+    <!-- FORMULARIO EVENTO -->
     <div th:class="${event.id != null} ? 'collapse show' : 'collapse'" id="formularioEvento">
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-primary text-white">
@@ -87,13 +100,13 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Suministros</label>
-                            <select multiple th:field="*{supplies}" class="form-select">
-                                <option th:each="s : ${suministros}" th:value="${s.id}" th:text="${s.name}"></option>
-                            </select>
-                            <small class="text-muted">Usa Ctrl (Windows) o Cmd (Mac) para seleccionar múltiples.</small>
-                        </div>
+<div class="col-md-12 mb-2">
+    <button type="button" class="btn btn-outline-success" id="addSupplyBtn">
+        ➕ Nuevo suministro
+    </button>
+</div>
+<div id="suministrosContainer"></div>
+
                     </div>
                     <div class="mt-4 text-end">
                         <button type="submit" class="btn btn-success">
@@ -102,40 +115,6 @@
                     </div>
                 </form>
             </div>
-        </div>
-    </div>
-
- <!-- FILTROS -->
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-header bg-secondary text-white">
-            <h5 class="mb-0">🔍 Filtros</h5>
-        </div>
-        <div class="card-body">
-            <form method="get" th:action="@{/events-view}" class="row g-3 align-items-end">
-                <div class="col-md-4">
-                    <label for="nombre" class="form-label">Nombre del evento</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" th:value="${param.nombre}" placeholder="Ej. Boda, Fiesta..." />
-                </div>
-                <div class="col-md-3">
-                    <label for="minGuests" class="form-label">Mínimo de invitados</label>
-                    <input type="number" class="form-control" id="minGuests" name="minGuests" th:value="${param.minGuests}" />
-                </div>
-                <div class="col-md-3">
-                    <label for="clientId" class="form-label">Cliente</label>
-                    <select class="form-select" id="clientId" name="clientId">
-                        <option value="" th:selected="${param.clientId == null}">Todos</option>
-                        <option th:each="c : ${clientes}"
-                                th:value="${c.id}"
-                                th:text="${c.name}"
-                                th:selected="${param.clientId} == ${c.id}">
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-2 d-grid gap-2">
-                    <button type="submit" class="btn btn-outline-primary">Aplicar filtros</button>
-                    <a th:href="@{/events-view}" class="btn btn-outline-secondary">Limpiar filtros</a>
-                </div>
-            </form>
         </div>
     </div>
 
@@ -174,7 +153,8 @@
                             </td>
                             <td>
                                 <ul class="mb-0 ps-3">
-                                    <li th:each="s : ${e.supplies}" th:text="${s.name}"></li>
+                                    <li th:each="es : ${e.eventSupplies}" 
+                                        th:text="${es.supply.name + ' (' + es.quantitySupply + ')'}"></li>
                                 </ul>
                             </td>
                             <td class="text-center">
@@ -190,7 +170,41 @@
             </div>
         </div>
     </div>
-
+<template id="supplyTemplate">
+    <div class="row mb-2 supply-entry">
+        <div class="col-md-6">
+            <label class="form-label">Suministro</label>
+            <select name="eventSupplies[__INDEX__].supply.id" class="form-select" required>
+                <option value="">-- Selecciona --</option>
+                <option th:each="s : ${suministros}" th:value="${s.id}" th:text="${s.name}"></option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Cantidad</label>
+            <input type="number" name="eventSupplies[__INDEX__].quantitySupply" class="form-control" min="1" required />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="button" class="btn btn-danger removeSupplyBtn">🗑</button>
+        </div>
+    </div>
+</template>
 </div>
+<script>
+    let supplyIndex = 0;
+
+    document.getElementById('addSupplyBtn').addEventListener('click', () => {
+        const template = document.getElementById('supplyTemplate').innerHTML;
+        const newSupply = template.replace(/__INDEX__/g, supplyIndex);
+        supplyIndex++;
+
+        const container = document.getElementById('suministrosContainer');
+        container.insertAdjacentHTML('beforeend', newSupply);
+
+        // Activar botón de eliminar
+        container.querySelectorAll('.removeSupplyBtn').forEach(btn => {
+            btn.onclick = (e) => e.target.closest('.supply-entry').remove();
+        });
+    });
+</script>
 </body>
 </html>

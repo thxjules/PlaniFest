@@ -1,10 +1,12 @@
 package com.example.planifest.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.planifest.enums.SupplyStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -57,10 +59,9 @@ public class Supply {
     @Column(name = "packaging_unit", nullable = false, length = 50)
     private String packagingUnit;
 
-    // Relationship
-    @ManyToMany(mappedBy = "supplies")
-    @JsonIgnore
-    private List<Event> events;
+
+    @OneToMany(mappedBy = "supply")
+    private List<EventSupply> eventSupplies = new ArrayList<>();
 
     @OneToMany(mappedBy = "supply")
     @JsonIgnore

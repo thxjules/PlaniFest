@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 
 import com.example.planifest.entity.Client;
 import com.example.planifest.entity.Event;
+import com.example.planifest.entity.EventSupply;
 import com.example.planifest.entity.PlaniService;
 import com.example.planifest.entity.Supply;
 import com.example.planifest.enums.EventStatus;
+import com.example.planifest.repository.EventSupplyRepository;
 import com.example.planifest.service.ClientServiceImp;
 import com.example.planifest.service.EventServiceImp;
 import com.example.planifest.service.PlaniServiceImp;
@@ -26,13 +28,15 @@ public class EventSeeder implements CommandLineRunner {
     private final ClientServiceImp clientService;
     private final SupplyServiceImp supplyService;
     private final PlaniServiceImp planiService;
+    private final EventSupplyRepository eventSupplyRepository;
 
-    public EventSeeder(EventServiceImp eventService, ClientServiceImp clientService, SupplyServiceImp supplyService, PlaniServiceImp planiService){
+    public EventSeeder(EventServiceImp eventService, ClientServiceImp clientService, SupplyServiceImp supplyService, PlaniServiceImp planiService, EventSupplyRepository eventSupplyRepository){
         
         this.eventService = eventService;
         this.clientService = clientService;
         this.supplyService = supplyService;
         this.planiService = planiService;
+        this.eventSupplyRepository = eventSupplyRepository;
     }
 
     @Override
@@ -73,9 +77,10 @@ public class EventSeeder implements CommandLineRunner {
             event1.setLocation("Auditorio Central");
             event1.setStatus(EventStatus.INACTIVE);
             event1.setClient(clients.get(0));
-            event1.setSupplies(List.of(supplies.get(0), supplies.get(1))); // Globos, pulseras
             event1.setServices(List.of(services.get(0)));
             eventService.create(event1);
+eventSupplyRepository.save(new EventSupply(event1, supplies.get(0), 4)); // 50 globos
+eventSupplyRepository.save(new EventSupply(event1, supplies.get(1), 7)); // 100 pulseras // Globos, pulseras
 
             Event event2 = new Event();
             event2.setEventName("Bodas de Plata");
@@ -87,9 +92,10 @@ public class EventSeeder implements CommandLineRunner {
             event2.setLocation("Finca campestre Lagos");
             event2.setStatus(EventStatus.ACTIVE);
             event2.setClient(clients.get(1));
-            event2.setSupplies(List.of(supplies.get(2))); // Fuentes de agua
             event2.setServices(List.of(services.get(1)));
             eventService.create(event2);
+            eventSupplyRepository.save(new EventSupply(event2, supplies.get(1), 2)); // Fuentes de agua
+            eventSupplyRepository.save(new EventSupply(event2, supplies.get(0), 2)); 
 
             Event event3 = new Event();
             event3.setEventName("Fiesta 15 años");
@@ -101,9 +107,9 @@ public class EventSeeder implements CommandLineRunner {
             event3.setLocation("Salón comunal Rincón de los Ángeles");
             event3.setStatus(EventStatus.ACTIVE);
             event3.setClient(clients.get(2));
-            event3.setSupplies(List.of(supplies.get(1), supplies.get(2)));
             event3.setServices(List.of(services.get(2)));
             eventService.create(event3);
+            eventSupplyRepository.save(new EventSupply(event3, supplies.get(3), 2)); 
 
             Event event4 = new Event();
             event4.setEventName("Feria Gastronómica");
@@ -115,25 +121,10 @@ public class EventSeeder implements CommandLineRunner {
             event4.setLocation("Parque Principal");
             event4.setStatus(EventStatus.ACTIVE);
             event4.setClient(clients.get(3));
-            event4.setSupplies(List.of(supplies.get(3)));
             event4.setServices(List.of(services.get(0), services.get(1)));
             eventService.create(event4);
+            eventSupplyRepository.save(new EventSupply(event4, supplies.get(0), 3)); 
 
-            Event event5 = new Event();
-            event5.setEventName("Seminario de Tecnología");
-            event5.setDescription("IA y Blockchain");
-            event5.setDate(LocalDate.of(2025, 8, 10));
-            event5.setStartTime(LocalTime.of(9, 0));
-            event5.setEndTime(LocalTime.of(17, 0));
-            event5.setGuestCount(120);
-            event5.setLocation("Centro de Convenciones");
-            event5.setStatus(EventStatus.INACTIVE);
-            event5.setClient(clients.get(4));
-            event5.setSupplies(supplies); // todos los insumos
-            event5.setServices(services); // todos los servicios
-            eventService.create(event5);
-
-            System.out.println("Seeder de eventos completado con insumos y servicios.");
         }
     }
 }

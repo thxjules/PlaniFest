@@ -2,6 +2,7 @@ package com.example.planifest.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -73,14 +74,15 @@ public class Event {
     @JsonIgnore
     private List<Task> tasks;
 
-    // Relación con Insumos
-    @ManyToMany
-    @JoinTable(name = "event_supply", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "supply_id"))
-    private List<Supply> supplies;
 
     @ManyToMany
     @JoinTable(name = "event_service", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
     private List<PlaniService> services;
+
+    /* Relacion con Suministros */
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EventSupply> eventSupplies = new ArrayList<>();
+
 
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus;
