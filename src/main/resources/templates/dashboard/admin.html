@@ -19,24 +19,15 @@
             <div class="brand px-2 mb-3">
                 <h2 class="fw-bold">Bienvenido Administrador</h2>
             </div>
-            <a th:href="@{/employees-view}" th:classappend="${activePage == 'employees'} ? 'active'">
-                <i class="bx bx-user"></i> Empleados
-            </a>
-            <a th:href="@{/events-view}" th:classappend="${activePage == 'events'} ? 'active'">
-                <i class="bx bx-calendar"></i> Eventos
-            </a>
-            <a th:href="@{/clients-view}" th:classappend="${activePage == 'clients'} ? 'active'">
-                <i class="bx bx-user"></i> Clientes
-            </a>
-            <a th:href="@{/tasks-view}" th:classappend="${activePage == 'tasks'} ? 'active'">
-                <i class="bx bx-task"></i> Tareas
-            </a>
-            <a th:href="@{/supply-admin}" th:classappend="${activePage == 'supplies'} ? 'active'">
-                <i class="bx bx-box"></i> Suministros
-            </a>
+            <a th:href="@{/employees-view}" th:classappend="${activePage == 'employees'} ? 'active'"><i class="bx bx-user"></i> Empleados</a>
+            <a th:href="@{/events-view}" th:classappend="${activePage == 'events'} ? 'active'"><i class="bx bx-calendar"></i> Eventos</a>
+            <a th:href="@{/clients-view}" th:classappend="${activePage == 'clients'} ? 'active'"><i class="bx bx-user"></i> Clientes</a>
+            <a th:href="@{/tasks-view}" th:classappend="${activePage == 'tasks'} ? 'active'"><i class="bx bx-task"></i> Tareas</a>
+            <a th:href="@{/supply-admin}" th:classappend="${activePage == 'supplies'} ? 'active'"><i class="bx bx-box"></i> Suministros</a>
 
-            <a th:href="@{/admin/report/pdf/all}">Descargar PDF</a>
-            <a th:href="@{/admin/report/excel/all}">Descargar Excel</a>
+            <a href="#" id="downloadPdf">Descargar PDF</a>
+            <a href="#" id="downloadExcel">Descargar Excel</a>
+
             <form method="post" th:action="@{/logout}" class="mt-4 text-center">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit" class="logout-button">
@@ -49,38 +40,35 @@
         </div>
     </div>
 
-    <!-- Contenido -->
+    <!-- Contenido principal -->
     <div class="main">
         <h1>Administrador</h1>
 
-        <div class="grid">
+        <!-- GRÁFICOS -->
+        <div class="grid mt-5">
             <div class="card">
-                <h3>Total de empleados</h3>
-                <canvas id="employeesChart" width="200" height="200"></canvas>
-
-            </div>
-            <div class="card">
-                <h3>Total de eventos</h3>
-                <canvas id="eventsChart" width="200" height="200"></canvas>
-
-            </div>
-            <div class="card">
-                <h3>Total de tareas</h3>
+                <h3>Gráficos de Tareas</h3>
                 <canvas id="tasksChart" width="200" height="200"></canvas>
-
             </div>
             <div class="card">
-                <h3>Tareas pendientes</h3>
+                <h3>Tareas Pendientes</h3>
                 <canvas id="tasksPendingChart" width="200" height="200"></canvas>
-
             </div>
             <div class="card">
-                <h3>Total de suministros</h3>
+                <h3>Gráficos de Empleados</h3>
+                <canvas id="employeesChart" width="200" height="200"></canvas>
+            </div>
+            <div class="card">
+                <h3>Gráficos de Eventos</h3>
+                <canvas id="eventsChart" width="200" height="200"></canvas>
+            </div>
+            <div class="card">
+                <h3>Gráfico de Suministros</h3>
                 <canvas id="suppliesChart" width="200" height="200"></canvas>
-
             </div>
         </div>
 
+        <!-- ACTIVIDADES, PRÓXIMOS EVENTOS Y NOTIFICACIONES -->
         <div class="grid mt-5">
             <div class="card">
                 <h3>Actividad reciente</h3>
@@ -93,7 +81,7 @@
                 <h3>Próximos eventos</h3>
                 <ul th:if="${proximosEventos != null and !proximosEventos.isEmpty()}">
                     <li th:each="evento : ${proximosEventos}">
-                        <span th:text="${#temporals.format(evento.date, 'dd/MM')}"></span> -
+                        <span th:text="${#temporals.format(evento.date, 'dd/MM')}"></span> - 
                         <span th:text="${evento.eventName}"></span>
                     </li>
                 </ul>
@@ -111,140 +99,80 @@
         </div>
     </div>
 
-<script th:inline="javascript">
-             /* Valores del modelo seguros para JS */
-        const totalInsumos = /*[[${totalInsumos}]]*/ 0;
-        const tareasPendientes = /*[[${tareasPendientes}]]*/ 0;
-        const tareasCompletadas = /*[[${tareasCompletadas}]]*/ 0;
-        const totalTareas = /*[[${totalTareas}]]*/ 0;
-        const empleadosAdmin = /*[[${empleadosAdmin}]]*/ 0;
-        const empleadosEmployee = /*[[${empleadosEmployee}]]*/ 0;
-        const empleadosOther = /*[[${empleadosOther}]]*/ 0;
-        const eventLabels = /*[[${eventLabelsJson}]]*/[];
-        const eventData = /*[[${eventDataJson}]]*/[];
-        const eventosFuturos = /*[[${eventosFuturos}]]*/ 0;
-        const eventosRealizados = /*[[${eventosRealizados}]]*/ 0;
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Datos de ejemplo (en producción vendrían del backend con Thymeleaf)
+    const tareas = 20;
+    const pendientes = 7;
+    const completadas = tareas - pendientes;
+    const empleados = 12;
+    const eventos = 5;
+    const insumos = 15;
 
-        // Tareas
-        new Chart(document.getElementById('tasksChart').getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Pendientes', 'Completadas'],
-                datasets: [{ data: [tareasPendientes, tareasCompletadas], backgroundColor: ['#FF6384', '#36A2EB'] }]
-            },
-            options: { responsive: true, plugins: { title: { display: true, text: 'Total de tareas: ' + totalTareas } } }
-        });
-
-        // Empleados
-        new Chart(document.getElementById('employeesChart').getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Admin', 'Empleado', 'Otros'],
-                datasets: [{ data: [empleadosAdmin, empleadosEmployee, empleadosOther], backgroundColor: ['#FFCE56', '#36A2EB', '#FF6384'] }]
-            },
-            options: { responsive: true, plugins: { title: { display: true, text: 'Total empleados' } } }
-        });
-
-        // Eventos próximos
-     new Chart(document.getElementById('eventsChart').getContext('2d'), {
-    type: 'bar',
-    data: {
-        labels: ['Eventos desarrollados', 'Eventos que faltan'],
-        datasets: [{
-            label: 'Cantidad de eventos',
-            data: [eventosRealizados, eventosFuturos],
-            backgroundColor: ['#36A2EB', '#FF6384']
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { display: false },
-            title: { display: true, text: 'Total de eventos: ' + (eventosRealizados + eventosFuturos) },
-            tooltip: { enabled: true }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                precision: 0 // Para que muestre números enteros
-            }
+    // 1️⃣ Gráfico de Tareas (Pie)
+    new Chart(document.getElementById("tasksChart"), {
+        type: "pie",
+        data: {
+            labels: ["Completadas", "Pendientes"],
+            datasets: [{
+                data: [completadas, pendientes],
+                backgroundColor: ["#4caf50", "#f44336"]
+            }]
         }
-    }
-});
-        // Gráfico solo de Tareas pendientes
-        new Chart(document.getElementById('tasksPendingChart').getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Pendientes', 'Completadas'],
-                datasets: [{
-                    data: [tareasPendientes, totalTareas - tareasPendientes],
-                    backgroundColor: ['#FF6384', '#E0E0E0'] // gris para completadas
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: { display: true, text: 'Tareas pendientes: ' + tareasPendientes }
-                }
-            }
-        });
-
-        // Suministros
-        new Chart(document.getElementById('suppliesChart').getContext('2d'), {
-            type: 'doughnut',
-            data: { labels: ['Total'], datasets: [{ data: [totalInsumos], backgroundColor: ['#FFCE56'] }] },
-            options: { responsive: true, plugins: { title: { display: true, text: 'Total suministros' } } }
-        });
-        function getDashboardData() {
-    const charts = ['tasksChart', 'tasksPendingChart', 'employeesChart', 'eventsChart', 'suppliesChart'];
-    const images = {};
-
-    charts.forEach(id => {
-        const canvas = document.getElementById(id);
-        images[id] = canvas.toDataURL('image/png');
     });
 
-    const data = {
-        charts: images,
-        totalTareas: /*[[${totalTareas}]]*/ 0,
-        tareasPendientes: /*[[${tareasPendientes}]]*/ 0,
-        totalEmpleados: /*[[${empleadosAdmin + empleadosEmployee + empleadosOther}]]*/ 0,
-        totalInsumos: /*[[${totalInsumos}]]*/ 0,
-        eventosRealizados: /*[[${eventosRealizados}]]*/ 0,
-        eventosFuturos: /*[[${eventosFuturos}]]*/ 0
-    };
+    // 2️⃣ Tareas Pendientes (Doughnut)
+    new Chart(document.getElementById("tasksPendingChart"), {
+        type: "doughnut",
+        data: {
+            labels: ["Pendientes", "Completadas"],
+            datasets: [{
+                data: [pendientes, completadas],
+                backgroundColor: ["#ff9800", "#8bc34a"]
+            }]
+        }
+    });
 
-    return data;
-}
+    // 3️⃣ Empleados (Bar)
+    new Chart(document.getElementById("employeesChart"), {
+        type: "bar",
+        data: {
+            labels: ["Empleados"],
+            datasets: [{
+                label: "Cantidad",
+                data: [empleados],
+                backgroundColor: "#2196f3"
+            }]
+        }
+    });
 
-document.getElementById('downloadPdf').addEventListener('click', () => {
-    fetch('/admin/report/pdf/full', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify(getDashboardData())
-    })
-    .then(res => res.blob())
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'reporte_dashboard.pdf'; a.click();
+    // 4️⃣ Eventos (Bar)
+    new Chart(document.getElementById("eventsChart"), {
+        type: "bar",
+        data: {
+            labels: ["Eventos"],
+            datasets: [{
+                label: "Cantidad",
+                data: [eventos],
+                backgroundColor: "#9c27b0"
+            }]
+        }
+    });
+
+    // 5️⃣ Insumos (Pie)
+    new Chart(document.getElementById("suppliesChart"), {
+        type: "pie",
+        data: {
+            labels: ["Insumos"],
+            datasets: [{
+                data: [insumos],
+                backgroundColor: ["#03a9f4"]
+            }]
+        }
     });
 });
+</script>
 
-document.getElementById('downloadExcel').addEventListener('click', () => {
-    fetch('/admin/report/excel/full', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify(getDashboardData())
-    })
-    .then(res => res.blob())
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'reporte_dashboard.xlsx'; a.click();
-    });
-});
-    </script>
+
 </body>
-
 </html>

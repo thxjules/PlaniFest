@@ -6,65 +6,47 @@
     <style>
         body {
             background-color: #ffffff;
-            background-size: cover;
-            background-repeat: no-repeat;
             color: #000000;
             font-family: serif;
             padding: 40px;
         }
-
         .report-container {
             background-color: white;
             padding: 20px;
             border: 1px solid #9ecae3;
         }
-
         h1 {
             text-align: center;
             font-size: 20px;
             margin-bottom: 20px;
             color: #000000;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
         }
-
         th, td {
             border: 1px solid #9ecae3;
             padding: 6px;
             text-align: center;
         }
-
         th {
             background-color: #0f2c5a;
             color: #ffffff;
         }
-
         tr:nth-child(even) {
             background-color: #9ecae3;
         }
-
-        .low-stock {
-            font-weight: bold;
-            color: #000000;
-        }
-
         .footer {
             margin-top: 30px;
             font-size: 10px;
             text-align: center;
-            color: #000000;
         }
     </style>
 </head>
 <body>
 <div class="report-container">
-    <h1>Reporte de Administración - PlaniFest</h1>
-
-    <div class="report-container">
     <h1>Reporte de Administración - PlaniFest</h1>
 
     <table>
@@ -75,44 +57,26 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>Total de empleados</td>
-            <td th:text="${totalEmpleados}">0</td>
-        </tr>
-        <tr>
-            <td>Total de eventos</td>
-            <td th:text="${totalEventos}">0</td>
-        </tr>
-        <tr>
-            <td>Total de tareas</td>
-            <td th:text="${totalTareas}">0</td>
-        </tr>
-        <tr>
-            <td>Tareas pendientes</td>
-            <td th:text="${tareasPendientes}">0</td>
-        </tr>
-        <tr>
-            <td>Total de suministros</td>
-            <td th:text="${totalInsumos}">0</td>
-        </tr>
+        <tr><td>Total de empleados</td><td th:text="${totalEmpleados}">0</td></tr>
+        <tr><td>Total de eventos</td><td th:text="${totalEventos}">0</td></tr>
+        <tr><td>Total de tareas</td><td th:text="${totalTareas}">0</td></tr>
+        <tr><td>Tareas pendientes</td><td th:text="${tareasPendientes}">0</td></tr>
+        <tr><td>Total de suministros</td><td th:text="${totalInsumos}">0</td></tr>
         </tbody>
     </table>
 
-    <!-- NUEVO: GRÁFICAS -->
     <div style="margin-top: 30px;">
         <h3>Distribución de empleados</h3>
-        <img src="/images/graficos/empleadosChart.png" alt="Gráfico de empleados" width="400"/>
+        <img th:src="@{/images/graficos/empleadosChart.png}" alt="Gráfico de empleados" width="400"/>
 
         <h3>Estado de tareas</h3>
-        <img src="/images/graficos/tareasChart.png" alt="Gráfico de tareas" width="400"/>
+        <img th:src="@{/images/graficos/tareasChart.png}" alt="Gráfico de tareas" width="400"/>
     </div>
 
     <div class="footer">
-        Reporte generado automáticamente por el sistema el 
+        Reporte generado automáticamente el 
         <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
     </div>
 </div>
-
-  </div>
 </body>
 </html>

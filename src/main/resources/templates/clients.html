@@ -16,13 +16,6 @@
             <h1>👥 Gestión de Clientes</h1>
             <p>Agrega, edita o elimina clientes</p>
         </div>
-        <form th:action="@{/api/import-export/client/import}" method="post" enctype="multipart/form-data" class="mb-3">
-            <div class="mb-3">
-                <label for="fileClient" class="form-label">Importar clientes desde Excel/CSV</label>
-                <input class="form-control" type="file" name="file" id="fileClient" required>
-            </div>
-            <button type="submit" class="btn btn-success">📤 Importar Clientes</button>
-        </form>
 
         <!-- BOTONES ENCIMA -->
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -36,6 +29,13 @@
                 ➕ Nuevo cliente
             </button>
         </div>
+         <form th:action="@{/api/import-export/client/import}" method="post" enctype="multipart/form-data" class="mb-3">
+            <div class="mb-3">
+                <label for="fileClient" class="form-label">Importar clientes desde Excel/CSV</label>
+                <input class="form-control" type="file" name="file" id="fileClient" required>
+            </div>
+            <button type="submit" class="btn btn-success">📤 Importar Clientes</button>
+        </form>
 
         <!-- FORMULARIO -->
         <div th:class="${client != null and client.id != null} ? 'collapse show' : 'collapse'" id="formularioCliente">
