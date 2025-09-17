@@ -1,10 +1,10 @@
 package com.example.planifest.controller.controllerview;
 
 import com.example.planifest.entity.Event;
-import com.example.planifest.entity.EventSupply;
 import com.example.planifest.service.ClientServiceImp;
 import com.example.planifest.service.EventServiceImp;
 import com.example.planifest.service.SupplyServiceImp;
+import com.example.planifest.service.MapService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +20,14 @@ public class EventViewController {
     private final EventServiceImp eventService;
     private final ClientServiceImp clientService;
     private final SupplyServiceImp supplyService;
+    private final MapService mapService;
 
     public EventViewController(EventServiceImp eventService, ClientServiceImp clientService,
-            SupplyServiceImp supplyService) {
+                               SupplyServiceImp supplyService, MapService mapService) {
         this.eventService = eventService;
         this.clientService = clientService;
         this.supplyService = supplyService;
+        this.mapService = mapService;
     }
 
     @GetMapping
@@ -35,6 +37,7 @@ public class EventViewController {
             @RequestParam(name = "minGuests", required = false) Integer minGuests,
             @RequestParam(name = "clientId", required = false) Long clientId,
             Model model) {
+
         Event event = (id != null) ? eventService.findById(id).orElse(new Event()) : new Event();
         List<Event> eventos = eventService.getAll();
 
@@ -60,43 +63,44 @@ public class EventViewController {
         model.addAttribute("event", event);
         model.addAttribute("eventos", eventos);
         model.addAttribute("clientes", clientService.getAll());
-        model.addAttribute("suministros", supplyService.getAll()); // Supply
+        model.addAttribute("suministros", supplyService.getAll());
+
+        // Generar URL del mapa usando el MapService
+        String mapUrl = mapService.getMapEmbed(event.getLocation());
+        model.addAttribute("mapUrl", mapUrl);
 
         return "events";
     }
 
     @PostMapping("/save")
-public String guardarEvento(@ModelAttribute Event event, Model model, RedirectAttributes redirectAttributes) {
-    try {
-        if (event.getId() == null) {
-            eventService.create(event);
-            redirectAttributes.addFlashAttribute("successMessage", "Evento creado exitosamente.");
-        } else {
-            eventService.update(event);
-            redirectAttributes.addFlashAttribute("successMessage", "Evento actualizado correctamente.");
+    public String guardarEvento(@ModelAttribute Event event, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            if (event.getId() == null) {
+                eventService.create(event);
+                redirectAttributes.addFlashAttribute("successMessage", "Evento creado exitosamente.");
+            } else {
+                eventService.update(event);
+                redirectAttributes.addFlashAttribute("successMessage", "Evento actualizado correctamente.");
+            }
+            return "redirect:/events-view";
+        } catch (RuntimeException ex) {
+            model.addAttribute("event", event);
+            model.addAttribute("eventos", eventService.getAll());
+            model.addAttribute("clientes", clientService.getAll());
+            model.addAttribute("suministros", supplyService.getAll());
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "events";
         }
-        return "redirect:/events-view";
-    } catch (RuntimeException ex) {
-        model.addAttribute("event", event);
-        model.addAttribute("eventos", eventService.getAll());
-        model.addAttribute("clientes", clientService.getAll());
-        model.addAttribute("suministros", supplyService.getAll());
-        model.addAttribute("errorMessage", ex.getMessage()); // clave para mostrar la alerta
-        return "events"; // asegúrate de que esta vista tenga el bloque para mostrar el mensaje
     }
-}
-
 
     @GetMapping("/delete/{id}")
     public String eliminarEvento(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-    try {
-        eventService.deleteById(id);
-        redirectAttributes.addFlashAttribute("successMessage", "Evento eliminado correctamente.");
-    } catch (RuntimeException e) {
-        redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar el evento: " + e.getMessage());
+        try {
+            eventService.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Evento eliminado correctamente.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar el evento: " + e.getMessage());
+        }
+        return "redirect:/events-view";
     }
-    return "redirect:/events-view";
 }
-    }
-
-
