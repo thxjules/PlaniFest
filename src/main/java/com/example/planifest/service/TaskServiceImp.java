@@ -119,5 +119,8 @@ public void createAll(List<Task> tasks) {
     }
     taskRepository.saveAll(tasks); // ✅ guarda todas en una sola operación
 }
+public long countPendientes() {
+    return taskRepository.countByStatus("PENDIENTE"); 
+}
 
 }

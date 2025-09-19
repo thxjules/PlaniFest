@@ -18,5 +18,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             Long userId,
             Long eventId
     );
+    long countByStatus(String status);
+
 }
 

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard - Catering Soft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <div>
+        <div class="brand">
+            <img th:src="@{/img/home/planifest.png}" alt="Company Logo">
+            <h4>Employee</h4>
+        </div>
+
+        <ul class="side-menu">
+            <li class="active">
+                <a th:href="@{/dashboard}"><i class="bx bx-home"></i> Home</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="text-center">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-button">
+                <i class="bx bx-log-out"></i> Logout
+            </button>
+        </form>
+    </div>
+</div>
+
+<div id="content">
+    <nav class="navbar mb-4">
+        <i class="bx bx-menu" id="toggle-sidebar"></i>
+        <span class="fs-5 fw-bold text-gold">Employee Dashboard</span>
+    </nav>
+
+    <main>
+        <h2 class="text-gold text-center mb-4">Assigned Tasks</h2>
+
+        <!-- Filters -->
+        <div class="row mb-4 justify-content-center">
+            <div class="col-md-3">
+                <label for="date" class="form-label fw-semibold">Date</label>
+                <input type="date" id="date" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label for="status" class="form-label fw-semibold">Status</label>
+                <select id="status" class="form-select">
+                    <option value="">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="in progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="event" class="form-label fw-semibold">Event</label>
+                <input type="text" id="event" class="form-control" placeholder="Search event...">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button onclick="filterTasks()" class="btn btn-gold w-100">Filter</button>
+            </div>
+        </div>
+
+        <!-- Tasks Table -->
+        <div class="table-responsive bg-white rounded shadow p-3">
+            <table class="table table-bordered table-hover">
+                <thead class="text-center">
+                    <tr>
+                        <th>Event</th>
+                        <th>Task</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="task-table-body">
+                    <tr th:each="task : ${assignedTasks}">
+                        <td th:text="${task.event.name}">Event Name</td>
+                        <td th:text="${task.name}">Task Name</td>
+                        <td th:text="${task.description}">Description</td>
+                        <td th:text="${task.taskDate}">Date</td>
+                        <td th:text="${task.status}">Status</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div th:replace="fragments/pagination :: pagination(${assignedTasks})"></div>
+        </div>
+    </main>
+</div>
+
+<!-- Filter Script -->
+<script>
+    document.getElementById('toggle-sidebar').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('show');
+        document.getElementById('content').classList.toggle('expanded');
+    });
+
+    async function filterTasks() {
+        let date = document.getElementById('date').value;
+        let status = document.getElementById('status').value;
+        let event = document.getElementById('event').value;
+
+        let query = new URLSearchParams({
+            date: date,
+            status: status,
+            event: event
+        }).toString();
+
+        try {
+            let response = await fetch(`/employee/filter?${query}`);
+            let data = await response.json();
+
+            let tbody = document.getElementById('task-table-body');
+            tbody.innerHTML = '';
+
+            if (data.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No tasks found for the selected filters.</td></tr>';
+                return;
+            }
+
+            data.data.forEach(task => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${task.event.name}</td>
+                        <td>${task.name}</td>
+                        <td>${task.description}</td>
+                        <td>${task.taskDate}</td>
+                        <td>${task.status}</td>
+                    </tr>
+                `;
+            });
+        } catch (error) {
+            console.error('Error while filtering tasks:', error);
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+
+body {
+    background-image: url('/images/cliente/client.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Imagen encabezado */
+.text-center img {
+    max-height: 190px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(214, 19, 19, 0.782);
+}
+
+/* Título princi */
+.header-section h1 {
+    font-weight: 700;
+    color:  #da2e2e;
+}
+
+.header-section p {
+    color: #000000;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/*Contiene tabla o formulario */
+.card {
+    border-radius: 10px;
+    background-color: #fbdf99cc; /* Transparencia sutil */
+}
+
+/* Encabezado tarjetas */
+.card-header {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    text-align: center;
+}
+
+/* Título encabezado */
+.card-header h5 {
+    font-weight: 600;
+}
+
+/* Tabla celdas encabezados */
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.table thead th {
+    background-color: #ce361c;
+    color: #000000;
+}
+
+/* Botones */
+.btn-outline-primary,
+.btn-outline-danger {
+    border-radius: 20px;
+    padding: 4px 12px;
+}
+
+.card-header {
+    background: #e22626;
+    
+}
+/* Etiqueta visual estados */
+.badge {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    border-radius: 12px;
+    text-transform: capitalize;
+}
+
+/* Alertas*/
+.alert {
+    font-size: 0.95rem;
+}
+
+/* Textareas  */
+textarea.form-control {
+    resize: vertical;
+}
+
+/* Etiquetas formularios */
+form .form-label {
+    font-weight: 500;
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Planifest - Lista de Movimiento del stock</title>
+    <link rel="stylesheet" th:href="@{/css/stockMo.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container py-5">
+
+
+    <div class="header-section text-center mb-5">
+        <img th:src="@{/images/planifest.png}" alt="Logo Planifest" style="max-height: 300px;">
+        <h1>📝 Gestión de Movimiento stock</h1>
+        <p>Reporte de Suministros</p>
+    </div>
+
+    <!-- MENSAJE DE ERROR Y BOTÓN NUEVA TAREA -->
+    <div class="text-end mb-3">
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error:</strong> <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+         <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="/dashboard/stock" class="btn btn-outline-secondary btn-sm">🏠 Volver</a>
+        <button class="btn btn-outline-primary btn-sm"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#formularioStock"
+                aria-expanded="false"
+                aria-controls="formularioStock">
+            ➕ Nuevo Movimiento
+        </button>
+    </div>
+
+
+    </div>
+
+    <!-- FORMULARIO DE TAREA -->
+    <div th:class="${stockMovement.id != null} ? 'collapse show' : 'collapse'" id="formularioStock">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0" th:text="${stockMovement.id != null} ? 'Editar Stock' : 'Nueva Stock'">Formulario de Movimiento stock</h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/stock-view/save}" method="post" th:object="${stockMovement}">
+                    <input type="hidden" th:field="*{id}" />
+                    <div class="row g-3">
+                        <!-- FECHA -->
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" th:field="*{date}" class="form-control" required />
+                        </div>
+                        <!-- Cantidad -->
+                        <div class="col-md-6">
+                            <label class="form-label">Cantidad</label>
+                            <input type="number" min="0" th:field="*{quantity}" class="form-control" required />
+                    </div>
+                        <!-- TIPO (ENUM) -->
+                        <div class="col-md-6">
+                            <label class="form-label">Tipo de Movimiento</label>
+                            <select th:field="*{type}" class="form-select">
+                                <option value="ENTRY">Entrada</option>
+                                <option value="EXIT">Salida</option>
+                            </select>
+                        </div>
+                        <!-- OBSERVACION -->
+                        <div class="col-md-6">
+                            <label class="form-label">Observacion</label>
+                            <textarea th:field="*{remarks}" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <!-- CAMBIAR POR SUMINISTROS -->
+                        <div class="col-md-6">
+                            <label class="form-label">Suministro</label>
+                            <select th:field="*{supply.id}" class="form-select">
+                                <option th:each="supply : ${supplies}" th:value="${supply.id}" th:text="${supply.Name}"></option>
+                            </select>
+                        </div>
+                        <!-- Campo -->
+                    </div>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-success">
+                            <span th:text="${stockMovement.id != null} ? '🔄 Actualizar Movimiento stock' : '💾 Guardar Movimiento stock'">💾 Guardar Movimiento stock</span>
+                        </button> 
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+       <!-- FILTRO DE BÚSQUEDA -->
+<form method="get" th:action="@{/stock-view}" class="mb-4">
+    <div class="row g-3 align-items-end">
+
+        <!-- Cantidad-->
+        <div class="col-md-3">
+            <label for="nombre" class="form-label">Cantidad</label>
+            <input type="number" id="cantidad" name="cantidad" class="form-control" th:value="${cantidad}">
+        </div>
+
+        <!-- Tipo -->
+        <div class="col-md-2">
+            <label for="estado" class="form-label">Tipo de Movimiento</label>
+            <select class="form-select" id="tipo" name="tipo">
+                <option value="" class="form-control">Todos</option>
+                <option value="ENTRY" th:selected="${tipo == 'ENTRY'}">Entrada</option>
+                <option value="EXIT" th:selected="${tipo == 'EXIT'}">Salida</option>
+            </select>
+        </div>
+
+        <!-- Suministro -->
+        <div class="col-md-2">
+            <label for="suministro" class="form-label">Suministro</label>
+            <select class="form-select" id="suministro" name="suministroId">
+                <option value="" >Todos</option>
+                <option th:each="suministro : ${supplies}" th:value="${suministro.id}" th:text="${suministro.name}"
+                        th:selected="${suministro.id == suministroId}"></option>
+            </select>
+        </div>
+
+        <!-- Botones -->
+        <div class="col-md-2 filtro-botones">
+    <button type="submit" class="btn btn-outline-primary btn-planifest">🔍 Filtrar</button>
+    <a href="/stock-view" class="btn btn-outline-secondary btn-planifest">♻ Limpiar</a>
+</div>
+
+    </div>
+</form>
+
+
+
+
+
+    <!-- TABLA DE TAREAS -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-black">
+            <h5 class="mb-0">📋 Lista de Movimientos</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cantidad</th>
+                            <th>Tipo</th>
+                            <th>Observaciones</th>
+                            <th>Suministro</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="t : ${stockMovements}">
+                            <td th:text="${t.date}"></td>
+                            <td th:text="${t.quantity}"></td>
+                            <td th:text="${t.type}"></td>
+                            <td th:text="${t.remarks}"></td>
+                            <td th:text="${t.supply.Name}"></td>
+                            <td class="text-center">
+                                <a th:href="@{/stock-view(id=${t.id})}" class="btn btn-sm btn-outline-primary me-1">✏️</a>
+                                <a th:href="@{/stock-view/delete/{id}(id=${t.id})}" class="btn btn-sm btn-outline-danger">🗑</a>
+                            </td>
+                        </tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
