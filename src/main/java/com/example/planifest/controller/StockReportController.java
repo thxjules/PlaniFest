@@ -33,7 +33,8 @@ public ResponseEntity<byte[]> generateStockReport() throws Exception {
     Map<String, Object> data = new HashMap<>();
     data.put("supplies", supplies);
 
-    
+    String logoStock = reportService.encodeImageToBase64("src/main/resources/static/images/dashboard/stock.png");
+    data.put("logoBase64", logoStock);
 
     byte[] pdf = reportService.generatePdf("reportStock", data);
 
@@ -41,5 +42,5 @@ public ResponseEntity<byte[]> generateStockReport() throws Exception {
             .contentType(MediaType.APPLICATION_PDF)
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=stock-report.pdf")
             .body(pdf);
-}
+    }
 }

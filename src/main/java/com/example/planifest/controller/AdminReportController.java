@@ -42,17 +42,21 @@ public class AdminReportController {
 
     @GetMapping("/report")
     public ResponseEntity<byte[]> generateAdminReport() throws Exception {
-        Map<String, Object> data = new HashMap<>();
-        data.put("totalEmpleados", empleadoService.countEmployees());
-        data.put("totalEventos", eventoService.count());
-        data.put("totalTareas", tareaService.count());
-        data.put("totalInsumos", supplyService.count());
+    Map<String, Object> data = new HashMap<>();
+    data.put("totalEmpleados", empleadoService.countEmployees());
+    data.put("totalEventos", eventoService.count());
+    data.put("totalTareas", tareaService.count());
+    data.put("totalInsumos", supplyService.count());
 
-        byte[] pdf = reportService.generatePdf("reportAdmin", data);
+    // Logo exclusivo para reporte admin
+    String logoAdmin = reportService.encodeImageToBase64("src/main/resources/static/images/dashboard/admin.png");
+    data.put("logoBase64", logoAdmin);
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=admin-report.pdf")
-                .body(pdf);
-    }
+    byte[] pdf = reportService.generatePdf("reportAdmin", data);
+
+    return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_PDF)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=admin-report.pdf")
+            .body(pdf);
+}
 }

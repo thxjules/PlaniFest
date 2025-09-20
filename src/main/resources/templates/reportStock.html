@@ -16,7 +16,6 @@
         .report-container {
             background-color: white;
             padding: 20px;
-            border: 1px solid #d2b48c;
         }
 
         h1 {
@@ -61,6 +60,8 @@
     </style>
 </head>
 <body>
+    <img th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" style="width:120px;"/>
+
     <div class="report-container">
         <h1>Reporte de Inventario - PlaniFest</h1>
         <table>
