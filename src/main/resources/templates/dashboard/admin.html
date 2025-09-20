@@ -25,7 +25,7 @@
             <a th:href="@{/tasks-view}" th:classappend="${activePage == 'tasks'} ? 'active'"><i class="bx bx-task"></i> Tareas</a>
             <a th:href="@{/supply-admin}" th:classappend="${activePage == 'supplies'} ? 'active'"><i class="bx bx-box"></i> Suministros</a>
 
-            <a href="#" id="downloadPdf">Descargar PDF</a>
+            <a th:href="@{/admin/report}" class="btn-gold">Reporte General</a>
             <a href="#" id="downloadExcel">Descargar Excel</a>
 
             <form method="post" th:action="@{/logout}" class="mt-4 text-center">

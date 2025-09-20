@@ -1,36 +1,35 @@
 package com.example.planifest.service;
-
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
-
 import org.springframework.stereotype.Service;
-
-import com.lowagie.text.Document;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfWriter;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import com.lowagie.text.DocumentException;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 @Service
 public class ReportService {
 
-   public byte[] generatePdf(String titulo, Map<String, Object> data) {
-    try {
-        System.out.println("📥 Datos recibidos en generatePdf: " + data);
+    private final SpringTemplateEngine templateEngine;
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Document document = new Document();
-        PdfWriter.getInstance(document, baos);
+    public ReportService(SpringTemplateEngine templateEngine) {
+        this.templateEngine = templateEngine;
+    }
 
-        document.open();
-        document.add(new Paragraph("✅ PDF generado correctamente"));
-        document.close();
+    public byte[] generatePdf(String templateName, Map<String, Object> variables) throws DocumentException {
+        Context context = new Context();
+        context.setVariables(variables);
 
-        System.out.println("✅ PDF generado y cerrado correctamente");
+        String htmlContent = templateEngine.process(templateName, context);
 
-        return baos.toByteArray();
-    } catch (Exception e) {
-        e.printStackTrace(); // <-- Aquí veremos el error real en consola
-        throw new RuntimeException("Error generando PDF", e);
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            ITextRenderer renderer = new ITextRenderer();
+            renderer.setDocumentFromString(htmlContent);
+            renderer.layout();
+            renderer.createPDF(outputStream);
+            return outputStream.toByteArray();
+        } catch (Exception e) {
+            throw new DocumentException("Error al generar PDF: " + e.getMessage());
+        }
     }
 }
-
-}   
