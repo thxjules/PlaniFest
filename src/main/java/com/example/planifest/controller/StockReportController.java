@@ -33,8 +33,7 @@ public ResponseEntity<byte[]> generateStockReport() throws Exception {
     Map<String, Object> data = new HashMap<>();
     data.put("supplies", supplies);
 
-    String logoStock = reportService.encodeImageToBase64("src/main/resources/static/images/dashboard/stock.png");
-    data.put("logoBase64", logoStock);
+    
 
     byte[] pdf = reportService.generatePdf("reportStock", data);
 

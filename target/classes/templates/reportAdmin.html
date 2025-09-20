@@ -1,47 +1,67 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Admin Report</title>
-    <style>
+    <style type="text/css">
         body {
-            background-color: #ffffff;
-            color: #000000;
-            font-family: serif;
+            background: url("../static/images/dashboard/1.png");
+            color: #ffffff;
+            font-family: "Cormorant Garamond", serif;
             padding: 40px;
         }
+
         .report-container {
-            background-color: white;
-            padding: 20px;
-            border: 1px solid #9ecae3;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(210, 180, 140, 0.3);
         }
+
         h1 {
             text-align: center;
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #000000;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: #ffffff;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 16px;
+            margin-top: 20px;
         }
+
         th, td {
-            border: 1px solid #9ecae3;
-            padding: 6px;
-            text-align: center;
+            border: 1px solid #ffffff;
+            padding: 12px;
+            text-align: left;
         }
+
         th {
-            background-color: #0f2c5a;
+            background-color: #00373a;
             color: #ffffff;
+            font-size: 1rem;
         }
+
         tr:nth-child(even) {
-            background-color: #9ecae3;
+            background-color: #1f1f1f;
         }
+
+        .value {
+            font-weight: bold;
+            color: #d5fdff;
+            text-align: right;
+        }
+
         .footer {
-            margin-top: 30px;
-            font-size: 10px;
+            margin-top: 40px;
+            font-size: 0.9rem;
             text-align: center;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -57,24 +77,31 @@
         </tr>
         </thead>
         <tbody>
-        <tr><td>Total de empleados</td><td th:text="${totalEmpleados}">0</td></tr>
-        <tr><td>Total de eventos</td><td th:text="${totalEventos}">0</td></tr>
-        <tr><td>Total de tareas</td><td th:text="${totalTareas}">0</td></tr>
-        <tr><td>Tareas pendientes</td><td th:text="${tareasPendientes}">0</td></tr>
-        <tr><td>Total de suministros</td><td th:text="${totalInsumos}">0</td></tr>
+        <tr>
+            <td>Total de empleados</td>
+            <td class="value" th:text="${totalEmpleados}">0</td>
+        </tr>
+        <tr>
+            <td>Total de eventos</td>
+            <td class="value" th:text="${totalEventos}">0</td>
+        </tr>
+        <tr>
+            <td>Total de tareas</td>
+            <td class="value" th:text="${totalTareas}">0</td>
+        </tr>
+        <tr>
+            <td>Tareas pendientes</td>
+            <td class="value" th:text="${tareasPendientes}">0</td>
+        </tr>
+        <tr>
+            <td>Total de suministros</td>
+            <td class="value" th:text="${totalInsumos}">0</td>
+        </tr>
         </tbody>
     </table>
 
-    <div style="margin-top: 30px;">
-        <h3>Distribución de empleados</h3>
-        <img th:src="@{/images/graficos/empleadosChart.png}" alt="Gráfico de empleados" width="400"/>
-
-        <h3>Estado de tareas</h3>
-        <img th:src="@{/images/graficos/tareasChart.png}" alt="Gráfico de tareas" width="400"/>
-    </div>
-
     <div class="footer">
-        Reporte generado automáticamente el 
+        Reporte generado automáticamente por el sistema el
         <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
     </div>
 </div>

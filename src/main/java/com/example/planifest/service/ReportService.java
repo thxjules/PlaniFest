@@ -1,8 +1,5 @@
 package com.example.planifest.service;
 import java.io.ByteArrayOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -20,10 +17,7 @@ public class ReportService {
     public ReportService(SpringTemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
-    public String encodeImageToBase64(String path) throws Exception {
-    byte[] imageBytes = Files.readAllBytes(Paths.get(path));
-    return Base64.getEncoder().encodeToString(imageBytes);
-}
+
     public byte[] generatePdf(String templateName, Map<String, Object> variables) throws DocumentException {
         Context context = new Context();
         context.setVariables(variables);
