@@ -1,7 +1,11 @@
 package com.example.planifest.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,23 +85,98 @@ public void create(Event event) {
 }
 
 
-    @Override
-    public void update(Event event) {
-        if (event.getId() == null || !eventRepository.existsById(event.getId())) {
-            throw new RuntimeException("No se puede actualizar el evento porque no existe.");
-        }
-        validateEvent(event);
-        eventRepository.save(event);
+@Override
+@Transactional
+public void update(Event event) {
+    if (event.getId() == null || !eventRepository.existsById(event.getId())) {
+        throw new RuntimeException("No se puede actualizar el evento porque no existe.");
     }
-/*  
-    @Override
-    public void deleteById(Long id) {
-        if (!eventRepository.existsById(id)) {
-            throw new RuntimeException("No se puede eliminar el evento porque no existe.");
+
+    validateEvent(event);
+
+    // Obtengo los EventSupply actuales en BD (antes de la edición)
+    List<EventSupply> existingList = eventSupplyRepository.findByEventId(event.getId());
+    Map<Long, EventSupply> existingById = existingList.stream()
+            .filter(es -> es.getId() != null)
+            .collect(Collectors.toMap(EventSupply::getId, Function.identity()));
+
+    List<EventSupply> submitted = event.getEventSupplies() != null ? event.getEventSupplies() : new ArrayList<>();
+
+    for (EventSupply subEs : submitted) {
+        if (subEs.getSupply() == null || subEs.getSupply().getId() == null) {
+            throw new RuntimeException("Debe seleccionar un suministro válido.");
         }
-        eventRepository.deleteById(id);
+
+        Supply newSupply = supplyRepository.findById(subEs.getSupply().getId())
+                .orElseThrow(() -> new RuntimeException("El suministro no se ha encontrado."));
+
+        if (subEs.getQuantitySupply() <= 0) {
+            throw new RuntimeException("La cantidad del suministro debe ser mayor a 0.");
+        }
+
+        // Si tiene id, era un registro existente -> comprobar cambios
+        if (subEs.getId() != null && existingById.containsKey(subEs.getId())) {
+            EventSupply oldEs = existingById.remove(subEs.getId()); // lo saco del mapa (queda lo eliminado)
+
+            Supply oldSupply = oldEs.getSupply();
+            int oldQty = oldEs.getQuantitySupply();
+            int newQty = subEs.getQuantitySupply();
+
+            if (oldSupply.getId().equals(newSupply.getId())) {
+                // mismo suministro: aplico delta
+                int delta = newQty - oldQty;
+                if (delta > 0) {
+                    if (newSupply.getCurrentStock() < delta) {
+                        throw new RuntimeException("Stock insuficiente para el suministro: " + newSupply.getName());
+                    }
+                    newSupply.setCurrentStock(newSupply.getCurrentStock() - delta);
+                } else if (delta < 0) {
+                    // delta negativo: devolvemos (-delta) al stock
+                    newSupply.setCurrentStock(newSupply.getCurrentStock() - delta); // restando un negativo = sumando
+                }
+                supplyRepository.save(newSupply);
+            } else {
+                // el usuario cambió el suministro: devolver qty al oldSupply y descontar en newSupply
+                oldSupply.setCurrentStock(oldSupply.getCurrentStock() + oldQty);
+                supplyRepository.save(oldSupply);
+
+                if (newSupply.getCurrentStock() < newQty) {
+                    throw new RuntimeException("Stock insuficiente para el suministro: " + newSupply.getName());
+                }
+                newSupply.setCurrentStock(newSupply.getCurrentStock() - newQty);
+                supplyRepository.save(newSupply);
+            }
+
+            // Asignaciones necesarias para persistir correctamente
+            subEs.setSupply(newSupply);
+            subEs.setEvent(event);
+        } else {
+            // nuevo EventSupply (no existía antes)
+            int qty = subEs.getQuantitySupply();
+            if (newSupply.getCurrentStock() < qty) {
+                throw new RuntimeException("Stock insuficiente para el suministro: " + newSupply.getName());
+            }
+            newSupply.setCurrentStock(newSupply.getCurrentStock() - qty);
+            supplyRepository.save(newSupply);
+
+            subEs.setSupply(newSupply);
+            subEs.setEvent(event);
+        }
     }
- */
+
+    for (EventSupply removed : existingById.values()) {
+        Supply s = supplyRepository.findById(removed.getSupply().getId()).orElse(null);
+        if (s != null) {
+            s.setCurrentStock(s.getCurrentStock() + removed.getQuantitySupply());
+            supplyRepository.save(s);
+        }
+        eventSupplyRepository.delete(removed);
+    }
+
+    // Finalmente guardo el evento (CascadeType.ALL guarda/actualiza EventSupply)
+    eventRepository.save(event);
+}
+
 
 @Override
 @Transactional

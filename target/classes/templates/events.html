@@ -115,8 +115,52 @@
                             <button type="button" class="btn btn-outline-success" id="addSupplyBtn">
                                 ➕ Nuevo suministro
                             </button>
+                                <!-- Template de Suministros -->
+<input type="hidden" id="initialSupplyCount"
+       th:value="${event.eventSupplies != null ? event.eventSupplies.size() : 0}" />
+
+<!-- Contenedor: aquí se renderizan los existentes (si hay) -->
+<div id="suministrosContainer">
+  <div th:if="${event.eventSupplies != null}"
+       th:each="es,iterStat : ${event.eventSupplies}"
+       class="row mb-2 supply-entry">
+       
+    <!-- id del EventSupply (clave para saber si es existente) -->
+    <input type="hidden" th:name="${'eventSupplies[' + iterStat.index + '].id'}"
+           th:value="${es.id}" />
+
+    <!-- Selección del suministro -->
+    <div class="col-md-6">
+      <label class="form-label">Suministro</label>
+      <select th:name="${'eventSupplies[' + iterStat.index + '].supply.id'}"
+              class="form-select" required>
+        <option value="">-- Selecciona --</option>
+        <option th:each="s : ${suministros}"
+                th:value="${s.id}"
+                th:text="${s.name}"
+                th:selected="${s.id} == ${es.supply.id}">
+        </option>
+      </select>
+    </div>
+
+    <!-- Cantidad -->
+    <div class="col-md-4">
+      <label class="form-label">Cantidad</label>
+      <input type="number"
+             th:name="${'eventSupplies[' + iterStat.index + '].quantitySupply'}"
+             class="form-control" min="1" required
+             th:value="${es.quantitySupply}" />
+    </div>
+
+    <!-- Botón eliminar -->
+    <div class="col-md-2 d-flex align-items-end">
+      <button type="button" class="btn btn-danger removeSupplyBtn">🗑</button>
+    </div>
+  </div>
+</div>
                         </div>
                         <div id="suministrosContainer"></div>
+
 
                     </div>
 
@@ -164,7 +208,7 @@
                             </td>
                             <td>
                                 <ul class="mb-0 ps-3">
-                                    <li th:each="supply : ${e.supplies}" th:text="${supply.name}"></li>
+    <li th:each="es : ${e.eventSupplies}" th:text="${es.supply.name + ' (x' + es.quantitySupply + ')'}"></li>
                                 </ul>
                             </td>
                             <td class="text-center">
@@ -181,21 +225,31 @@
         </div>
     </div>
 
-    <!-- Template de Suministros -->
-    <template id="supplyTemplate">
-        <div class="row mb-2 supply-entry">
-            <div class="col-md-6">
-                <label class="form-label">Suministro</label>
-                <select name="supplies[INDEX].id" class="form-select" required>
-                    <option value="">-- Selecciona --</option>
-                    <option th:each="s : ${suministros}" th:value="${s.id}" th:text="${s.name}"></option>
-                </select>
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="button" class="btn btn-danger removeSupplyBtn">🗑</button>
-            </div>
-        </div>
-    </template>
+
+<!-- Template para agregar nuevos (se reemplaza INDEX por JS) -->
+<template id="supplyTemplate">
+  <div class="row mb-2 supply-entry">
+    <div class="col-md-6">
+      <label class="form-label">Suministro</label>
+      <select name="eventSupplies[INDEX].supply.id" class="form-select" required>
+        <option value="">-- Selecciona --</option>
+        <!-- las opciones ya están renderizadas por Thymeleaf -->
+        <option th:each="s : ${suministros}" th:value="${s.id}" th:text="${s.name}"></option>
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Cantidad</label>
+      <input type="number" name="eventSupplies[INDEX].quantitySupply" class="form-control" min="1" required>
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+      <button type="button" class="btn btn-danger removeSupplyBtn">🗑</button>
+    </div>
+  </div>
+</template>
+    
+
 </div>
 
 <!-- Los Scripts -->
@@ -225,6 +279,38 @@
             mapFrame.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyCgZPwudO2MG358I1CqrzctaVrIfclADcQ&q=${encodeURIComponent(address)}`;
         }
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+  const initialCountEl = document.getElementById('initialSupplyCount');
+  let supplyIndex = initialCountEl ? (parseInt(initialCountEl.value, 10) || 0) : 0;
+
+  const addBtn = document.getElementById('addSupplyBtn');
+  const container = document.getElementById('suministrosContainer');
+
+  function attachRemoveHandlers() {
+    document.querySelectorAll('.removeSupplyBtn').forEach(btn => {
+      // evitar duplicar handlers
+      if (!btn.dataset.hasHandler) {
+        btn.addEventListener('click', (e) => {
+          e.target.closest('.supply-entry').remove();
+        });
+        btn.dataset.hasHandler = '1';
+      }
+    });
+  }
+
+  // agregar nuevo suministro con índice correcto
+  addBtn.addEventListener('click', () => {
+    const template = document.getElementById('supplyTemplate').innerHTML;
+    const newHtml = template.replace(/INDEX/g, supplyIndex);
+    supplyIndex++;
+    container.insertAdjacentHTML('beforeend', newHtml);
+    attachRemoveHandlers();
+  });
+
+  // attach a los ya existentes
+  attachRemoveHandlers();
+});
 </script>
 </body>
 </html>

@@ -176,6 +176,10 @@
     </div>
 
 </div>
-
+<script>
+  const stockInput = document.getElementById("currentStock");
+  stockInput.addEventListener("keydown", e => e.preventDefault()); // evita teclear
+  stockInput.addEventListener("paste", e => e.preventDefault());   // evita pegar
+</script>
 </body>
 </html>
