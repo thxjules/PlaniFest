@@ -44,6 +44,7 @@ C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\dto\TaskDTO.
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\dto\UserDTO.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\entity\Client.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\entity\Event.java
+C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\entity\EventSupply.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\entity\PlaniService.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\entity\Position.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\entity\StockMovement.java
@@ -67,12 +68,14 @@ C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\mapper\UserM
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\PlanifestApplication.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\repository\ClientRepository.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\repository\EventRepository.java
+C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\repository\EventSupplyRepository.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\repository\PlaniServiceRepository.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\repository\PositionRepository.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\repository\StockMovementRepository.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\repository\SupplyRepository.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\repository\TaskRepository.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\repository\UserRepository.java
+C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\service\ChartService.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\service\ClientServiceImp.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\service\dao\Idao.java
 C:\Proyecto\planifest\PlaniFest\src\main\java\com\example\planifest\service\EmailService.java
