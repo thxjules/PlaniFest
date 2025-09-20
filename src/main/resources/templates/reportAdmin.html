@@ -8,14 +8,13 @@
     <title>Admin Report</title>
     <style type="text/css">
         body {
-            background: url("../static/images/dashboard/1.png");
-            color: #ffffff;
+            color: #000;
             font-family: "Cormorant Garamond", serif;
             padding: 40px;
         }
 
         .report-container {
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: #ffffff;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 0 15px rgba(210, 180, 140, 0.3);
@@ -25,7 +24,7 @@
             text-align: center;
             font-size: 2.2rem;
             margin-bottom: 30px;
-            color: #ffffff;
+            color: #070707;
         }
 
         table {
@@ -36,7 +35,7 @@
         }
 
         th, td {
-            border: 1px solid #ffffff;
+            border: 1px solid #02fb34;
             padding: 12px;
             text-align: left;
         }
@@ -48,12 +47,12 @@
         }
 
         tr:nth-child(even) {
-            background-color: #1f1f1f;
+            background-color: #d4f1d7;
         }
 
         .value {
             font-weight: bold;
-            color: #d5fdff;
+            color: #064040;
             text-align: right;
         }
 
@@ -61,14 +60,14 @@
             margin-top: 40px;
             font-size: 0.9rem;
             text-align: center;
-            color: #ffffff;
+            color: #080808;
         }
     </style>
 </head>
 <body>
+<img th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" style="width:120px;"/>
 <div class="report-container">
     <h1>Reporte de Administración - PlaniFest</h1>
-
     <table>
         <thead>
         <tr>
