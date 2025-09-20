@@ -85,7 +85,6 @@ public class TaskExcelService {
                 event.setId(eventId);
                 task.setEvent(event);
 
-                // ✅ Verificar si ya existe
                 boolean exists = taskRepository.existsByNameAndDateAndUser_IdAndEvent_Id(
                         nombre,
                         fecha,
