@@ -36,9 +36,9 @@ public class SupplySeeder implements CommandLineRunner {
                     "Advertencia: Use todos los Globos que estan el Paquete, Lo guarde los Paquetes si no estan Todos los Globos");
             supply1.setStorageLocation("Almacen numero 1");
             supply1.setStatus(SupplyStatus.AVAILABLE);
-            supply1.setCurrentStock(20);
+            supply1.setCurrentStock(40);
             supply1.setMinStock(5);
-            supply1.setMaxStock(70);
+            supply1.setMaxStock(150);
             supply1.setPackagingUnit("Cajas de Espuma");
 
             /* Creacion del supply 1 */
@@ -52,9 +52,9 @@ public class SupplySeeder implements CommandLineRunner {
                     "Solo usar estas pulseras en eventos Nocturnos, de cualquier tipo para una mejor experiencia Nt(Se cuenta cada pulsera)");
             supply2.setStorageLocation("Almacen numero 1");
             supply2.setStatus(SupplyStatus.AVAILABLE);
-            supply2.setCurrentStock(20);
+            supply2.setCurrentStock(60);
             supply2.setMinStock(5);
-            supply2.setMaxStock(30);
+            supply2.setMaxStock(200);
             supply2.setPackagingUnit("Bolsas de plastico");
 
             supplyService.create(supply2);
@@ -67,9 +67,9 @@ public class SupplySeeder implements CommandLineRunner {
                     "Precaucion: Uso de las fuentes de agua SOLO en eventos donde haya prescencia de Adultos y no eventos que tengan ningun tipo de menor de edad");
             supply3.setStorageLocation("Almacen numero 2");
             supply3.setStatus(SupplyStatus.AVAILABLE);
-            supply3.setCurrentStock(5);
+            supply3.setCurrentStock(20);
             supply3.setMinStock(2);
-            supply3.setMaxStock(10);
+            supply3.setMaxStock(50);
             supply3.setPackagingUnit("No tiene");
 
             supplyService.create(supply3);
@@ -81,9 +81,9 @@ public class SupplySeeder implements CommandLineRunner {
             supply4.setDescription("Tener cuidado a la hora de depositar las maquinas de humo en cajas de espama");
             supply4.setStorageLocation("Almacen numero 2");
             supply4.setStatus(SupplyStatus.AVAILABLE);
-            supply4.setCurrentStock(10);
+            supply4.setCurrentStock(60);
             supply4.setMinStock(8);
-            supply4.setMaxStock(20);
+            supply4.setMaxStock(140);
             supply4.setPackagingUnit("Cajas de Espuma");
 
             supplyService.create(supply4);

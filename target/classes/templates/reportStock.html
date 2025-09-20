@@ -6,40 +6,49 @@
     <style>
         body {
             background-color: #ffffff;
-            background-size: cover;
-            background-repeat: no-repeat;
             color: #000000;
-            font-family: serif;
-            padding: 40px;
+            font-family: "Cormorant Garamond", serif;
+            padding: 30px;
         }
 
         .report-container {
-            background-color: white;
-            padding: 20px;
+            background-color: #fdfdfd;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(210, 180, 140, 0.3);
         }
 
         h1 {
             text-align: center;
-            font-size: 20px;
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: #2e2e2e;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 40px;
             margin-bottom: 20px;
-            color: #000000;
+            color: #2e2e2e;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 13px;
+            margin-top: 20px;
         }
 
         th, td {
             border: 1px solid #a54c03;
-            padding: 6px;
+            padding: 8px;
             text-align: center;
         }
 
         th {
             background-color: #3b2004;
             color: #ffffff;
+            font-weight: bold;
         }
 
         tr:nth-child(even) {
@@ -48,22 +57,45 @@
 
         .low-stock {
             font-weight: bold;
-            color: #000000;
+            color: #d32f2f;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .chart-container img {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            padding: 10px;
         }
 
         .footer {
-            margin-top: 30px;
+            margin-top: 40px;
             font-size: 10px;
             text-align: center;
-            color: #000000;
+            color: #555;
+        }
+
+        img.logo {
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 120px;
         }
     </style>
 </head>
 <body>
-    <img th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" style="width:120px;"/>
+    <img th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" class="logo"/>
 
     <div class="report-container">
         <h1>Reporte de Inventario - PlaniFest</h1>
+
+        <!-- Tabla de insumos -->
         <table>
             <thead>
                 <tr>
@@ -93,6 +125,20 @@
                 </tr>
             </tbody>
         </table>
+
+        <!-- Contenedor de gráficas -->
+        <div class="chart-container">
+            <div>
+                <h2>Distribución del Inventario</h2>
+                <img th:src="'data:image/png;base64,' + ${chartBase64}" alt="Gráfico Pastel" style="width:400px; height:300px;"/>
+            </div>
+
+            <div>
+                <h2>Stock Actual vs. Mínimo y Máximo</h2>
+                <img th:src="'data:image/png;base64,' + ${chartBarras}" alt="Gráfico Barras" style="width:500px; height:300px;"/>
+            </div>
+        </div>
+
         <div class="footer">
             Reporte generado automáticamente por el sistema el 
             <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.

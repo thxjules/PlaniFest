@@ -10,7 +10,8 @@
         body {
             color: #000;
             font-family: "Cormorant Garamond", serif;
-            padding: 40px;
+            padding: 30px;
+            background-color: #f9f9f9;
         }
 
         .report-container {
@@ -22,87 +23,114 @@
 
         h1 {
             text-align: center;
-            font-size: 2.2rem;
-            margin-bottom: 30px;
-            color: #070707;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #222;
         }
 
         table {
-            width: 100%;
+            width: 60%;
+            margin: 0 auto;
             border-collapse: collapse;
-            font-size: 16px;
+            font-size: 14px;
             margin-top: 20px;
         }
 
         th, td {
-            border: 1px solid #02fb34;
-            padding: 12px;
-            text-align: left;
+            border: 1px solid #0288d1;
+            padding: 10px;
+            text-align: center;
         }
 
         th {
-            background-color: #00373a;
+            background-color: #01579b;
             color: #ffffff;
-            font-size: 1rem;
+            font-weight: bold;
         }
 
         tr:nth-child(even) {
-            background-color: #d4f1d7;
+            background-color: #e1f5fe;
         }
 
         .value {
             font-weight: bold;
-            color: #064040;
-            text-align: right;
+            color: #0277bd;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .chart-container img {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            padding: 10px;
+            max-width: 500px;
+            height: auto;
         }
 
         .footer {
-            margin-top: 40px;
+            margin-top: 50px;
             font-size: 0.9rem;
             text-align: center;
-            color: #080808;
+            color: #555;
+        }
+
+        img.logo {
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 120px;
         }
     </style>
 </head>
 <body>
-<img th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" style="width:120px;"/>
-<div class="report-container">
-    <h1>Reporte de Administración - PlaniFest</h1>
-    <table>
-        <thead>
-        <tr>
-            <th>Métrica</th>
-            <th>Valor</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>Total de empleados</td>
-            <td class="value" th:text="${totalEmpleados}">0</td>
-        </tr>
-        <tr>
-            <td>Total de eventos</td>
-            <td class="value" th:text="${totalEventos}">0</td>
-        </tr>
-        <tr>
-            <td>Total de tareas</td>
-            <td class="value" th:text="${totalTareas}">0</td>
-        </tr>
-        <tr>
-            <td>Tareas pendientes</td>
-            <td class="value" th:text="${tareasPendientes}">0</td>
-        </tr>
-        <tr>
-            <td>Total de suministros</td>
-            <td class="value" th:text="${totalInsumos}">0</td>
-        </tr>
-        </tbody>
-    </table>
+    <img th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" class="logo"/>
 
-    <div class="footer">
-        Reporte generado automáticamente por el sistema el
-        <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
+    <div class="report-container">
+        <h1>Reporte de Administración - PlaniFest</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Métrica</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total de empleados</td>
+                    <td class="value" th:text="${totalEmpleados}">0</td>
+                </tr>
+                <tr>
+                    <td>Total de eventos</td>
+                    <td class="value" th:text="${totalEventos}">0</td>
+                </tr>
+                <tr>
+                    <td>Total de tareas</td>
+                    <td class="value" th:text="${totalTareas}">0</td>
+                </tr>
+                <tr>
+                    <td>Tareas pendientes</td>
+                    <td class="value" th:text="${tareasPendientes}">0</td>
+                </tr>
+                <tr>
+                    <td>Total de suministros</td>
+                    <td class="value" th:text="${totalInsumos}">0</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="chart-container">
+            <img th:src="'data:image/png;base64,' + ${graficoAdmin}" alt="Gráfico Administración"/>
+        </div>
+
+        <div class="footer">
+            Reporte generado automáticamente por el sistema el
+            <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
+        </div>
     </div>
-</div>
 </body>
 </html>
