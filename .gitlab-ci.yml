@@ -1,0 +1,41 @@
+stages:
+  - build
+  - test
+  - report
+
+variables:
+  MAVEN_CLI_OPTS: "-B -V"
+
+cache:
+  paths:
+    - .m2/repository
+
+build:
+  stage: build
+  image: maven:3.9.3-eclipse-temurin-17
+  script:
+    - mvn $MAVEN_CLI_OPTS clean compile
+  artifacts:
+    paths:
+      - target/classes
+
+test:
+  stage: test
+  image: maven:3.9.3-eclipse-temurin-17
+  script:
+    - mvn $MAVEN_CLI_OPTS test jacoco:report
+  artifacts:
+    paths:
+      - target/site/jacoco
+    reports:
+      junit: target/surefire-reports/*.xml
+
+coverage-report:
+  stage: report
+  script:
+    - echo "Cobertura JaCoCo generada en target/site/jacoco"
+  dependencies:
+    - test
+  artifacts:
+    paths:
+      - target/site/jacoco

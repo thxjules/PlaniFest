@@ -113,13 +113,13 @@ public class TaskServiceImp implements Idao<Task, Long> {
             .toList();
     }
     // ----------------- CARGA MASIVA -----------------
-public void createAll(List<Task> tasks) {
+        public void createAll(List<Task> tasks) {
     for (Task task : tasks) {
         validateTask(task); // ✅ validamos cada tarea
     }
     taskRepository.saveAll(tasks); // ✅ guarda todas en una sola operación
-}
-public long countPendientes() {
+    }
+    public long countPendientes() {
     return taskRepository.countByStatus("PENDIENTE"); 
 }
 
