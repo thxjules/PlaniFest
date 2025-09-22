@@ -163,9 +163,12 @@
                                 <span th:classappend="${e.status} == 'ACTIVE' ? 'badge bg-info text-dark' : 'badge bg-warning text-dark'" th:text="${e.status}"></span>
                             </td>
                             <td>
+                                
                                 <ul class="mb-0 ps-3">
-                                    <li th:each="supply : ${e.supplies}" th:text="${supply.name}"></li>
+                                     <li th:each="es : ${e.eventSupplies}" 
+                                        th:text="${es.supply.name + ' (' + es.quantitySupply + ')'}"></li>
                                 </ul>
+                            
                             </td>
                             <td class="text-center">
                                 <a th:href="@{/events-view(id=${e.id})}" class="btn btn-sm btn-outline-primary me-1">✏</a>
@@ -182,24 +185,29 @@
     </div>
 
     <!-- Template de Suministros -->
-    <template id="supplyTemplate">
-        <div class="row mb-2 supply-entry">
-            <div class="col-md-6">
-                <label class="form-label">Suministro</label>
-                <select name="supplies[INDEX].id" class="form-select" required>
-                    <option value="">-- Selecciona --</option>
-                    <option th:each="s : ${suministros}" th:value="${s.id}" th:text="${s.name}"></option>
-                </select>
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="button" class="btn btn-danger removeSupplyBtn">🗑</button>
-            </div>
+  <template id="supplyTemplate">
+    <div class="row mb-2 supply-entry">
+        <div class="col-md-6">
+            <label class="form-label">Suministro</label>
+            <select name="eventSupplies[__INDEX__].supply.id" class="form-select" required>
+                <option value="">-- Selecciona --</option>
+                <option th:each="s : ${suministros}" th:value="${s.id}" th:text="${s.name}"></option>
+            </select>
         </div>
-    </template>
+        <div class="col-md-4">
+            <label class="form-label">Cantidad</label>
+            <input type="number" name="eventSupplies[__INDEX__].quantitySupply" class="form-control" min="1" required />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="button" class="btn btn-danger removeSupplyBtn">🗑</button>
+        </div>
+    </div>
+</template>
 </div>
 
 <!-- Los Scripts -->
 <script>
+        
     // Suministros un poquito más dinámicos
     let supplyIndex = 0;
     document.getElementById('addSupplyBtn').addEventListener('click', () => {
