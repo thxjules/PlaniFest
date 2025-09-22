@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SupplyImportStrategy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.service.importstrategy</a> &gt; <span class="el_source">SupplyImportStrategy.java</span></div><h1>SupplyImportStrategy.java</h1><pre class="source lang-java linenums">package com.example.planifest.service.importstrategy;
+
+import com.example.planifest.entity.Supply;
+import com.example.planifest.enums.SupplyStatus;
+import com.example.planifest.repository.SupplyRepository;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+@Service
+public class SupplyImportStrategy implements ImportStrategy&lt;Supply&gt; {
+
+    private final SupplyRepository supplyRepository;
+
+<span class="fc" id="L21">    public SupplyImportStrategy(SupplyRepository supplyRepository) {</span>
+<span class="fc" id="L22">        this.supplyRepository = supplyRepository;</span>
+<span class="fc" id="L23">    }</span>
+
+    @Override
+    public List&lt;String&gt; validate(MultipartFile file) {
+<span class="nc" id="L27">        List&lt;String&gt; errores = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L29">        try (InputStream is = file.getInputStream(); Workbook workbook = new XSSFWorkbook(is)) {</span>
+<span class="nc" id="L30">            Sheet sheet = workbook.getSheetAt(0);</span>
+<span class="nc" id="L31">            Iterator&lt;Row&gt; rows = sheet.iterator();</span>
+
+<span class="nc" id="L33">            int rowNumber = 0;</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">            while (rows.hasNext()) {</span>
+<span class="nc" id="L35">                Row row = rows.next();</span>
+
+<span class="nc bnc" id="L37" title="All 2 branches missed.">                if (rowNumber == 0) { // Saltar encabezado</span>
+<span class="nc" id="L38">                    rowNumber++;</span>
+<span class="nc" id="L39">                    continue;</span>
+                }
+
+<span class="nc" id="L42">                String name = getCellStringValue(row.getCell(0));</span>
+<span class="nc" id="L43">                String supplyType = getCellStringValue(row.getCell(1));</span>
+<span class="nc" id="L44">                String description = getCellStringValue(row.getCell(2));</span>
+<span class="nc" id="L45">                String storageLocation = getCellStringValue(row.getCell(3));</span>
+<span class="nc" id="L46">                String statusStr = getCellStringValue(row.getCell(4));</span>
+<span class="nc" id="L47">                Integer currentStock = getCellIntValue(row.getCell(5));</span>
+<span class="nc" id="L48">                Integer minStock = getCellIntValue(row.getCell(6));</span>
+<span class="nc" id="L49">                Integer maxStock = getCellIntValue(row.getCell(7));</span>
+<span class="nc" id="L50">                String packagingUnit = getCellStringValue(row.getCell(8));</span>
+
+                // Validaciones básicas
+<span class="nc bnc" id="L53" title="All 2 branches missed.">                if (name.isEmpty()) errores.add(&quot;Fila &quot; + rowNumber + &quot;: Nombre vacío&quot;);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">                if (supplyType.isEmpty()) errores.add(&quot;Fila &quot; + rowNumber + &quot;: Tipo vacío&quot;);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                if (description.isEmpty()) errores.add(&quot;Fila &quot; + rowNumber + &quot;: Descripción vacía&quot;);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">                if (storageLocation.isEmpty()) errores.add(&quot;Fila &quot; + rowNumber + &quot;: Ubicación vacía&quot;);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                if (statusStr.isEmpty()) errores.add(&quot;Fila &quot; + rowNumber + &quot;: Estado vacío&quot;);</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                if (currentStock == null) errores.add(&quot;Fila &quot; + rowNumber + &quot;: Stock actual inválido&quot;);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                if (minStock == null) errores.add(&quot;Fila &quot; + rowNumber + &quot;: Stock mínimo inválido&quot;);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                if (maxStock == null) errores.add(&quot;Fila &quot; + rowNumber + &quot;: Stock máximo inválido&quot;);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">                if (packagingUnit.isEmpty()) errores.add(&quot;Fila &quot; + rowNumber + &quot;: Unidad de empaque vacía&quot;);</span>
+
+                // Validar estado
+                try {
+<span class="nc" id="L65">                    SupplyStatus.valueOf(statusStr.toUpperCase());</span>
+<span class="nc" id="L66">                } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L67">                    errores.add(&quot;Fila &quot; + rowNumber + &quot;: Estado inválido -&gt; &quot; + statusStr);</span>
+<span class="nc" id="L68">                }</span>
+
+                // Validar duplicado por nombre
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                if (supplyRepository.existsByName(name)) {</span>
+<span class="nc" id="L72">                    errores.add(&quot;Fila &quot; + rowNumber + &quot;: Supply duplicado -&gt; &quot; + name);</span>
+                }
+
+<span class="nc" id="L75">                rowNumber++;</span>
+<span class="nc" id="L76">            }</span>
+
+<span class="nc" id="L78">        } catch (Exception e) {</span>
+<span class="nc" id="L79">            errores.add(&quot;Error leyendo el archivo: &quot; + e.getMessage());</span>
+<span class="nc" id="L80">        }</span>
+
+<span class="nc" id="L82">        return errores;</span>
+    }
+
+    @Override
+    public void saveAll(MultipartFile file) {
+<span class="nc" id="L87">        try (InputStream is = file.getInputStream(); Workbook workbook = new XSSFWorkbook(is)) {</span>
+<span class="nc" id="L88">            Sheet sheet = workbook.getSheetAt(0);</span>
+<span class="nc" id="L89">            Iterator&lt;Row&gt; rows = sheet.iterator();</span>
+
+<span class="nc" id="L91">            int rowNumber = 0;</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            while (rows.hasNext()) {</span>
+<span class="nc" id="L93">                Row row = rows.next();</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">                if (rowNumber == 0) { // Saltar encabezado</span>
+<span class="nc" id="L95">                    rowNumber++;</span>
+<span class="nc" id="L96">                    continue;</span>
+                }
+
+<span class="nc" id="L99">                Supply supply = new Supply();</span>
+<span class="nc" id="L100">                supply.setName(getCellStringValue(row.getCell(0)));</span>
+<span class="nc" id="L101">                supply.setSupplyType(getCellStringValue(row.getCell(1)));</span>
+<span class="nc" id="L102">                supply.setDescription(getCellStringValue(row.getCell(2)));</span>
+<span class="nc" id="L103">                supply.setStorageLocation(getCellStringValue(row.getCell(3)));</span>
+
+<span class="nc" id="L105">                String statusStr = getCellStringValue(row.getCell(4));</span>
+<span class="nc" id="L106">                supply.setStatus(SupplyStatus.valueOf(statusStr.toUpperCase()));</span>
+
+<span class="nc" id="L108">                supply.setCurrentStock(getCellIntValue(row.getCell(5)));</span>
+<span class="nc" id="L109">                supply.setMinStock(getCellIntValue(row.getCell(6)));</span>
+<span class="nc" id="L110">                supply.setMaxStock(getCellIntValue(row.getCell(7)));</span>
+<span class="nc" id="L111">                supply.setPackagingUnit(getCellStringValue(row.getCell(8)));</span>
+
+                // Guardar si no existe
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                if (!supplyRepository.existsByName(supply.getName())) {</span>
+<span class="nc" id="L115">                    supplyRepository.save(supply);</span>
+                }
+
+<span class="nc" id="L118">                rowNumber++;</span>
+<span class="nc" id="L119">            }</span>
+<span class="nc" id="L120">        } catch (Exception e) {</span>
+<span class="nc" id="L121">            throw new RuntimeException(&quot;Error importando supplies: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L122">        }</span>
+<span class="nc" id="L123">    }</span>
+
+    // ===== HELPERS =====
+    private String getCellStringValue(Cell cell) {
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (cell == null) return &quot;&quot;;</span>
+<span class="nc" id="L128">        cell.setCellType(CellType.STRING);</span>
+<span class="nc" id="L129">        return cell.getStringCellValue().trim();</span>
+    }
+
+    private Integer getCellIntValue(Cell cell) {
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (cell == null) return null;</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if (cell.getCellType() == CellType.NUMERIC) {</span>
+<span class="nc" id="L135">            return (int) cell.getNumericCellValue();</span>
+        } else {
+            try {
+<span class="nc" id="L138">                return Integer.parseInt(cell.getStringCellValue());</span>
+<span class="nc" id="L139">            } catch (NumberFormatException e) {</span>
+<span class="nc" id="L140">                return null;</span>
+            }
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

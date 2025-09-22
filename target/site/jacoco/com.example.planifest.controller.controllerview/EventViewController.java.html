@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventViewController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.controller.controllerview</a> &gt; <span class="el_source">EventViewController.java</span></div><h1>EventViewController.java</h1><pre class="source lang-java linenums">package com.example.planifest.controller.controllerview;
+
+import com.example.planifest.entity.Event;
+import com.example.planifest.service.ClientServiceImp;
+import com.example.planifest.service.EventServiceImp;
+import com.example.planifest.service.SupplyServiceImp;
+import com.example.planifest.service.MapService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Controller
+@RequestMapping(&quot;/events-view&quot;)
+public class EventViewController {
+
+    private final EventServiceImp eventService;
+    private final ClientServiceImp clientService;
+    private final SupplyServiceImp supplyService;
+    private final MapService mapService;
+
+    public EventViewController(EventServiceImp eventService, ClientServiceImp clientService,
+<span class="fc" id="L26">                               SupplyServiceImp supplyService, MapService mapService) {</span>
+<span class="fc" id="L27">        this.eventService = eventService;</span>
+<span class="fc" id="L28">        this.clientService = clientService;</span>
+<span class="fc" id="L29">        this.supplyService = supplyService;</span>
+<span class="fc" id="L30">        this.mapService = mapService;</span>
+<span class="fc" id="L31">    }</span>
+
+    @GetMapping
+    public String mostrarEventos(
+            @RequestParam(name = &quot;id&quot;, required = false) Long id,
+            @RequestParam(name = &quot;nombre&quot;, required = false) String nombre,
+            @RequestParam(name = &quot;minGuests&quot;, required = false) Integer minGuests,
+            @RequestParam(name = &quot;clientId&quot;, required = false) Long clientId,
+            Model model) {
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        Event event = (id != null) ? eventService.findById(id).orElse(new Event()) : new Event();</span>
+<span class="nc" id="L42">        List&lt;Event&gt; eventos = eventService.getAll();</span>
+
+        // Aplicar filtros
+<span class="nc bnc" id="L45" title="All 4 branches missed.">        if (nombre != null &amp;&amp; !nombre.isBlank()) {</span>
+<span class="nc" id="L46">            eventos = eventos.stream()</span>
+<span class="nc" id="L47">                    .filter(e -&gt; e.getEventName().toLowerCase().contains(nombre.toLowerCase()))</span>
+<span class="nc" id="L48">                    .collect(Collectors.toList());</span>
+        }
+
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (minGuests != null) {</span>
+<span class="nc" id="L52">            eventos = eventos.stream()</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">                    .filter(e -&gt; e.getGuestCount() &gt;= minGuests)</span>
+<span class="nc" id="L54">                    .collect(Collectors.toList());</span>
+        }
+
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if (clientId != null) {</span>
+<span class="nc" id="L58">            eventos = eventos.stream()</span>
+<span class="nc bnc" id="L59" title="All 4 branches missed.">                    .filter(e -&gt; e.getClient() != null &amp;&amp; e.getClient().getId().equals(clientId))</span>
+<span class="nc" id="L60">                    .collect(Collectors.toList());</span>
+        }
+
+<span class="nc" id="L63">        model.addAttribute(&quot;event&quot;, event);</span>
+<span class="nc" id="L64">        model.addAttribute(&quot;eventos&quot;, eventos);</span>
+<span class="nc" id="L65">        model.addAttribute(&quot;clientes&quot;, clientService.getAll());</span>
+<span class="nc" id="L66">        model.addAttribute(&quot;suministros&quot;, supplyService.getAll());</span>
+
+        // Generar URL del mapa usando el MapService
+<span class="nc" id="L69">        String mapUrl = mapService.getMapEmbed(event.getLocation());</span>
+<span class="nc" id="L70">        model.addAttribute(&quot;mapUrl&quot;, mapUrl);</span>
+
+<span class="nc" id="L72">        return &quot;events&quot;;</span>
+    }
+
+    @PostMapping(&quot;/save&quot;)
+    public String guardarEvento(@ModelAttribute Event event, Model model, RedirectAttributes redirectAttributes) {
+        try {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            if (event.getId() == null) {</span>
+<span class="nc" id="L79">                eventService.create(event);</span>
+<span class="nc" id="L80">                redirectAttributes.addFlashAttribute(&quot;successMessage&quot;, &quot;Evento creado exitosamente.&quot;);</span>
+            } else {
+<span class="nc" id="L82">                eventService.update(event);</span>
+<span class="nc" id="L83">                redirectAttributes.addFlashAttribute(&quot;successMessage&quot;, &quot;Evento actualizado correctamente.&quot;);</span>
+            }
+<span class="nc" id="L85">            return &quot;redirect:/events-view&quot;;</span>
+<span class="nc" id="L86">        } catch (RuntimeException ex) {</span>
+<span class="nc" id="L87">            model.addAttribute(&quot;event&quot;, event);</span>
+<span class="nc" id="L88">            model.addAttribute(&quot;eventos&quot;, eventService.getAll());</span>
+<span class="nc" id="L89">            model.addAttribute(&quot;clientes&quot;, clientService.getAll());</span>
+<span class="nc" id="L90">            model.addAttribute(&quot;suministros&quot;, supplyService.getAll());</span>
+<span class="nc" id="L91">            model.addAttribute(&quot;errorMessage&quot;, ex.getMessage());</span>
+<span class="nc" id="L92">            return &quot;events&quot;;</span>
+        }
+    }
+
+    @GetMapping(&quot;/delete/{id}&quot;)
+    public String eliminarEvento(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+<span class="nc" id="L99">            eventService.deleteById(id);</span>
+<span class="nc" id="L100">            redirectAttributes.addFlashAttribute(&quot;successMessage&quot;, &quot;Evento eliminado correctamente.&quot;);</span>
+<span class="nc" id="L101">        } catch (RuntimeException e) {</span>
+<span class="nc" id="L102">            redirectAttributes.addFlashAttribute(&quot;errorMessage&quot;, &quot;Error al eliminar el evento: &quot; + e.getMessage());</span>
+<span class="nc" id="L103">        }</span>
+<span class="nc" id="L104">        return &quot;redirect:/events-view&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

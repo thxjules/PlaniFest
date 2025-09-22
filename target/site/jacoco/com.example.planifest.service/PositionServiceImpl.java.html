@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PositionServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.service</a> &gt; <span class="el_source">PositionServiceImpl.java</span></div><h1>PositionServiceImpl.java</h1><pre class="source lang-java linenums">package com.example.planifest.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.example.planifest.entity.Position;
+import com.example.planifest.repository.PositionRepository;
+import com.example.planifest.service.dao.Idao;
+
+@Service
+public class PositionServiceImpl implements Idao&lt;Position, Long&gt; {
+
+    private final PositionRepository positionRepository;
+
+<span class="fc" id="L17">    public PositionServiceImpl(PositionRepository positionRepository) {</span>
+<span class="fc" id="L18">        this.positionRepository = positionRepository;</span>
+<span class="fc" id="L19">    }</span>
+
+    @Override
+    public List&lt;Position&gt; getAll() {
+<span class="nc" id="L23">        return positionRepository.findAll();</span>
+    }
+
+    @Override
+    public void create(Position position) {
+<span class="nc" id="L28">        validatePosition(position);</span>
+<span class="nc" id="L29">        positionRepository.save(position);</span>
+<span class="nc" id="L30">    }</span>
+
+    public long count(){
+<span class="fc" id="L33">        return positionRepository.count();</span>
+    }
+
+    @Override
+    public void update(Position position) {
+<span class="nc bnc" id="L38" title="All 4 branches missed.">        if (position.getId() == null || !positionRepository.existsById(position.getId())) {</span>
+<span class="nc" id="L39">            throw new RuntimeException(&quot;No se puede actualizar una posición que no existe.&quot;);</span>
+        }
+<span class="nc" id="L41">        validatePosition(position);</span>
+<span class="nc" id="L42">        positionRepository.save(position);</span>
+<span class="nc" id="L43">    }</span>
+
+    @Override
+    public void deleteById(Long id) {
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (!positionRepository.existsById(id)) {</span>
+<span class="nc" id="L48">            throw new RuntimeException(&quot;No se puede borrar una posición que no existe.&quot;);</span>
+        }
+<span class="nc" id="L50">        positionRepository.deleteById(id);</span>
+<span class="nc" id="L51">    }</span>
+
+    private void validatePosition(Position position) {
+<span class="nc bnc" id="L54" title="All 4 branches missed.">        if (position.getName() == null || position.getName().isBlank()) {</span>
+<span class="nc" id="L55">            throw new RuntimeException(&quot;El nombre de la posición es obligatorio.&quot;);</span>
+        }
+<span class="nc" id="L57">    }</span>
+
+    public Optional&lt;Position&gt; findById(Long id) {
+<span class="nc" id="L60">    return positionRepository.findById(id);</span>
+}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

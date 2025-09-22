@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StrategyFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.service</a> &gt; <span class="el_source">StrategyFactory.java</span></div><h1>StrategyFactory.java</h1><pre class="source lang-java linenums">package com.example.planifest.service;
+
+import org.springframework.stereotype.Service;
+
+import com.example.planifest.entity.Client;
+import com.example.planifest.entity.Event;
+import com.example.planifest.entity.Supply;
+import com.example.planifest.entity.Task;
+import com.example.planifest.entity.User;
+import com.example.planifest.service.importstrategy.ClientImportStrategy;
+import com.example.planifest.service.importstrategy.EventImportStrategy;
+import com.example.planifest.service.importstrategy.ImportStrategy;
+import com.example.planifest.service.importstrategy.SupplyImportStrategy;
+import com.example.planifest.service.importstrategy.TaskImportStrategy;
+import com.example.planifest.service.importstrategy.UserImportStrategy;
+
+
+
+
+@Service
+public class StrategyFactory {
+
+    private final UserImportStrategy userImportStrategy;
+    private final TaskImportStrategy taskImportStrategy;
+    private final EventImportStrategy eventImportStrategy;
+    private final SupplyImportStrategy supplyImportStrategy;
+    private final ClientImportStrategy clientImportStrategy;
+
+    public StrategyFactory(UserImportStrategy u, TaskImportStrategy t,
+<span class="fc" id="L30">                           EventImportStrategy e, SupplyImportStrategy s, ClientImportStrategy c) {</span>
+<span class="fc" id="L31">        this.userImportStrategy = u;</span>
+<span class="fc" id="L32">        this.taskImportStrategy = t;</span>
+<span class="fc" id="L33">        this.eventImportStrategy = e;</span>
+<span class="fc" id="L34">        this.supplyImportStrategy = s;</span>
+<span class="fc" id="L35">        this.clientImportStrategy = c;</span>
+<span class="fc" id="L36">    }</span>
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T&gt; ImportStrategy&lt;T&gt; getStrategy(Class&lt;T&gt; entityClass) {
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (entityClass == User.class) return (ImportStrategy&lt;T&gt;) userImportStrategy;</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (entityClass == Task.class) return (ImportStrategy&lt;T&gt;) taskImportStrategy;</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (entityClass == Event.class) return (ImportStrategy&lt;T&gt;) eventImportStrategy;</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (entityClass == Supply.class) return (ImportStrategy&lt;T&gt;) supplyImportStrategy;</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (entityClass == Client.class) return (ImportStrategy&lt;T&gt;) clientImportStrategy;</span>
+        
+<span class="nc" id="L46">        throw new IllegalArgumentException(&quot;No strategy for &quot; + entityClass);</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

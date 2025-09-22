@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SupplyController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.controller</a> &gt; <span class="el_source">SupplyController.java</span></div><h1>SupplyController.java</h1><pre class="source lang-java linenums">package com.example.planifest.controller;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.planifest.entity.Supply;
+import com.example.planifest.service.SupplyServiceImp;
+
+/* Define que la clase es un controlador para spring */
+@RestController
+/* Ruta base */
+@RequestMapping(&quot;/supplies&quot;)
+public class SupplyController {
+
+    /* Se trae y se define a Service como un Objeto?? */
+    private final SupplyServiceImp supplyService;
+
+    /* Constructor de Service para traer las instrucciones */
+<span class="fc" id="L28">    public SupplyController(SupplyServiceImp supplyService) {</span>
+<span class="fc" id="L29">        this.supplyService = supplyService;</span>
+<span class="fc" id="L30">    }</span>
+
+    /* Metodos con sus EndPoints-Rutas */
+
+    /* Metodo para Obtener todos los Suministros/Recursos */
+    @GetMapping
+    /* En caso de una solicitud http asi */
+    public ResponseEntity&lt;List&lt;Supply&gt;&gt; getAllSupplies() {
+        /* Devuelve una respuesta y la info del service */
+<span class="nc" id="L39">        return ResponseEntity.ok(supplyService.getAll());</span>
+    }
+
+    @PostMapping
+    /* Al no devolver nada no nesecita definirse el &quot;Formato&quot; */
+    public ResponseEntity&lt;?&gt; createSupply(@RequestBody Supply supply) {
+        /* Envia una respuesta http de que fue creado pero &quot;Sin cuerpo&quot; */
+<span class="nc" id="L46">        return ResponseEntity.status(201).build();</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    /* El path es para almacenar el ID? */
+    public ResponseEntity&lt;?&gt; updateSupply(@PathVariable Long id, @RequestBody Supply supply) {
+<span class="nc" id="L52">        supply.setId(id);</span>
+        /* Actualizacion de el Suministro por el ID */
+<span class="nc" id="L54">        supplyService.update(supply);</span>
+        /* Respuesta de devuelve */
+<span class="nc" id="L56">        return ResponseEntity.noContent().build();</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; deleteSupply(@PathVariable Long id) {
+        /* Accede al metodo del SERVICE */
+<span class="nc" id="L62">        supplyService.deleteById(id);</span>
+        /* Da el mensaje */
+<span class="nc" id="L64">        return ResponseEntity.ok().build();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomErrorController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.controller</a> &gt; <span class="el_source">CustomErrorController.java</span></div><h1>CustomErrorController.java</h1><pre class="source lang-java linenums">package com.example.planifest.controller;
+
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
+
+@Controller
+<span class="fc" id="L12">public class CustomErrorController implements ErrorController {</span>
+
+    @GetMapping(&quot;/error&quot;)
+    public String handleError(HttpServletRequest request) {
+<span class="nc" id="L16">        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);</span>
+
+<span class="nc bnc" id="L18" title="All 2 branches missed.">        if (status != null) {</span>
+<span class="nc" id="L19">            int statusCode = Integer.parseInt(status.toString());</span>
+
+<span class="nc bnc" id="L21" title="All 2 branches missed.">            if (statusCode == HttpStatus.NOT_FOUND.value()) {</span>
+<span class="nc" id="L22">                return &quot;error/404&quot;;</span>
+<span class="nc bnc" id="L23" title="All 2 branches missed.">            } else if (statusCode == HttpStatus.FORBIDDEN.value()) {</span>
+<span class="nc" id="L24">                return &quot;error/403&quot;;</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {</span>
+<span class="nc" id="L26">                return &quot;error/500&quot;;</span>
+            }
+        }
+
+<span class="nc" id="L30">        return &quot;error/error&quot;; // error general</span>
+    }
+
+    // ⬇️ Estas rutas son para que puedas acceder directamente desde el navegador (opcional)
+    @GetMapping(&quot;/403&quot;)
+    public String accessDenied() {
+<span class="nc" id="L36">        return &quot;error/403&quot;;</span>
+    }
+
+    @GetMapping(&quot;/404&quot;)
+    public String notFound() {
+<span class="nc" id="L41">        return &quot;error/404&quot;;</span>
+    }
+
+    @GetMapping(&quot;/500&quot;)
+    public String internalError() {
+<span class="nc" id="L46">        return &quot;error/500&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

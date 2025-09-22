@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClientServiceImp.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.service</a> &gt; <span class="el_source">ClientServiceImp.java</span></div><h1>ClientServiceImp.java</h1><pre class="source lang-java linenums">package com.example.planifest.service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
+
+import org.springframework.stereotype.Service;
+
+import com.example.planifest.entity.Client;
+import com.example.planifest.repository.ClientRepository;
+import com.example.planifest.service.dao.Idao;
+
+@Service
+public class ClientServiceImp implements Idao&lt;Client, Long&gt; {
+
+    private final ClientRepository clientRepository;
+
+<span class="fc" id="L18">    public ClientServiceImp(ClientRepository clientRepository) {</span>
+<span class="fc" id="L19">        this.clientRepository = clientRepository;</span>
+<span class="fc" id="L20">    }</span>
+
+    @Override
+    public List&lt;Client&gt; getAll() {
+<span class="nc" id="L24">        return clientRepository.findAll();</span>
+    }
+
+    /* Encontrar por ID */
+        public Optional&lt;Client&gt; findById(Long id){
+<span class="nc" id="L29">        return clientRepository.findById(id);</span>
+    }
+
+    /* Filtro para empleados */
+    public List&lt;Client&gt; filtroNombreEmail(String nombre, String email){
+
+<span class="nc" id="L35">        return clientRepository.findAll().stream()</span>
+<span class="nc bnc" id="L36" title="All 6 branches missed.">        .filter(c -&gt; nombre == null || nombre.isBlank() || c.getName().toLowerCase().contains(nombre.toLowerCase()))</span>
+<span class="nc bnc" id="L37" title="All 6 branches missed.">        .filter(c -&gt; email == null || email.isBlank() || c.getEmail().toLowerCase().contains(email.toLowerCase()))</span>
+<span class="nc" id="L38">        .toList();</span>
+    }
+
+
+    @Override
+    public void create(Client client) {
+<span class="nc" id="L44">        validateClient(client, true);</span>
+<span class="nc" id="L45">        clientRepository.save(client);</span>
+<span class="nc" id="L46">    }</span>
+
+    public long count(){
+<span class="fc" id="L49">        return clientRepository.count();</span>
+    }
+    @Override
+    public void update(Client client) {
+<span class="nc bnc" id="L53" title="All 4 branches missed.">        if (client.getId() == null || !clientRepository.existsById(client.getId())) {</span>
+<span class="nc" id="L54">            throw new RuntimeException(&quot;El cliente no existe.&quot;);</span>
+        }
+<span class="nc" id="L56">        validateClient(client, false);</span>
+<span class="nc" id="L57">        clientRepository.save(client);</span>
+<span class="nc" id="L58">    }</span>
+
+    @Override
+    public void deleteById(Long id) {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (!clientRepository.existsById(id)) {</span>
+<span class="nc" id="L63">            throw new RuntimeException(&quot;El cliente no existe.&quot;);</span>
+        }
+<span class="nc" id="L65">        clientRepository.deleteById(id);</span>
+<span class="nc" id="L66">    }</span>
+
+    private void validateClient(Client client, boolean isCreate) {
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (isBlank(client.getName())) {</span>
+<span class="nc" id="L70">            throw new RuntimeException(&quot;El nombre del cliente es obligatorio.&quot;);</span>
+        }
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (client.getName().length() &gt; 100) {</span>
+<span class="nc" id="L73">            throw new RuntimeException(&quot;El nombre del cliente no puede superar los 100 caracteres.&quot;);</span>
+        }
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (isBlank(client.getEmail())) {</span>
+<span class="nc" id="L77">            throw new RuntimeException(&quot;El correo del cliente es obligatorio.&quot;);</span>
+        }
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (client.getEmail().length() &gt; 100) {</span>
+<span class="nc" id="L80">            throw new RuntimeException(&quot;El correo no puede superar los 100 caracteres.&quot;);</span>
+        }
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (!isValidEmail(client.getEmail())) {</span>
+<span class="nc" id="L83">            throw new RuntimeException(&quot;El formato del correo es inválido.&quot;);</span>
+        }
+<span class="nc bnc" id="L85" title="All 4 branches missed.">        if (isCreate &amp;&amp; clientRepository.existsByEmailIgnoreCase(client.getEmail())) {</span>
+<span class="nc" id="L86">            throw new RuntimeException(&quot;Ya existe un cliente con ese correo.&quot;);</span>
+        }
+
+<span class="nc bnc" id="L89" title="All 4 branches missed.">        if (client.getPhone() != null &amp;&amp; client.getPhone().length() &gt; 20) {</span>
+<span class="nc" id="L90">            throw new RuntimeException(&quot;El teléfono no puede superar los 20 caracteres.&quot;);</span>
+        }
+<span class="nc" id="L92">    }</span>
+
+    private boolean isBlank(String str) {
+<span class="nc bnc" id="L95" title="All 4 branches missed.">        return str == null || str.isBlank();</span>
+    }
+
+    private boolean isValidEmail(String email) {
+<span class="nc" id="L99">        String regex = &quot;^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$&quot;;</span>
+<span class="nc" id="L100">        return Pattern.matches(regex, email);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

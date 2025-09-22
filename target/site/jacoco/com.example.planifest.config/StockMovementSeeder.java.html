@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StockMovementSeeder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.config</a> &gt; <span class="el_source">StockMovementSeeder.java</span></div><h1>StockMovementSeeder.java</h1><pre class="source lang-java linenums">package com.example.planifest.config;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import com.example.planifest.entity.StockMovement;
+import com.example.planifest.entity.Supply;
+import com.example.planifest.enums.StockStatus;
+import com.example.planifest.service.StockMovementServiceImp;
+import com.example.planifest.service.SupplyServiceImp;
+
+@Order(4)
+@Component
+public class StockMovementSeeder implements CommandLineRunner {
+
+    private final StockMovementServiceImp stockMovementService;
+    private final SupplyServiceImp supplyService;
+
+<span class="fc" id="L23">    public StockMovementSeeder(StockMovementServiceImp stockMovementService, SupplyServiceImp supplyService) {</span>
+<span class="fc" id="L24">        this.stockMovementService = stockMovementService;</span>
+<span class="fc" id="L25">        this.supplyService = supplyService;</span>
+
+<span class="fc" id="L27">    }</span>
+
+    @Override
+    public void run(String... args) throws Exception {
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (stockMovementService.getAll().isEmpty()) {</span>
+
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (stockMovementService.count() &gt; 0) {</span>
+<span class="nc" id="L34">                System.out.println(&quot;El Seder ya se había ejecutado&quot;);</span>
+<span class="nc" id="L35">                return;</span>
+            }
+
+<span class="nc" id="L38">            List&lt;Supply&gt; supplies = supplyService.getAll();</span>
+
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            if (supplies.size() &gt;= 3) {</span>
+
+<span class="nc" id="L42">                StockMovement stockMovement1 = new StockMovement();</span>
+                /* El 0 demuestra la posicion del supply que se usara */
+<span class="nc" id="L44">                stockMovement1.setSupply(supplies.get(0));</span>
+<span class="nc" id="L45">                stockMovement1.setDate(LocalDate.now());</span>
+<span class="nc" id="L46">                stockMovement1.setQuantity(5);</span>
+<span class="nc" id="L47">                stockMovement1.setType(StockStatus.ENTRY);</span>
+<span class="nc" id="L48">                stockMovement1.setRemarks(</span>
+                        &quot;Se daran entrada a 5 unidades mas de los Globos de Colores que estan con el ID numero 1&quot;);
+<span class="nc" id="L50">                stockMovementService.create(stockMovement1);</span>
+<span class="nc" id="L51">                System.out.println(&quot;Seeder: El Stock Movement numero 1 se ha creado&quot;);</span>
+
+
+<span class="nc" id="L54">                StockMovement stockMovement2 = new StockMovement();</span>
+                /* El 0 demuestra la posicion del supply que se usara */
+<span class="nc" id="L56">                stockMovement2.setSupply(supplies.get(1));</span>
+<span class="nc" id="L57">                stockMovement2.setDate(LocalDate.now());</span>
+<span class="nc" id="L58">                stockMovement2.setQuantity(10);</span>
+<span class="nc" id="L59">                stockMovement2.setType(StockStatus.ENTRY);</span>
+<span class="nc" id="L60">                stockMovement2.setRemarks(</span>
+                        &quot;Se agragara 10 bolsas con pulseras de neon con el id numero 2&quot;);
+<span class="nc" id="L62">                stockMovementService.create(stockMovement2);</span>
+<span class="nc" id="L63">                System.out.println(&quot;Seeder: El Stock Movement numero 2 se ha creado&quot;);</span>
+
+<span class="nc" id="L65">                 StockMovement stockMovement3 = new StockMovement();</span>
+                /* El 0 demuestra la posicion del supply que se usara */
+<span class="nc" id="L67">                stockMovement3.setSupply(supplies.get(2));</span>
+<span class="nc" id="L68">                stockMovement3.setDate(LocalDate.now());</span>
+<span class="nc" id="L69">                stockMovement3.setQuantity(1);</span>
+<span class="nc" id="L70">                stockMovement3.setType(StockStatus.EXIT);</span>
+<span class="nc" id="L71">                stockMovement3.setRemarks(</span>
+                        &quot;Se quitaran/restaran 1 Fuente de agua por motivos de fallos&quot;);
+<span class="nc" id="L73">                stockMovementService.create(stockMovement3);</span>
+<span class="nc" id="L74">                System.out.println(&quot;Seeder: El Stock Movement numero 3 se ha creado&quot;);</span>
+
+
+
+
+
+
+
+
+
+<span class="nc" id="L84">            } else {</span>
+<span class="nc" id="L85">                System.out</span>
+<span class="nc" id="L86">                        .println(&quot;No se pudo crear ninguna Observacion ya que no existe ningun Suministro actualmente&quot;);</span>
+            }
+        }
+<span class="fc" id="L89">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

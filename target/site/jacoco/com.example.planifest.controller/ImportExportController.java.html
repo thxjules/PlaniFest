@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ImportExportController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.controller</a> &gt; <span class="el_source">ImportExportController.java</span></div><h1>ImportExportController.java</h1><pre class="source lang-java linenums">package com.example.planifest.controller;
+
+import com.example.planifest.service.ImportExportService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/api/import-export&quot;)
+public class ImportExportController {
+
+    private final ImportExportService importExportService;
+
+<span class="fc" id="L16">    public ImportExportController(ImportExportService importExportService) {</span>
+<span class="fc" id="L17">        this.importExportService = importExportService;</span>
+<span class="fc" id="L18">    }</span>
+
+    // ================== Importación ==================
+    @PostMapping(&quot;/{entity}/import&quot;)
+    public ResponseEntity&lt;List&lt;String&gt;&gt; importData(
+            @PathVariable String entity,
+            @RequestParam(&quot;file&quot;) MultipartFile file
+    ) {
+        try {
+<span class="nc" id="L27">            Class&lt;?&gt; entityClass = getEntityClass(entity);</span>
+<span class="nc" id="L28">            List&lt;String&gt; errors = importExportService.importData(file, entityClass);</span>
+<span class="nc" id="L29">            return ResponseEntity.ok(errors);</span>
+<span class="nc" id="L30">        } catch (Exception e) {</span>
+<span class="nc" id="L31">            return ResponseEntity.badRequest().body(List.of(e.getMessage()));</span>
+        }
+    }
+
+    // ================== Exportación ==================
+    @GetMapping(&quot;/{entity}/export/json&quot;)
+    public ResponseEntity&lt;String&gt; exportJson(@PathVariable String entity) {
+        try {
+<span class="nc" id="L39">            Class&lt;?&gt; entityClass = getEntityClass(entity);</span>
+<span class="nc" id="L40">            String json = importExportService.exportJson(entityClass);</span>
+<span class="nc" id="L41">            return ResponseEntity.ok(json);</span>
+<span class="nc" id="L42">        } catch (Exception e) {</span>
+<span class="nc" id="L43">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    @GetMapping(&quot;/{entity}/export/csv&quot;)
+    public ResponseEntity&lt;byte[]&gt; exportCsv(@PathVariable String entity) {
+        try {
+<span class="nc" id="L50">            Class&lt;?&gt; entityClass = getEntityClass(entity);</span>
+<span class="nc" id="L51">            byte[] data = importExportService.exportCsv(entityClass);</span>
+<span class="nc" id="L52">            return ResponseEntity.ok()</span>
+<span class="nc" id="L53">                    .header(&quot;Content-Disposition&quot;, &quot;attachment; filename=&quot; + entity + &quot;.csv&quot;)</span>
+<span class="nc" id="L54">                    .body(data);</span>
+<span class="nc" id="L55">        } catch (Exception e) {</span>
+<span class="nc" id="L56">            return ResponseEntity.badRequest().body(null);</span>
+        }
+    }
+
+    @GetMapping(&quot;/{entity}/export/excel&quot;)
+    public ResponseEntity&lt;byte[]&gt; exportExcel(@PathVariable String entity) {
+        try {
+<span class="nc" id="L63">            Class&lt;?&gt; entityClass = getEntityClass(entity);</span>
+<span class="nc" id="L64">            byte[] data = importExportService.exportExcel(entityClass);</span>
+<span class="nc" id="L65">            return ResponseEntity.ok()</span>
+<span class="nc" id="L66">                    .header(&quot;Content-Disposition&quot;, &quot;attachment; filename=&quot; + entity + &quot;.xlsx&quot;)</span>
+<span class="nc" id="L67">                    .body(data);</span>
+<span class="nc" id="L68">        } catch (Exception e) {</span>
+<span class="nc" id="L69">            return ResponseEntity.badRequest().body(null);</span>
+        }
+    }
+
+    // ================== Helper ==================
+    private Class&lt;?&gt; getEntityClass(String entity) {
+<span class="nc bnc" id="L75" title="All 6 branches missed.">        return switch (entity.toLowerCase()) {</span>
+<span class="nc" id="L76">            case &quot;user&quot; -&gt; com.example.planifest.entity.User.class;</span>
+<span class="nc" id="L77">            case &quot;task&quot; -&gt; com.example.planifest.entity.Task.class;</span>
+<span class="nc" id="L78">            case &quot;event&quot; -&gt; com.example.planifest.entity.Event.class;</span>
+<span class="nc" id="L79">            case &quot;supply&quot; -&gt; com.example.planifest.entity.Supply.class;</span>
+<span class="nc" id="L80">            case &quot;client&quot; -&gt; com.example.planifest.entity.Client.class;</span>
+<span class="nc" id="L81">            default -&gt; throw new IllegalArgumentException(&quot;Entidad no soportada: &quot; + entity);</span>
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

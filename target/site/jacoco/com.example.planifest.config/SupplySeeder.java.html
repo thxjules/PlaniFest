@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SupplySeeder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.config</a> &gt; <span class="el_source">SupplySeeder.java</span></div><h1>SupplySeeder.java</h1><pre class="source lang-java linenums">package com.example.planifest.config;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import com.example.planifest.entity.Supply;
+import com.example.planifest.enums.SupplyStatus;
+import com.example.planifest.service.SupplyServiceImp;
+
+@Component
+@Order(2)
+public class SupplySeeder implements CommandLineRunner {
+
+    private final SupplyServiceImp supplyService;
+
+    /* Constructor */
+<span class="fc" id="L18">    public SupplySeeder(SupplyServiceImp supplyService) {</span>
+<span class="fc" id="L19">        this.supplyService = supplyService;</span>
+<span class="fc" id="L20">    }</span>
+
+    @Override
+    /* Creacion de los Seeders */
+    public void run(String... args) throws Exception {
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">        if (supplyService.count() &gt; 0) {</span>
+<span class="fc" id="L26">            System.out.println(&quot;El seder de suministros ya había sido ejecutado&quot;);</span>
+<span class="fc" id="L27">             return; </span>
+        }
+        
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        if (supplyService.getAll().isEmpty()) {</span>
+
+<span class="nc" id="L32">            Supply supply1 = new Supply();</span>
+<span class="nc" id="L33">            supply1.setName(&quot;Globos de Colores&quot;);</span>
+<span class="nc" id="L34">            supply1.setSupplyType(&quot;Decoracion&quot;);</span>
+<span class="nc" id="L35">            supply1.setDescription(</span>
+                    &quot;Advertencia: Use todos los Globos que estan el Paquete, Lo guarde los Paquetes si no estan Todos los Globos&quot;);
+<span class="nc" id="L37">            supply1.setStorageLocation(&quot;Almacen numero 1&quot;);</span>
+<span class="nc" id="L38">            supply1.setStatus(SupplyStatus.AVAILABLE);</span>
+<span class="nc" id="L39">            supply1.setCurrentStock(40);</span>
+<span class="nc" id="L40">            supply1.setMinStock(5);</span>
+<span class="nc" id="L41">            supply1.setMaxStock(150);</span>
+<span class="nc" id="L42">            supply1.setPackagingUnit(&quot;Cajas de Espuma&quot;);</span>
+
+            /* Creacion del supply 1 */
+<span class="nc" id="L45">            supplyService.create(supply1);</span>
+<span class="nc" id="L46">            System.out.println(&quot;Seeder: El suministro 1 ha sido creado&quot;);</span>
+
+<span class="nc" id="L48">            Supply supply2 = new Supply();</span>
+<span class="nc" id="L49">            supply2.setName(&quot;Pulseras de Neon&quot;);</span>
+<span class="nc" id="L50">            supply2.setSupplyType(&quot;Mobiliario&quot;);</span>
+<span class="nc" id="L51">            supply2.setDescription(</span>
+                    &quot;Solo usar estas pulseras en eventos Nocturnos, de cualquier tipo para una mejor experiencia Nt(Se cuenta cada pulsera)&quot;);
+<span class="nc" id="L53">            supply2.setStorageLocation(&quot;Almacen numero 1&quot;);</span>
+<span class="nc" id="L54">            supply2.setStatus(SupplyStatus.AVAILABLE);</span>
+<span class="nc" id="L55">            supply2.setCurrentStock(60);</span>
+<span class="nc" id="L56">            supply2.setMinStock(5);</span>
+<span class="nc" id="L57">            supply2.setMaxStock(200);</span>
+<span class="nc" id="L58">            supply2.setPackagingUnit(&quot;Bolsas de plastico&quot;);</span>
+
+<span class="nc" id="L60">            supplyService.create(supply2);</span>
+<span class="nc" id="L61">            System.out.println(&quot;Seeder: El suministro 2 ha sido creado&quot;);</span>
+
+<span class="nc" id="L63">            Supply supply3 = new Supply();</span>
+<span class="nc" id="L64">            supply3.setName(&quot;Fuentes de agua&quot;);</span>
+<span class="nc" id="L65">            supply3.setSupplyType(&quot;Mobiliario&quot;);</span>
+<span class="nc" id="L66">            supply3.setDescription(</span>
+                    &quot;Precaucion: Uso de las fuentes de agua SOLO en eventos donde haya prescencia de Adultos y no eventos que tengan ningun tipo de menor de edad&quot;);
+<span class="nc" id="L68">            supply3.setStorageLocation(&quot;Almacen numero 2&quot;);</span>
+<span class="nc" id="L69">            supply3.setStatus(SupplyStatus.AVAILABLE);</span>
+<span class="nc" id="L70">            supply3.setCurrentStock(20);</span>
+<span class="nc" id="L71">            supply3.setMinStock(2);</span>
+<span class="nc" id="L72">            supply3.setMaxStock(50);</span>
+<span class="nc" id="L73">            supply3.setPackagingUnit(&quot;No tiene&quot;);</span>
+
+<span class="nc" id="L75">            supplyService.create(supply3);</span>
+<span class="nc" id="L76">            System.out.println(&quot;Seeder: El suministro 2 ha sido creado&quot;);</span>
+
+<span class="nc" id="L78">            Supply supply4 = new Supply();</span>
+<span class="nc" id="L79">            supply4.setName(&quot;Maquinas de humo&quot;);</span>
+<span class="nc" id="L80">            supply4.setSupplyType(&quot;Mobiliario&quot;);</span>
+<span class="nc" id="L81">            supply4.setDescription(&quot;Tener cuidado a la hora de depositar las maquinas de humo en cajas de espama&quot;);</span>
+<span class="nc" id="L82">            supply4.setStorageLocation(&quot;Almacen numero 2&quot;);</span>
+<span class="nc" id="L83">            supply4.setStatus(SupplyStatus.AVAILABLE);</span>
+<span class="nc" id="L84">            supply4.setCurrentStock(60);</span>
+<span class="nc" id="L85">            supply4.setMinStock(8);</span>
+<span class="nc" id="L86">            supply4.setMaxStock(140);</span>
+<span class="nc" id="L87">            supply4.setPackagingUnit(&quot;Cajas de Espuma&quot;);</span>
+
+<span class="nc" id="L89">            supplyService.create(supply4);</span>
+<span class="nc" id="L90">            System.out.println(&quot;Seeder: El suministro 2 ha sido creado&quot;);</span>
+
+        }
+<span class="nc" id="L93">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

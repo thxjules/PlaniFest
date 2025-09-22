@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserSeeder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.config</a> &gt; <span class="el_source">UserSeeder.java</span></div><h1>UserSeeder.java</h1><pre class="source lang-java linenums">package com.example.planifest.config;
+
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import com.example.planifest.entity.Position;
+import com.example.planifest.entity.User;
+import com.example.planifest.enums.Role;
+import com.example.planifest.service.PositionServiceImpl;
+import com.example.planifest.service.TaskServiceImp;
+import com.example.planifest.service.UserServiceImp;
+
+@Component
+@Order(7)
+public class UserSeeder implements CommandLineRunner {
+
+    private final UserServiceImp userService;
+    private final PositionServiceImpl positionService;
+    //private final PasswordEncoder passwordEncoder;
+
+    public UserSeeder(UserServiceImp userService, TaskServiceImp taskService,
+<span class="fc" id="L25">                      PositionServiceImpl positionService ) {</span>
+<span class="fc" id="L26">        this.userService = userService;</span>
+<span class="fc" id="L27">        this.positionService = positionService;</span>
+      //  this.passwordEncoder = passwordEncoder;
+<span class="fc" id="L29">    }</span>
+
+    @Override
+    public void run(String... args) throws Exception {
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (userService.getAll().isEmpty()) {</span>
+<span class="nc" id="L34">            List&lt;Position&gt; positions = positionService.getAll();</span>
+
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if (positions.isEmpty()) {</span>
+<span class="nc" id="L37">                System.out.println(&quot;No hay posiciones disponibles para asignar a los usuarios.&quot;);</span>
+<span class="nc" id="L38">                return;</span>
+            }
+
+            // Usuario 1
+<span class="nc" id="L42">            User user1 = new User();</span>
+<span class="nc" id="L43">            user1.setUsername(&quot;Alice Johnson&quot;);</span>
+<span class="nc" id="L44">            user1.setEmail(&quot;Alice@gmail.com&quot;);</span>
+<span class="nc" id="L45">            user1.setPassword((&quot;Alice123&quot;));</span>
+<span class="nc" id="L46">            user1.setPhoneNumber(&quot;1234567890&quot;);</span>
+<span class="nc" id="L47">            user1.setRole(Role.ADMIN);</span>
+<span class="nc" id="L48">            userService.create(user1);</span>
+
+            // Usuario 2
+<span class="nc" id="L51">            User user2 = new User();</span>
+<span class="nc" id="L52">            user2.setUsername(&quot;Bob Smith&quot;);</span>
+<span class="nc" id="L53">            user2.setEmail(&quot;bodsmith@gmail.com&quot;);</span>
+<span class="nc" id="L54">            user2.setPassword((&quot;Bobsmit123&quot;));</span>
+<span class="nc" id="L55">            user2.setPhoneNumber(&quot;9876543210&quot;);</span>
+<span class="nc" id="L56">            user2.setRole(Role.EMPLOYEE);</span>
+<span class="nc" id="L57">            user2.setPosition(positions.get(0));</span>
+<span class="nc" id="L58">            userService.create(user2);</span>
+
+            // Usuario 3
+<span class="nc" id="L61">            User user3 = new User();</span>
+<span class="nc" id="L62">            user3.setUsername(&quot;Charlie Brown&quot;);</span>
+<span class="nc" id="L63">            user3.setEmail(&quot;Charlie@gmail.com&quot;);</span>
+<span class="nc" id="L64">            user3.setPassword((&quot;Charlie123&quot;));</span>
+<span class="nc" id="L65">            user3.setPhoneNumber(&quot;5574354354&quot;);</span>
+<span class="nc" id="L66">            user3.setRole(Role.STOCK_ADMIN);</span>
+<span class="nc" id="L67">            userService.create(user3);</span>
+
+            // Usuario 4
+<span class="nc" id="L70">            User user4 = new User();</span>
+<span class="nc" id="L71">            user4.setUsername(&quot;Diana Prince&quot;);</span>
+<span class="nc" id="L72">            user4.setEmail(&quot;Diana@gmail.com&quot;);</span>
+<span class="nc" id="L73">            user4.setPassword((&quot;Diana123&quot;));</span>
+<span class="nc" id="L74">            user4.setPhoneNumber(&quot;3114569872&quot;);</span>
+<span class="nc" id="L75">            user4.setRole(Role.EMPLOYEE);</span>
+<span class="nc" id="L76">            user4.setPosition(positions.get(1));</span>
+<span class="nc" id="L77">            userService.create(user4);</span>
+
+            // Usuario 5
+<span class="nc" id="L80">            User user5 = new User();</span>
+<span class="nc" id="L81">            user5.setUsername(&quot;Ethan Hunt&quot;);</span>
+<span class="nc" id="L82">            user5.setEmail(&quot;Ethan@gmail.com&quot;);</span>
+<span class="nc" id="L83">            user5.setPassword((&quot;Ethan123&quot;));</span>
+<span class="nc" id="L84">            user5.setPhoneNumber(&quot;3111234567&quot;);</span>
+<span class="nc" id="L85">            user5.setRole(Role.EMPLOYEE);</span>
+<span class="nc" id="L86">            user5.setPosition(positions.get(2));</span>
+<span class="nc" id="L87">            userService.create(user5);</span>
+
+            // Usuario 6
+<span class="nc" id="L90">            User user6 = new User();</span>
+<span class="nc" id="L91">            user6.setUsername(&quot;Camilo Gutierrez&quot;);</span>
+<span class="nc" id="L92">            user6.setEmail(&quot;Gutierrez@gmail.com&quot;);</span>
+<span class="nc" id="L93">            user6.setPassword((&quot;Gutierrez123&quot;));</span>
+<span class="nc" id="L94">            user6.setPhoneNumber(&quot;3111234567&quot;);</span>
+<span class="nc" id="L95">            user6.setRole(Role.EMPLOYEE);</span>
+<span class="nc" id="L96">            user6.setPosition(positions.get(3));</span>
+<span class="nc" id="L97">            userService.create(user6);</span>
+
+<span class="nc" id="L99">            System.out.println(&quot;Seeder de usuarios ejecutado correctamente. Se han creado 6 usuarios.&quot;);</span>
+        }
+<span class="fc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

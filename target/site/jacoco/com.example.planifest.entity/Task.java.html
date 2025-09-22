@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Task.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.entity</a> &gt; <span class="el_source">Task.java</span></div><h1>Task.java</h1><pre class="source lang-java linenums">package com.example.planifest.entity;
+
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.example.planifest.enums.TaskStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+@Table(name = &quot;tasks&quot;)
+<span class="fc" id="L28">public class Task {</span>
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = &quot;task_seq&quot;)
+    @SequenceGenerator(name = &quot;task_seq&quot;, sequenceName = &quot;task_seq&quot;, allocationSize = 1)
+    @Column(name = &quot;task_id&quot;, nullable = false, updatable = false, insertable = true)
+    private Long id;
+
+    @Column(length = 50, nullable = false)
+    private String name;
+
+    @Column(name = &quot;description&quot;, nullable = false)
+    private String description;
+
+    @DateTimeFormat(pattern = &quot;yyyy-MM-dd'T'HH:mm&quot;)
+    @Column(name = &quot;date&quot;, nullable = false)
+    private LocalDateTime date;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TaskStatus status;
+
+    // Relationship
+    @ManyToOne
+    @JoinColumn(name = &quot;user_id&quot;, nullable = false)
+    @JsonBackReference
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;event_id&quot;, nullable = false)
+    private Event event;
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

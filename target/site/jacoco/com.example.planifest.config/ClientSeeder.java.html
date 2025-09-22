@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClientSeeder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.config</a> &gt; <span class="el_source">ClientSeeder.java</span></div><h1>ClientSeeder.java</h1><pre class="source lang-java linenums">package com.example.planifest.config;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import com.example.planifest.entity.Client;
+import com.example.planifest.service.ClientServiceImp;
+
+@Component
+@Order(1)
+public class ClientSeeder implements CommandLineRunner {
+
+    private final ClientServiceImp clientService;
+
+<span class="fc" id="L16">    public ClientSeeder(ClientServiceImp clientService) {</span>
+<span class="fc" id="L17">        this.clientService = clientService;</span>
+<span class="fc" id="L18">    }</span>
+
+    @Override
+    public void run(String... args) throws Exception {
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">        if (clientService.count() &gt; 0) {</span>
+<span class="fc" id="L23">            System.out.println(&quot;El seeder de cliente ya se había ejecutado.&quot;);</span>
+<span class="fc" id="L24">            return; </span>
+        }
+
+<span class="nc" id="L27">        createClient(&quot;Sleider Rodriguez&quot;, &quot;sleider1605@gmail.com&quot;, &quot;313298432&quot;);</span>
+<span class="nc" id="L28">        createClient(&quot;Juan Barragan&quot;, &quot;Barraganj@gmail.com&quot;, &quot;3143992629&quot;);</span>
+<span class="nc" id="L29">        createClient(&quot;James Riascos&quot;, &quot;Riascosj@gmail.com&quot;, &quot;3143932623&quot;);</span>
+<span class="nc" id="L30">        createClient(&quot;Sara Garzón&quot;, &quot;Sara@gmail.com&quot;, &quot;3133932683&quot;);</span>
+<span class="nc" id="L31">        createClient(&quot;Daliana Trujillo&quot;, &quot;trujillo@gmail.com&quot;, &quot;3103934623&quot;);</span>
+
+<span class="nc" id="L33">        System.out.println(&quot;El seeder de cliente fue ejecutado.&quot;);</span>
+<span class="nc" id="L34">    }</span>
+
+    private void createClient(String name, String email, String phone) {
+<span class="nc" id="L37">        Client client = new Client();</span>
+<span class="nc" id="L38">        client.setName(name);</span>
+<span class="nc" id="L39">        client.setEmail(email);</span>
+<span class="nc" id="L40">        client.setPhone(phone);</span>
+<span class="nc" id="L41">        clientService.create(client);</span>
+<span class="nc" id="L42">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

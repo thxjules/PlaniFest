@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskImportStrategy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.service.importstrategy</a> &gt; <span class="el_source">TaskImportStrategy.java</span></div><h1>TaskImportStrategy.java</h1><pre class="source lang-java linenums">package com.example.planifest.service.importstrategy;
+
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.planifest.entity.Event;
+import com.example.planifest.entity.Task;
+import com.example.planifest.entity.User;
+import com.example.planifest.enums.TaskStatus;
+import com.example.planifest.repository.TaskRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
+public class TaskImportStrategy implements ImportStrategy&lt;Task&gt; {
+
+    private final TaskRepository taskRepository;
+<span class="fc" id="L33">    private final ObjectMapper objectMapper = new ObjectMapper();</span>
+
+    // ✅ Soporta múltiples formatos de fecha
+<span class="fc" id="L36">    private static final List&lt;DateTimeFormatter&gt; FORMATOS_FECHA = Arrays.asList(</span>
+<span class="fc" id="L37">            DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd'T'HH:mm&quot;),</span>
+<span class="fc" id="L38">            DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy HH:mm&quot;),</span>
+<span class="fc" id="L39">            DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy H:mm&quot;)</span>
+    );
+
+<span class="fc" id="L42">    public TaskImportStrategy(TaskRepository taskRepository) {</span>
+<span class="fc" id="L43">        this.taskRepository = taskRepository;</span>
+<span class="fc" id="L44">    }</span>
+
+    @Override
+    public List&lt;String&gt; validate(MultipartFile file) {
+<span class="nc" id="L48">        List&lt;String&gt; errores = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="nc" id="L50">            String name = file.getOriginalFilename();</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">            if (name == null) {</span>
+<span class="nc" id="L52">                errores.add(&quot;Archivo inválido&quot;);</span>
+<span class="nc" id="L53">                return errores;</span>
+            }
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (name.endsWith(&quot;.json&quot;)) {</span>
+<span class="nc" id="L57">                List&lt;Task&gt; tasks = Arrays.asList(objectMapper.readValue(file.getInputStream(), Task[].class));</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                for (Task t : tasks) {</span>
+<span class="nc" id="L59">                    validarTask(t, errores);</span>
+<span class="nc" id="L60">                }</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            } else if (name.endsWith(&quot;.csv&quot;)) {</span>
+<span class="nc" id="L62">                Reader reader = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);</span>
+<span class="nc" id="L63">                CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT</span>
+<span class="nc" id="L64">                        .withDelimiter(';')</span>
+<span class="nc" id="L65">                        .withFirstRecordAsHeader()</span>
+<span class="nc" id="L66">                        .withIgnoreHeaderCase()</span>
+<span class="nc" id="L67">                        .withTrim());</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                for (CSVRecord record : parser) {</span>
+<span class="nc" id="L69">                    Task t = csvToTask(record);</span>
+<span class="nc" id="L70">                    validarTask(t, errores);</span>
+<span class="nc" id="L71">                }</span>
+<span class="nc" id="L72">                parser.close();</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            } else if (name.endsWith(&quot;.xlsx&quot;)) {</span>
+<span class="nc" id="L74">                Workbook workbook = new XSSFWorkbook(file.getInputStream());</span>
+<span class="nc" id="L75">                Sheet sheet = workbook.getSheetAt(0);</span>
+<span class="nc" id="L76">                int rowNum = 0;</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                for (Row row : sheet) {</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                    if (rowNum++ == 0) continue; // saltar encabezado</span>
+<span class="nc" id="L79">                    Task t = excelToTask(row);</span>
+<span class="nc" id="L80">                    validarTask(t, errores);</span>
+<span class="nc" id="L81">                }</span>
+<span class="nc" id="L82">                workbook.close();</span>
+<span class="nc" id="L83">            } else {</span>
+<span class="nc" id="L84">                errores.add(&quot;Formato no soportado: &quot; + name);</span>
+            }
+<span class="nc" id="L86">        } catch (Exception e) {</span>
+<span class="nc" id="L87">            errores.add(&quot;Error leyendo el archivo: &quot; + e.getMessage());</span>
+<span class="nc" id="L88">        }</span>
+<span class="nc" id="L89">        return errores;</span>
+    }
+
+    @Override
+    public void saveAll(MultipartFile file) {
+        try {
+<span class="nc" id="L95">            String name = file.getOriginalFilename();</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            if (name == null) throw new RuntimeException(&quot;Archivo inválido&quot;);</span>
+
+<span class="nc" id="L98">            List&lt;Task&gt; tasks = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            if (name.endsWith(&quot;.json&quot;)) {</span>
+<span class="nc" id="L101">                tasks = Arrays.asList(objectMapper.readValue(file.getInputStream(), Task[].class));</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            } else if (name.endsWith(&quot;.csv&quot;)) {</span>
+<span class="nc" id="L103">                Reader reader = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);</span>
+<span class="nc" id="L104">                CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT</span>
+<span class="nc" id="L105">                        .withDelimiter(';')</span>
+<span class="nc" id="L106">                        .withFirstRecordAsHeader()</span>
+<span class="nc" id="L107">                        .withIgnoreHeaderCase()</span>
+<span class="nc" id="L108">                        .withTrim());</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">                for (CSVRecord record : parser) {</span>
+<span class="nc" id="L110">                    tasks.add(csvToTask(record));</span>
+<span class="nc" id="L111">                }</span>
+<span class="nc" id="L112">                parser.close();</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            } else if (name.endsWith(&quot;.xlsx&quot;)) {</span>
+<span class="nc" id="L114">                Workbook workbook = new XSSFWorkbook(file.getInputStream());</span>
+<span class="nc" id="L115">                Sheet sheet = workbook.getSheetAt(0);</span>
+<span class="nc" id="L116">                int rowNum = 0;</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                for (Row row : sheet) {</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">                    if (rowNum++ == 0) continue; // encabezado</span>
+<span class="nc" id="L119">                    tasks.add(excelToTask(row));</span>
+<span class="nc" id="L120">                }</span>
+<span class="nc" id="L121">                workbook.close();</span>
+<span class="nc" id="L122">            } else {</span>
+<span class="nc" id="L123">                throw new RuntimeException(&quot;Formato no soportado: &quot; + name);</span>
+            }
+
+            // ✅ Guardar en BD evitando duplicados
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            for (Task t : tasks) {</span>
+<span class="nc" id="L128">                boolean exists = taskRepository.existsByNameAndDateAndUser_IdAndEvent_Id(</span>
+<span class="nc" id="L129">                        t.getName(), t.getDate(), t.getUser().getId(), t.getEvent().getId()</span>
+                );
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                if (!exists) taskRepository.save(t);</span>
+<span class="nc" id="L132">            }</span>
+
+<span class="nc" id="L134">        } catch (Exception e) {</span>
+<span class="nc" id="L135">            throw new RuntimeException(&quot;Error guardando tareas: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L136">        }</span>
+<span class="nc" id="L137">    }</span>
+
+    // ================== Helpers ==================
+
+    private void validarTask(Task t, List&lt;String&gt; errores) {
+<span class="nc bnc" id="L142" title="All 4 branches missed.">        if (t.getName() == null || t.getName().isEmpty())</span>
+<span class="nc" id="L143">            errores.add(&quot;Nombre vacío&quot;);</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (t.getDate() == null)</span>
+<span class="nc" id="L145">            errores.add(&quot;Fecha inválida para tarea: &quot; + t.getName());</span>
+<span class="nc bnc" id="L146" title="All 4 branches missed.">        if (t.getUser() == null || t.getUser().getId() == null)</span>
+<span class="nc" id="L147">            errores.add(&quot;Usuario no definido para tarea: &quot; + t.getName());</span>
+<span class="nc bnc" id="L148" title="All 4 branches missed.">        if (t.getEvent() == null || t.getEvent().getId() == null)</span>
+<span class="nc" id="L149">            errores.add(&quot;Evento no definido para tarea: &quot; + t.getName());</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        if (t.getStatus() == null)</span>
+<span class="nc" id="L151">            errores.add(&quot;Estado no definido para tarea: &quot; + t.getName());</span>
+<span class="nc" id="L152">    }</span>
+
+    private LocalDateTime parseFecha(String fechaStr) {
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        for (DateTimeFormatter f : FORMATOS_FECHA) {</span>
+            try {
+<span class="nc" id="L157">                return LocalDateTime.parse(fechaStr, f);</span>
+<span class="nc" id="L158">            } catch (Exception ignored) {}</span>
+<span class="nc" id="L159">        }</span>
+<span class="nc" id="L160">        throw new RuntimeException(&quot;Formato de fecha no soportado: &quot; + fechaStr);</span>
+    }
+
+    private Task csvToTask(CSVRecord record) {
+<span class="nc" id="L164">        Task t = new Task();</span>
+<span class="nc" id="L165">        t.setName(record.get(&quot;name&quot;));</span>
+<span class="nc" id="L166">        t.setDescription(record.get(&quot;description&quot;));</span>
+<span class="nc" id="L167">        t.setStatus(TaskStatus.valueOf(record.get(&quot;status&quot;).toUpperCase()));</span>
+
+        // ✅ ahora soporta múltiples formatos de fecha
+<span class="nc" id="L170">        t.setDate(parseFecha(record.get(&quot;date&quot;)));</span>
+
+<span class="nc" id="L172">        User u = new User();</span>
+<span class="nc" id="L173">        u.setId(Long.parseLong(record.get(&quot;user_id&quot;)));</span>
+<span class="nc" id="L174">        t.setUser(u);</span>
+
+<span class="nc" id="L176">        Event e = new Event();</span>
+<span class="nc" id="L177">        e.setId(Long.parseLong(record.get(&quot;event_id&quot;)));</span>
+<span class="nc" id="L178">        t.setEvent(e);</span>
+
+<span class="nc" id="L180">        return t;</span>
+    }
+
+    private Task excelToTask(Row row) {
+<span class="nc" id="L184">        Task t = new Task();</span>
+<span class="nc" id="L185">        t.setDate(row.getCell(0).getLocalDateTimeCellValue());</span>
+<span class="nc" id="L186">        t.setDescription(row.getCell(1).getStringCellValue());</span>
+<span class="nc" id="L187">        t.setName(row.getCell(2).getStringCellValue());</span>
+<span class="nc" id="L188">        t.setStatus(TaskStatus.valueOf(row.getCell(3).getStringCellValue().toUpperCase()));</span>
+
+<span class="nc" id="L190">        User u = new User();</span>
+<span class="nc" id="L191">        u.setId((long) row.getCell(4).getNumericCellValue());</span>
+<span class="nc" id="L192">        t.setUser(u);</span>
+
+<span class="nc" id="L194">        Event e = new Event();</span>
+<span class="nc" id="L195">        e.setId((long) row.getCell(5).getNumericCellValue());</span>
+<span class="nc" id="L196">        t.setEvent(e);</span>
+
+<span class="nc" id="L198">        return t;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

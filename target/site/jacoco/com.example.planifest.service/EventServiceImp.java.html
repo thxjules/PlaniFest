@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventServiceImp.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.service</a> &gt; <span class="el_source">EventServiceImp.java</span></div><h1>EventServiceImp.java</h1><pre class="source lang-java linenums">package com.example.planifest.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.planifest.entity.Event;
+import com.example.planifest.entity.EventSupply;
+import com.example.planifest.entity.Supply;
+import com.example.planifest.repository.EventRepository;
+import com.example.planifest.repository.EventSupplyRepository;
+import com.example.planifest.repository.SupplyRepository;
+import com.example.planifest.service.AuditService;
+import com.example.planifest.service.dao.Idao;
+
+@Service
+public class EventServiceImp implements Idao&lt;Event, Long&gt; {
+
+    private final EventRepository eventRepository;
+    private final SupplyRepository supplyRepository;
+    private final EventSupplyRepository eventSupplyRepository;
+    private final AuditService auditService;
+
+    public EventServiceImp(EventRepository eventRepository, SupplyRepository supplyRepository,
+<span class="fc" id="L27">        EventSupplyRepository eventSupplyRepository, AuditService auditService) {</span>
+<span class="fc" id="L28">        this.eventRepository = eventRepository;</span>
+<span class="fc" id="L29">        this.supplyRepository = supplyRepository;</span>
+<span class="fc" id="L30">        this.eventSupplyRepository = eventSupplyRepository;</span>
+<span class="fc" id="L31">        this.auditService = auditService;</span>
+
+<span class="fc" id="L33">    }</span>
+
+    @Override
+    public List&lt;Event&gt; getAll() {
+<span class="fc" id="L37">        return eventRepository.findAll();</span>
+    }
+
+    public List&lt;Event&gt; findByClientId(Long clientId) {
+<span class="nc" id="L41">        return eventRepository.findByClientId(clientId);</span>
+    }
+
+    @Override
+    @Transactional
+    public void create(Event event) {
+<span class="nc" id="L47">        validateEvent(event);</span>
+
+        // Asignar el evento a cada EventSupply ANTES de guardar el evento
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        for (EventSupply es : event.getEventSupplies()) {</span>
+<span class="nc bnc" id="L51" title="All 4 branches missed.">            if (es.getSupply() == null || es.getSupply().getId() == null) {</span>
+<span class="nc" id="L52">                throw new RuntimeException(&quot;Debe seleccionar un suministro válido.&quot;);</span>
+            }
+
+<span class="nc" id="L55">            Supply supply = supplyRepository.findById(es.getSupply().getId())</span>
+<span class="nc" id="L56">                    .orElseThrow(() -&gt; new RuntimeException(&quot;El suministro no se ha encontrado.&quot;));</span>
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (es.getQuantitySupply() &lt;= 0) {</span>
+<span class="nc" id="L59">                throw new RuntimeException(&quot;La cantidad del suministro debe ser mayor a 0.&quot;);</span>
+            }
+
+<span class="nc bnc" id="L62" title="All 2 branches missed.">            if (es.getQuantitySupply() &gt; supply.getCurrentStock()) {</span>
+<span class="nc" id="L63">                throw new RuntimeException(&quot;La cantidad solicitada excede el stock disponible.&quot;);</span>
+            }
+
+            // Descontar stock
+<span class="nc" id="L67">            supply.setCurrentStock(supply.getCurrentStock() - es.getQuantitySupply());</span>
+<span class="nc" id="L68">            supplyRepository.save(supply);</span>
+
+            // Asignar relaciones
+<span class="nc" id="L71">            es.setEvent(event); // ← Aquí usamos el objeto original, no el savedEvent</span>
+<span class="nc" id="L72">            es.setSupply(supply);</span>
+<span class="nc" id="L73">        }</span>
+
+<span class="nc" id="L75">       Event savedEvent = eventRepository.save(event);</span>
+<span class="nc" id="L76">        auditService.logAction(&quot;CREATE&quot;, &quot;Event&quot;, savedEvent.getId());    </span>
+
+<span class="nc" id="L78">    }</span>
+
+    public Event createAndReturn(Event event) {
+<span class="nc" id="L81">        validateEvent(event);</span>
+<span class="nc" id="L82">        return eventRepository.save(event);</span>
+    }
+
+    @Override
+    public void update(Event event) {
+<span class="nc bnc" id="L87" title="All 4 branches missed.">        if (event.getId() == null || !eventRepository.existsById(event.getId())) {</span>
+<span class="nc" id="L88">            throw new RuntimeException(&quot;No se puede actualizar el evento porque no existe.&quot;);</span>
+        }
+<span class="nc" id="L90">        validateEvent(event);</span>
+<span class="nc" id="L91">        eventRepository.save(event);</span>
+<span class="nc" id="L92">    }</span>
+    /*
+     * @Override
+     * public void deleteById(Long id) {
+     * if (!eventRepository.existsById(id)) {
+     * throw new
+     * RuntimeException(&quot;No se puede eliminar el evento porque no existe.&quot;);
+     * }
+     * eventRepository.deleteById(id);
+     * }
+     */
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+<span class="nc" id="L107">        Event event = eventRepository.findById(id)</span>
+<span class="nc" id="L108">                .orElseThrow(() -&gt; new RuntimeException(&quot;No se puede eliminar el evento porque no existe.&quot;));</span>
+
+<span class="nc" id="L110">        List&lt;EventSupply&gt; supplies = eventSupplyRepository.findByEventId(id);</span>
+
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        for (EventSupply es : supplies) {</span>
+<span class="nc" id="L113">            Supply supply = es.getSupply();</span>
+<span class="nc" id="L114">            supply.setCurrentStock(supply.getCurrentStock() + es.getQuantitySupply());</span>
+<span class="nc" id="L115">            supplyRepository.save(supply);</span>
+<span class="nc" id="L116">        }</span>
+
+<span class="nc" id="L118">        eventSupplyRepository.deleteAll(supplies);</span>
+<span class="nc" id="L119">        eventRepository.delete(event);</span>
+<span class="nc" id="L120">    }</span>
+
+    public long count() {
+<span class="nc" id="L123">        return eventRepository.count();</span>
+
+    }
+
+    public Optional&lt;Event&gt; findById(Long id) {
+<span class="nc" id="L128">        return eventRepository.findById(id);</span>
+    }
+
+    /* Validaciones de los atributos del Evento */
+
+    private void validateEvent(Event event) {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if (isBlank(event.getEventName())) {</span>
+<span class="nc" id="L135">            throw new RuntimeException(&quot;El nombre del evento es obligatorio.&quot;);</span>
+        }
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (isBlank(event.getDescription())) {</span>
+<span class="nc" id="L138">            throw new RuntimeException(&quot;La descripción del evento es obligatoria.&quot;);</span>
+        }
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        if (event.getDate() == null) {</span>
+<span class="nc" id="L141">            throw new RuntimeException(&quot;La fecha del evento es obligatoria.&quot;);</span>
+        }
+<span class="nc bnc" id="L143" title="All 4 branches missed.">        if (event.getStartTime() == null || event.getEndTime() == null) {</span>
+<span class="nc" id="L144">            throw new RuntimeException(&quot;La hora de inicio y fin del evento es obligatoria.&quot;);</span>
+        }
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        if (event.getEndTime().isBefore(event.getStartTime())) {</span>
+<span class="nc" id="L147">            throw new RuntimeException(&quot;La hora de fin no puede ser anterior a la hora de inicio.&quot;);</span>
+        }
+<span class="nc bnc" id="L149" title="All 4 branches missed.">        if (event.getGuestCount() == null || event.getGuestCount() &lt;= 0) {</span>
+<span class="nc" id="L150">            throw new RuntimeException(&quot;El número de invitados debe ser mayor a cero.&quot;);</span>
+        }
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (event.getLocation() == null) {</span>
+<span class="nc" id="L153">            throw new RuntimeException(&quot;La ubicación del evento es obligatoria.&quot;);</span>
+        }
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        if (event.getStatus() == null) {</span>
+<span class="nc" id="L156">            throw new RuntimeException(&quot;El estado del evento es obligatorio.&quot;);</span>
+        }
+<span class="nc bnc" id="L158" title="All 4 branches missed.">        if (event.getClient() == null || event.getClient().getId() == null) {</span>
+<span class="nc" id="L159">            throw new RuntimeException(&quot;El evento debe tener un cliente válido asignado.&quot;);</span>
+        }
+<span class="nc" id="L161">    }</span>
+
+    private boolean isBlank(String str) {
+<span class="nc bnc" id="L164" title="All 4 branches missed.">        return str == null || str.isBlank();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

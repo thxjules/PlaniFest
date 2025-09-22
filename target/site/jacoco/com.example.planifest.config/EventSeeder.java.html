@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventSeeder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.config</a> &gt; <span class="el_source">EventSeeder.java</span></div><h1>EventSeeder.java</h1><pre class="source lang-java linenums">package com.example.planifest.config;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import com.example.planifest.entity.Client;
+import com.example.planifest.entity.Event;
+import com.example.planifest.entity.EventSupply;
+import com.example.planifest.entity.PlaniService;
+import com.example.planifest.entity.Supply;
+import com.example.planifest.enums.EventStatus;
+import com.example.planifest.repository.EventSupplyRepository;
+import com.example.planifest.service.ClientServiceImp;
+import com.example.planifest.service.EventServiceImp;
+import com.example.planifest.service.PlaniServiceImp;
+import com.example.planifest.service.SupplyServiceImp;
+
+@Component
+@Order(5)
+public class EventSeeder implements CommandLineRunner {
+
+    private final EventServiceImp eventService;
+    private final ClientServiceImp clientService;
+    private final SupplyServiceImp supplyService;
+    private final PlaniServiceImp planiService;
+    private final EventSupplyRepository eventSupplyRepository;
+
+<span class="fc" id="L33">    public EventSeeder(EventServiceImp eventService, ClientServiceImp clientService, SupplyServiceImp supplyService, PlaniServiceImp planiService, EventSupplyRepository eventSupplyRepository){</span>
+        
+<span class="fc" id="L35">        this.eventService = eventService;</span>
+<span class="fc" id="L36">        this.clientService = clientService;</span>
+<span class="fc" id="L37">        this.supplyService = supplyService;</span>
+<span class="fc" id="L38">        this.planiService = planiService;</span>
+<span class="fc" id="L39">        this.eventSupplyRepository = eventSupplyRepository;</span>
+<span class="fc" id="L40">    }</span>
+
+    @Override
+    public void run(String... args) throws Exception {
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (eventService.getAll().isEmpty()) {</span>
+
+<span class="nc" id="L46">            List&lt;Client&gt; clients = clientService.getAll();</span>
+<span class="nc" id="L47">            List&lt;Supply&gt; supplies = supplyService.getAll();</span>
+<span class="nc" id="L48">            List&lt;PlaniService&gt; services = planiService.getAll();</span>
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">             if (eventService.count() &gt; 0) {</span>
+<span class="nc" id="L51">            System.out.println(&quot;El Seder ya se había ejecutado&quot;);</span>
+<span class="nc" id="L52">             return; </span>
+        }
+
+<span class="nc bnc" id="L55" title="All 2 branches missed.">            if (clients.size() &lt; 5) {</span>
+<span class="nc" id="L56">                System.out.println(&quot;No hay suficientes clientes para asignar a los eventos.&quot;);</span>
+<span class="nc" id="L57">                return;</span>
+            }
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">            if (supplies.size() &lt; 4) {</span>
+<span class="nc" id="L61">                System.out.println(&quot;No hay suficientes insumos para asignar a los eventos.&quot;);</span>
+<span class="nc" id="L62">                return;</span>
+            }
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            if (services.size() &lt; 3) {</span>
+<span class="nc" id="L65">                System.out.println(&quot;No hay suficientes servicios para asignar a los eventos.&quot;);</span>
+<span class="nc" id="L66">                return;</span>
+            }
+
+            // Asignaciones por índice
+<span class="nc" id="L70">            Event event1 = new Event();</span>
+<span class="nc" id="L71">            event1.setEventName(&quot;Evento de Música&quot;);</span>
+<span class="nc" id="L72">            event1.setDescription(&quot;Concierto de rock en vivo&quot;);</span>
+<span class="nc" id="L73">            event1.setDate(LocalDate.of(2025, 1, 20));</span>
+<span class="nc" id="L74">            event1.setStartTime(LocalTime.of(18, 0));</span>
+<span class="nc" id="L75">            event1.setEndTime(LocalTime.of(23, 0));</span>
+<span class="nc" id="L76">            event1.setGuestCount(150);</span>
+<span class="nc" id="L77">            event1.setLocation(&quot;Auditorio Central&quot;);</span>
+<span class="nc" id="L78">            event1.setStatus(EventStatus.INACTIVE);</span>
+<span class="nc" id="L79">            event1.setClient(clients.get(0));</span>
+<span class="nc" id="L80">            event1.setServices(List.of(services.get(0)));</span>
+<span class="nc" id="L81">            eventService.create(event1);</span>
+<span class="nc" id="L82">eventSupplyRepository.save(new EventSupply(event1, supplies.get(0), 4)); // 50 globos</span>
+<span class="nc" id="L83">eventSupplyRepository.save(new EventSupply(event1, supplies.get(1), 7)); // 100 pulseras // Globos, pulseras</span>
+
+<span class="nc" id="L85">            Event event2 = new Event();</span>
+<span class="nc" id="L86">            event2.setEventName(&quot;Bodas de Plata&quot;);</span>
+<span class="nc" id="L87">            event2.setDescription(&quot;Aniversario de 20 años de casados&quot;);</span>
+<span class="nc" id="L88">            event2.setDate(LocalDate.of(2025, 9, 20));</span>
+<span class="nc" id="L89">            event2.setStartTime(LocalTime.of(17, 0));</span>
+<span class="nc" id="L90">            event2.setEndTime(LocalTime.of(23, 0));</span>
+<span class="nc" id="L91">            event2.setGuestCount(80);</span>
+<span class="nc" id="L92">            event2.setLocation(&quot;Finca campestre Lagos&quot;);</span>
+<span class="nc" id="L93">            event2.setStatus(EventStatus.ACTIVE);</span>
+<span class="nc" id="L94">            event2.setClient(clients.get(1));</span>
+<span class="nc" id="L95">            event2.setServices(List.of(services.get(1)));</span>
+<span class="nc" id="L96">            eventService.create(event2);</span>
+<span class="nc" id="L97">            eventSupplyRepository.save(new EventSupply(event2, supplies.get(1), 2)); // Fuentes de agua</span>
+<span class="nc" id="L98">            eventSupplyRepository.save(new EventSupply(event2, supplies.get(0), 2)); </span>
+
+<span class="nc" id="L100">            Event event3 = new Event();</span>
+<span class="nc" id="L101">            event3.setEventName(&quot;Fiesta 15 años&quot;);</span>
+<span class="nc" id="L102">            event3.setDescription(&quot;Fiesta de 15 años de Camila Torreón&quot;);</span>
+<span class="nc" id="L103">            event3.setDate(LocalDate.of(2025, 9, 12));</span>
+<span class="nc" id="L104">            event3.setStartTime(LocalTime.of(19, 0));</span>
+<span class="nc" id="L105">            event3.setEndTime(LocalTime.of(23, 30));</span>
+<span class="nc" id="L106">            event3.setGuestCount(200);</span>
+<span class="nc" id="L107">            event3.setLocation(&quot;Salón comunal Rincón de los Ángeles&quot;);</span>
+<span class="nc" id="L108">            event3.setStatus(EventStatus.ACTIVE);</span>
+<span class="nc" id="L109">            event3.setClient(clients.get(2));</span>
+<span class="nc" id="L110">            event3.setServices(List.of(services.get(2)));</span>
+<span class="nc" id="L111">            eventService.create(event3);</span>
+<span class="nc" id="L112">            eventSupplyRepository.save(new EventSupply(event3, supplies.get(3), 2)); </span>
+
+<span class="nc" id="L114">            Event event4 = new Event();</span>
+<span class="nc" id="L115">            event4.setEventName(&quot;Feria Gastronómica&quot;);</span>
+<span class="nc" id="L116">            event4.setDescription(&quot;Muestra de comida internacional&quot;);</span>
+<span class="nc" id="L117">            event4.setDate(LocalDate.of(2025, 6, 20));</span>
+<span class="nc" id="L118">            event4.setStartTime(LocalTime.of(12, 0));</span>
+<span class="nc" id="L119">            event4.setEndTime(LocalTime.of(20, 0));</span>
+<span class="nc" id="L120">            event4.setGuestCount(300);</span>
+<span class="nc" id="L121">            event4.setLocation(&quot;Parque Principal&quot;);</span>
+<span class="nc" id="L122">            event4.setStatus(EventStatus.ACTIVE);</span>
+<span class="nc" id="L123">            event4.setClient(clients.get(3));</span>
+<span class="nc" id="L124">            event4.setServices(List.of(services.get(0), services.get(1)));</span>
+<span class="nc" id="L125">            eventService.create(event4);</span>
+<span class="nc" id="L126">            eventSupplyRepository.save(new EventSupply(event4, supplies.get(0), 3)); </span>
+
+        }
+<span class="fc" id="L129">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

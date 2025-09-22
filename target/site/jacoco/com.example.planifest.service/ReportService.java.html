@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReportService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.service</a> &gt; <span class="el_source">ReportService.java</span></div><h1>ReportService.java</h1><pre class="source lang-java linenums">package com.example.planifest.service;
+import java.io.ByteArrayOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Base64;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.xhtmlrenderer.pdf.ITextRenderer;
+
+import com.lowagie.text.DocumentException;
+
+@Service
+public class ReportService {
+
+    private final SpringTemplateEngine templateEngine;
+
+<span class="fc" id="L20">    public ReportService(SpringTemplateEngine templateEngine) {</span>
+<span class="fc" id="L21">        this.templateEngine = templateEngine;</span>
+<span class="fc" id="L22">    }</span>
+    public String encodeImageToBase64(String path) throws Exception {
+<span class="nc" id="L24">    byte[] imageBytes = Files.readAllBytes(Paths.get(path));</span>
+<span class="nc" id="L25">    return Base64.getEncoder().encodeToString(imageBytes);</span>
+}
+    public byte[] generatePdf(String templateName, Map&lt;String, Object&gt; variables) throws DocumentException {
+<span class="nc" id="L28">        Context context = new Context();</span>
+<span class="nc" id="L29">        context.setVariables(variables);</span>
+
+<span class="nc" id="L31">        String htmlContent = templateEngine.process(templateName, context);</span>
+
+<span class="nc" id="L33">        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {</span>
+<span class="nc" id="L34">            ITextRenderer renderer = new ITextRenderer();</span>
+<span class="nc" id="L35">            renderer.setDocumentFromString(htmlContent);</span>
+<span class="nc" id="L36">            renderer.layout();</span>
+<span class="nc" id="L37">            renderer.createPDF(outputStream);</span>
+<span class="nc" id="L38">            return outputStream.toByteArray();</span>
+<span class="nc" id="L39">        } catch (Exception e) {</span>
+<span class="nc" id="L40">            throw new DocumentException(&quot;Error al generar PDF: &quot; + e.getMessage());</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

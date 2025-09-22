@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskSeeder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.config</a> &gt; <span class="el_source">TaskSeeder.java</span></div><h1>TaskSeeder.java</h1><pre class="source lang-java linenums">package com.example.planifest.config;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import com.example.planifest.entity.Event;
+import com.example.planifest.entity.Task;
+import com.example.planifest.entity.User;
+import com.example.planifest.enums.TaskStatus;
+import com.example.planifest.repository.EventRepository;
+import com.example.planifest.service.TaskServiceImp;
+import com.example.planifest.service.UserServiceImp;
+
+@Component
+@Order(8)
+public class TaskSeeder implements CommandLineRunner {
+
+    private final TaskServiceImp taskService;
+    private final UserServiceImp userService;
+    private final EventRepository eventRepository;
+
+<span class="fc" id="L27">    public TaskSeeder(TaskServiceImp taskService, EventRepository eventRepository, UserServiceImp userService) {</span>
+<span class="fc" id="L28">        this.taskService = taskService;</span>
+<span class="fc" id="L29">        this.userService = userService;</span>
+<span class="fc" id="L30">        this.eventRepository = eventRepository;</span>
+<span class="fc" id="L31">    }</span>
+
+    @Override
+    public void run(String... args) throws Exception {
+<span class="fc" id="L35">        System.out.println(&quot;Entrando al seeder de tareas&quot;);</span>
+
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (taskService.count() &gt; 0) {</span>
+<span class="fc" id="L38">            System.out.println(&quot;El Seeder ya se había ejecutado&quot;);</span>
+<span class="fc" id="L39">            return;</span>
+        }
+
+        // Traer Usuarios
+<span class="nc" id="L43">        List&lt;User&gt; users = userService.getAll();</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (users.size() &lt; 5) {</span>
+<span class="nc" id="L45">            System.out.println(&quot;No hay suficientes usuarios&quot;);</span>
+<span class="nc" id="L46">            return;</span>
+        }
+
+        // Buscar eventos por nombre
+<span class="nc" id="L50">        Optional&lt;Event&gt; eventoMusica = eventRepository.findByEventName(&quot;Evento de Música&quot;);</span>
+<span class="nc" id="L51">        Optional&lt;Event&gt; bodasDePlata = eventRepository.findByEventName(&quot;Bodas de Plata&quot;);</span>
+<span class="nc" id="L52">        Optional&lt;Event&gt; fiesta15 = eventRepository.findByEventName(&quot;Fiesta 15 años&quot;);</span>
+<span class="nc" id="L53">        Optional&lt;Event&gt; feriaGastronomica = eventRepository.findByEventName(&quot;Feria Gastronómica&quot;);</span>
+<span class="nc" id="L54">        Optional&lt;Event&gt; seminarioTech = eventRepository.findByEventName(&quot;Seminario de Tecnología&quot;);</span>
+
+        // Tarea 1
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if (taskService.findByName(&quot;Montaje del escenario&quot;).isEmpty()) {</span>
+<span class="nc" id="L58">            eventoMusica.ifPresent(event -&gt; {</span>
+<span class="nc" id="L59">                Task task = new Task();</span>
+<span class="nc" id="L60">                task.setName(&quot;Montaje del escenario&quot;);</span>
+<span class="nc" id="L61">                task.setDescription(&quot;Preparar el escenario para el evento&quot;);</span>
+<span class="nc" id="L62">                task.setDate(LocalDateTime.of(2025, 1, 20, 10, 0)); // 10:00 am</span>
+<span class="nc" id="L63">                task.setStatus(TaskStatus.PENDING);</span>
+<span class="nc" id="L64">                task.setUser(users.get(0));</span>
+<span class="nc" id="L65">                task.setEvent(event);</span>
+<span class="nc" id="L66">                taskService.create(task);</span>
+<span class="nc" id="L67">            });</span>
+        }
+
+        // Tarea 2
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (taskService.findByName(&quot;Sonido y luces&quot;).isEmpty()) {</span>
+<span class="nc" id="L72">            bodasDePlata.ifPresent(event -&gt; {</span>
+<span class="nc" id="L73">                Task task = new Task();</span>
+<span class="nc" id="L74">                task.setName(&quot;Sonido y luces&quot;);</span>
+<span class="nc" id="L75">                task.setDescription(&quot;Configurar el sonido y las luces del evento&quot;);</span>
+<span class="nc" id="L76">                task.setDate(LocalDateTime.of(2025, 9, 20, 15, 30)); // 3:30 pm</span>
+<span class="nc" id="L77">                task.setStatus(TaskStatus.PENDING);</span>
+<span class="nc" id="L78">                task.setUser(users.get(1));</span>
+<span class="nc" id="L79">                task.setEvent(event);</span>
+<span class="nc" id="L80">                taskService.create(task);</span>
+<span class="nc" id="L81">            });</span>
+        }
+
+        // Tarea 3
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (taskService.findByName(&quot;Manteles y mesas&quot;).isEmpty()) {</span>
+<span class="nc" id="L86">            fiesta15.ifPresent(event -&gt; {</span>
+<span class="nc" id="L87">                Task task = new Task();</span>
+<span class="nc" id="L88">                task.setName(&quot;Manteles y mesas&quot;);</span>
+<span class="nc" id="L89">                task.setDescription(&quot;Colocar los manteles y sillas antes del evento&quot;);</span>
+<span class="nc" id="L90">                task.setDate(LocalDateTime.of(2025, 9, 12, 9, 0)); // 9:00 am</span>
+<span class="nc" id="L91">                task.setStatus(TaskStatus.PENDING);</span>
+<span class="nc" id="L92">                task.setUser(users.get(2));</span>
+<span class="nc" id="L93">                task.setEvent(event);</span>
+<span class="nc" id="L94">                taskService.create(task);</span>
+<span class="nc" id="L95">            });</span>
+        }
+
+        // Tarea 4
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (taskService.findByName(&quot;Decoración del lugar&quot;).isEmpty()) {</span>
+<span class="nc" id="L100">            feriaGastronomica.ifPresent(event -&gt; {</span>
+<span class="nc" id="L101">                Task task = new Task();</span>
+<span class="nc" id="L102">                task.setName(&quot;Decoración del lugar&quot;);</span>
+<span class="nc" id="L103">                task.setDescription(&quot;Decorar el lugar para el evento&quot;);</span>
+<span class="nc" id="L104">                task.setDate(LocalDateTime.of(2025, 6, 20, 8, 0)); // 8:00 am</span>
+<span class="nc" id="L105">                task.setStatus(TaskStatus.IN_PROGRESS);</span>
+<span class="nc" id="L106">                task.setUser(users.get(3));</span>
+<span class="nc" id="L107">                task.setEvent(event);</span>
+<span class="nc" id="L108">                taskService.create(task);</span>
+<span class="nc" id="L109">            });</span>
+        }
+
+        // Tarea 5
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (taskService.findByName(&quot;Revisión de seguridad&quot;).isEmpty()) {</span>
+<span class="nc" id="L114">            seminarioTech.ifPresent(event -&gt; {</span>
+<span class="nc" id="L115">                Task task = new Task();</span>
+<span class="nc" id="L116">                task.setName(&quot;Revisión de seguridad&quot;);</span>
+<span class="nc" id="L117">                task.setDescription(&quot;Revisar la seguridad del lugar para el evento&quot;);</span>
+<span class="nc" id="L118">                task.setDate(LocalDateTime.of(2025, 8, 10, 14, 0)); // 2:00 pm</span>
+<span class="nc" id="L119">                task.setStatus(TaskStatus.PENDING);</span>
+<span class="nc" id="L120">                task.setUser(users.get(4));</span>
+<span class="nc" id="L121">                task.setEvent(event);</span>
+<span class="nc" id="L122">                taskService.create(task);</span>
+<span class="nc" id="L123">            });</span>
+        }
+
+<span class="nc" id="L126">        System.out.println(&quot;Seeder de tareas ejecutado (modo seguro por nombre).&quot;);</span>
+<span class="nc" id="L127">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

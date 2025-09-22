@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ImportExportService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">planifest</a> &gt; <a href="index.source.html" class="el_package">com.example.planifest.service</a> &gt; <span class="el_source">ImportExportService.java</span></div><h1>ImportExportService.java</h1><pre class="source lang-java linenums">package com.example.planifest.service;
+
+import com.example.planifest.service.exportstrategy.ExportStrategy;
+import com.example.planifest.service.exportstrategy.ExportStrategyFactory;
+import com.example.planifest.service.importstrategy.ImportStrategy;
+import com.example.planifest.service.importstrategy.ImportStrategyFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+@Service
+public class ImportExportService {
+
+    private final ImportStrategyFactory importFactory;
+    private final ExportStrategyFactory exportFactory;
+
+<span class="fc" id="L18">    public ImportExportService(ImportStrategyFactory importFactory, ExportStrategyFactory exportFactory) {</span>
+<span class="fc" id="L19">        this.importFactory = importFactory;</span>
+<span class="fc" id="L20">        this.exportFactory = exportFactory;</span>
+<span class="fc" id="L21">    }</span>
+
+    // ================== Importación ==================
+    public List&lt;String&gt; importData(MultipartFile file, Class&lt;?&gt; entityClass) {
+<span class="nc" id="L25">        ImportStrategy&lt;?&gt; strategy = importFactory.getStrategy(entityClass);</span>
+<span class="nc" id="L26">        return strategy.importData(file);</span>
+    }
+
+    // ================== Exportación ==================
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public String exportJson(Class&lt;?&gt; entityClass) throws Exception {
+<span class="nc" id="L32">        ExportStrategy strategy = exportFactory.getStrategy(entityClass);</span>
+<span class="nc" id="L33">        List&lt;?&gt; data = exportFactory.getData(entityClass);</span>
+<span class="nc" id="L34">        return strategy.exportToJson(data);</span>
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public byte[] exportCsv(Class&lt;?&gt; entityClass) throws Exception {
+<span class="nc" id="L39">        ExportStrategy strategy = exportFactory.getStrategy(entityClass);</span>
+<span class="nc" id="L40">        List&lt;?&gt; data = exportFactory.getData(entityClass);</span>
+<span class="nc" id="L41">        return strategy.exportToCsv(data);</span>
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public byte[] exportExcel(Class&lt;?&gt; entityClass) throws Exception {
+<span class="nc" id="L46">        ExportStrategy strategy = exportFactory.getStrategy(entityClass);</span>
+<span class="nc" id="L47">        List&lt;?&gt; data = exportFactory.getData(entityClass);</span>
+<span class="nc" id="L48">        return strategy.exportToExcel(data);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
