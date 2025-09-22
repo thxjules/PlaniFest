@@ -12,7 +12,6 @@ import com.example.planifest.entity.Supply;
 import com.example.planifest.repository.EventRepository;
 import com.example.planifest.repository.EventSupplyRepository;
 import com.example.planifest.repository.SupplyRepository;
-import com.example.planifest.service.AuditService;
 import com.example.planifest.service.dao.Idao;
 
 @Service
@@ -21,15 +20,12 @@ public class EventServiceImp implements Idao<Event, Long> {
     private final EventRepository eventRepository;
     private final SupplyRepository supplyRepository;
     private final EventSupplyRepository eventSupplyRepository;
-    private final AuditService auditService;
 
     public EventServiceImp(EventRepository eventRepository, SupplyRepository supplyRepository,
-        EventSupplyRepository eventSupplyRepository, AuditService auditService) {
+            EventSupplyRepository eventSupplyRepository) {
         this.eventRepository = eventRepository;
         this.supplyRepository = supplyRepository;
         this.eventSupplyRepository = eventSupplyRepository;
-        this.auditService = auditService;
-
     }
 
     @Override
@@ -40,47 +36,50 @@ public class EventServiceImp implements Idao<Event, Long> {
     public List<Event> findByClientId(Long clientId) {
         return eventRepository.findByClientId(clientId);
     }
+  
 
     @Override
-    @Transactional
-    public void create(Event event) {
-        validateEvent(event);
+@Transactional
+public void create(Event event) {
+    validateEvent(event);
 
-        // Asignar el evento a cada EventSupply ANTES de guardar el evento
-        for (EventSupply es : event.getEventSupplies()) {
-            if (es.getSupply() == null || es.getSupply().getId() == null) {
-                throw new RuntimeException("Debe seleccionar un suministro válido.");
-            }
-
-            Supply supply = supplyRepository.findById(es.getSupply().getId())
-                    .orElseThrow(() -> new RuntimeException("El suministro no se ha encontrado."));
-
-            if (es.getQuantitySupply() <= 0) {
-                throw new RuntimeException("La cantidad del suministro debe ser mayor a 0.");
-            }
-
-            if (es.getQuantitySupply() > supply.getCurrentStock()) {
-                throw new RuntimeException("La cantidad solicitada excede el stock disponible.");
-            }
-
-            // Descontar stock
-            supply.setCurrentStock(supply.getCurrentStock() - es.getQuantitySupply());
-            supplyRepository.save(supply);
-
-            // Asignar relaciones
-            es.setEvent(event); // ← Aquí usamos el objeto original, no el savedEvent
-            es.setSupply(supply);
+    // Asignar el evento a cada EventSupply ANTES de guardar el evento
+    for (EventSupply es : event.getEventSupplies()) {
+        if (es.getSupply() == null || es.getSupply().getId() == null) {
+            throw new RuntimeException("Debe seleccionar un suministro válido.");
         }
 
-       Event savedEvent = eventRepository.save(event);
-        auditService.logAction("CREATE", "Event", savedEvent.getId());    
+        Supply supply = supplyRepository.findById(es.getSupply().getId())
+            .orElseThrow(() -> new RuntimeException("El suministro no se ha encontrado."));
 
+        if (es.getQuantitySupply() <= 0) {
+            throw new RuntimeException("La cantidad del suministro debe ser mayor a 0.");
+        }
+
+        if (es.getQuantitySupply() > supply.getCurrentStock()) {
+            throw new RuntimeException("La cantidad solicitada excede el stock disponible.");
+        }
+
+        // Descontar stock
+        supply.setCurrentStock(supply.getCurrentStock() - es.getQuantitySupply());
+        supplyRepository.save(supply);
+
+        // Asignar relaciones
+        es.setEvent(event); // ← Aquí usamos el objeto original, no el savedEvent
+        es.setSupply(supply);
     }
 
+    // Ahora sí, guardar el evento con sus suministros
+    eventRepository.save(event); // gracias a CascadeType.ALL, se guardan los EventSupply
+}
+
+
+    
     public Event createAndReturn(Event event) {
-        validateEvent(event);
-        return eventRepository.save(event);
-    }
+    validateEvent(event);
+    return eventRepository.save(event);
+}
+
 
     @Override
     public void update(Event event) {
@@ -90,34 +89,33 @@ public class EventServiceImp implements Idao<Event, Long> {
         validateEvent(event);
         eventRepository.save(event);
     }
-    /*
-     * @Override
-     * public void deleteById(Long id) {
-     * if (!eventRepository.existsById(id)) {
-     * throw new
-     * RuntimeException("No se puede eliminar el evento porque no existe.");
-     * }
-     * eventRepository.deleteById(id);
-     * }
-     */
-
+/*  
     @Override
-    @Transactional
     public void deleteById(Long id) {
-        Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No se puede eliminar el evento porque no existe."));
-
-        List<EventSupply> supplies = eventSupplyRepository.findByEventId(id);
-
-        for (EventSupply es : supplies) {
-            Supply supply = es.getSupply();
-            supply.setCurrentStock(supply.getCurrentStock() + es.getQuantitySupply());
-            supplyRepository.save(supply);
+        if (!eventRepository.existsById(id)) {
+            throw new RuntimeException("No se puede eliminar el evento porque no existe.");
         }
-
-        eventSupplyRepository.deleteAll(supplies);
-        eventRepository.delete(event);
+        eventRepository.deleteById(id);
     }
+ */
+
+@Override
+@Transactional
+public void deleteById(Long id) {
+    Event event = eventRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("No se puede eliminar el evento porque no existe."));
+
+    List<EventSupply> supplies = eventSupplyRepository.findByEventId(id);
+
+    for (EventSupply es : supplies) {
+        Supply supply = es.getSupply();
+        supply.setCurrentStock(supply.getCurrentStock() + es.getQuantitySupply());
+        supplyRepository.save(supply);
+    }
+
+    eventSupplyRepository.deleteAll(supplies);
+    eventRepository.delete(event);
+}
 
     public long count() {
         return eventRepository.count();
