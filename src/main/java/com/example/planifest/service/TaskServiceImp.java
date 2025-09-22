@@ -10,14 +10,17 @@ import org.springframework.stereotype.Service;
 import com.example.planifest.entity.Task;
 import com.example.planifest.repository.TaskRepository;
 import com.example.planifest.service.dao.Idao;
+import com.example.planifest.service.AuditService;
 
 @Service
 public class TaskServiceImp implements Idao<Task, Long> {
 
     private final TaskRepository taskRepository;
+    private final AuditService auditService;
 
-    public TaskServiceImp(TaskRepository taskRepository) {
+    public TaskServiceImp(TaskRepository taskRepository, AuditService auditService) {
         this.taskRepository = taskRepository;
+        this.auditService=auditService;
     }
 
     @Override
@@ -29,12 +32,15 @@ public class TaskServiceImp implements Idao<Task, Long> {
     public void create(Task task) {
         validateTask(task);
         taskRepository.save(task);
+        Task savedTask = taskRepository.save(task);
+        auditService.logAction("CREATE", "Task", savedTask.getId());    
     }
 
     @Override
     public void update(Task task) {
         validateTask(task);
         taskRepository.save(task);
+
     }
 
     @Override

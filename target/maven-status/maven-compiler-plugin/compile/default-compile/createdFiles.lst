@@ -7,6 +7,7 @@ com\example\planifest\controller\AdminReportController.class
 com\example\planifest\controller\controllerview\PruebaViewController.class
 com\example\planifest\entity\Event.class
 com\example\planifest\service\TaskExcelService.class
+com\example\planifest\entity\EventSupply.class
 com\example\planifest\service\ExportService.class
 com\example\planifest\service\UserDetailsImpl.class
 com\example\planifest\entity\Position.class
@@ -24,11 +25,14 @@ com\example\planifest\service\ImportExportService.class
 com\example\planifest\enums\SupplyStatus.class
 com\example\planifest\service\EmailServiceUser.class
 com\example\planifest\entity\StockMovement.class
+com\example\planifest\service\AuditService.class
 com\example\planifest\config\CustomSuccessHandler$1.class
 com\example\planifest\service\MapService.class
 com\example\planifest\enums\EventStatus.class
+com\example\planifest\repository\AuditLogRepository.class
 com\example\planifest\controller\TaskController.class
 com\example\planifest\controller\UserController.class
+com\example\planifest\service\ChartService.class
 com\example\planifest\controller\AuthController.class
 com\example\planifest\dto\StockDTO.class
 com\example\planifest\enums\StockStatus.class
@@ -68,11 +72,13 @@ com\example\planifest\controller\PlaniServiceController.class
 com\example\planifest\repository\StockMovementRepository.class
 com\example\planifest\service\exportstrategy\UserExportStrategy.class
 com\example\planifest\service\PositionServiceImpl.class
+com\example\planifest\entity\AudiLog.class
 com\example\planifest\PlanifestApplication.class
 com\example\planifest\service\UserDetailsServiceImpl.class
 com\example\planifest\controller\controllerview\EventViewController.class
 com\example\planifest\controller\ImportExportController.class
 com\example\planifest\enums\TaskStatus.class
+com\example\planifest\repository\EventSupplyRepository.class
 com\example\planifest\entity\Client.class
 com\example\planifest\repository\UserRepository.class
 com\example\planifest\service\importstrategy\UserImportStrategy.class
