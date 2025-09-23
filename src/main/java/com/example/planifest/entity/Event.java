@@ -1,6 +1,5 @@
 package com.example.planifest.entity;
 
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.planifest.enums.EventStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -44,7 +43,7 @@ public class Event {
 
     @Column(nullable = false, length = 200)
     private String description;
-    
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private LocalDate date;
@@ -72,9 +71,8 @@ public class Event {
 
     // Relación con Tareas
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonManagedReference
     private List<Task> tasks;
-
 
     @ManyToMany
     @JoinTable(name = "event_service", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
@@ -83,7 +81,6 @@ public class Event {
     /* Relacion con Suministros */
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventSupply> eventSupplies = new ArrayList<>();
-
 
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus;

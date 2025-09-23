@@ -3,7 +3,9 @@ package com.example.planifest.service.importstrategy;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,11 +34,13 @@ public class TaskImportStrategy implements ImportStrategy<Task> {
     private final TaskRepository taskRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    // ✅ Soporta múltiples formatos de fecha
+    // ✅ Soporta múltiples formatos de fecha (con o sin hora)
     private static final List<DateTimeFormatter> FORMATOS_FECHA = Arrays.asList(
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"),
             DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"),
-            DateTimeFormatter.ofPattern("dd/MM/yyyy H:mm")
+            DateTimeFormatter.ofPattern("dd/MM/yyyy H:mm"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            DateTimeFormatter.ofPattern("dd/MM/yyyy")
     );
 
     public TaskImportStrategy(TaskRepository taskRepository) {
@@ -152,9 +156,17 @@ public class TaskImportStrategy implements ImportStrategy<Task> {
     }
 
     private LocalDateTime parseFecha(String fechaStr) {
-        for (DateTimeFormatter f : FORMATOS_FECHA) {
+        String f = fechaStr.trim(); // elimina espacios al inicio y fin
+        for (DateTimeFormatter formatter : FORMATOS_FECHA) {
             try {
-                return LocalDateTime.parse(fechaStr, f);
+                if (formatter.toString().contains("H") || formatter.toString().contains("m")) {
+                    // formato con hora
+                    return LocalDateTime.parse(f, formatter);
+                } else {
+                    // formato solo fecha
+                    LocalDate date = LocalDate.parse(f, formatter);
+                    return LocalDateTime.of(date, LocalTime.MIDNIGHT);
+                }
             } catch (Exception ignored) {}
         }
         throw new RuntimeException("Formato de fecha no soportado: " + fechaStr);
@@ -162,39 +174,31 @@ public class TaskImportStrategy implements ImportStrategy<Task> {
 
     private Task csvToTask(CSVRecord record) {
         Task t = new Task();
-        t.setName(record.get("name"));
-        t.setDescription(record.get("description"));
-        t.setStatus(TaskStatus.valueOf(record.get("status").toUpperCase()));
-
-        // ✅ ahora soporta múltiples formatos de fecha
+        t.setName(record.get("name").trim());
+        t.setDescription(record.get("description").trim());
+        t.setStatus(TaskStatus.valueOf(record.get("status").toUpperCase().trim()));
         t.setDate(parseFecha(record.get("date")));
-
         User u = new User();
-        u.setId(Long.parseLong(record.get("user_id")));
+        u.setId(Long.parseLong(record.get("user_id").trim()));
         t.setUser(u);
-
         Event e = new Event();
-        e.setId(Long.parseLong(record.get("event_id")));
+        e.setId(Long.parseLong(record.get("event_id").trim()));
         t.setEvent(e);
-
         return t;
     }
 
     private Task excelToTask(Row row) {
         Task t = new Task();
         t.setDate(row.getCell(0).getLocalDateTimeCellValue());
-        t.setDescription(row.getCell(1).getStringCellValue());
-        t.setName(row.getCell(2).getStringCellValue());
-        t.setStatus(TaskStatus.valueOf(row.getCell(3).getStringCellValue().toUpperCase()));
-
+        t.setDescription(row.getCell(1).getStringCellValue().trim());
+        t.setName(row.getCell(2).getStringCellValue().trim());
+        t.setStatus(TaskStatus.valueOf(row.getCell(3).getStringCellValue().toUpperCase().trim()));
         User u = new User();
         u.setId((long) row.getCell(4).getNumericCellValue());
         t.setUser(u);
-
         Event e = new Event();
         e.setId((long) row.getCell(5).getNumericCellValue());
         t.setEvent(e);
-
         return t;
     }
 }

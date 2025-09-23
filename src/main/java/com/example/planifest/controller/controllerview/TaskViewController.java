@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.planifest.entity.Event;
 import com.example.planifest.entity.Task;
+import com.example.planifest.entity.User;
 import com.example.planifest.service.EventServiceImp;
 import com.example.planifest.service.TaskExcelService;
 import com.example.planifest.service.TaskServiceImp;
@@ -52,7 +54,7 @@ public class TaskViewController {
         List<Task> tareas = taskService.filtrarPorNombreEstadoFechaYUsuario(nombre, estado, fechaTarea, usuarioId);
 
         model.addAttribute("tareas", tareas);
-        model.addAttribute("task", new Task()); // Para formulario nueva tarea
+        model.addAttribute("task", new Task());
         model.addAttribute("usuarios", userService.getAll());
         model.addAttribute("eventos", eventService.getAll());
 
@@ -62,7 +64,7 @@ public class TaskViewController {
         model.addAttribute("nombre", nombre);
         model.addAttribute("usuarioId", usuarioId);
 
-        return "tasks"; // tu vista Thymeleaf
+        return "tasks";
     }
 
     // CARGAR FORMULARIO CON UNA TAREA PARA EDITAR
@@ -93,10 +95,24 @@ public class TaskViewController {
         return "tasks";
     }
 
-    // GUARDAR TAREA
+    // GUARDAR O ACTUALIZAR TAREA
     @PostMapping("/save")
     public String guardarTarea(@ModelAttribute Task task, RedirectAttributes redirectAttributes) {
         try {
+            // Recuperar usuario y evento desde DB
+            User user = userService.findById(task.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            Event event = eventService.findById(task.getEvent().getId())
+                    .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+
+            task.setUser(user);
+            task.setEvent(event);
+
+            // Ajustar hora a medianoche para evitar mostrar hora en el input
+            if (task.getDate() != null) {
+                task.setDate(task.getDate().withHour(0).withMinute(0).withSecond(0).withNano(0));
+            }
+
             if (task.getId() == null) {
                 taskService.create(task);
                 redirectAttributes.addFlashAttribute("successMessage", "Tarea creada correctamente.");
@@ -104,9 +120,11 @@ public class TaskViewController {
                 taskService.update(task);
                 redirectAttributes.addFlashAttribute("successMessage", "Tarea actualizada correctamente.");
             }
+
         } catch (RuntimeException ex) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al guardar la tarea: " + ex.getMessage());
         }
+
         return "redirect:/tasks-view";
     }
 
@@ -122,25 +140,14 @@ public class TaskViewController {
         return "redirect:/tasks-view";
     }
 
-    // CARGA MASIVA SIN VALIDAR DUPLICADOS
-  // @PostMapping("/bulk-excel")
-//public ResponseEntity<?> uploadExcel(@RequestParam("file") MultipartFile file) {
-   // List<String> duplicadas = taskExcelService.importarTareasDesdeExcel(file);
-
-    //if (!duplicadas.isEmpty()) {
-       // return ResponseEntity.status(409).body("⚠️ Estas tareas ya existen: " + String.join(", ", duplicadas));
-   // }
-
-  //  return ResponseEntity.status(201).body("✅ Todas las tareas se importaron correctamente.");
-//}
-
-    // IMPORTACIÓN VALIDANDO DUPLICADOS
+    // IMPORTACIÓN DE EXCEL CON VALIDACIÓN DE DUPLICADOS
     @PostMapping("/import-excel")
     public String importarExcel(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         List<String> duplicadas = taskExcelService.importarTareasDesdeExcel(file);
 
         if (!duplicadas.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "⚠️ Estas tareas ya existen y no se importaron: " + String.join(", ", duplicadas));
+            redirectAttributes.addFlashAttribute("errorMessage", "⚠️ Estas tareas ya existen y no se importaron: " 
+                    + String.join(", ", duplicadas));
         } else {
             redirectAttributes.addFlashAttribute("successMessage", "✅ Todas las tareas se importaron correctamente.");
         }

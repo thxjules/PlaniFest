@@ -3,6 +3,7 @@ package com.example.planifest.entity;
 import java.util.List;
 
 import com.example.planifest.enums.Role;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +24,6 @@ import lombok.Setter;
 @Setter
 @Table(name = "users")
 public class User {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,10 +46,11 @@ public class User {
     @Column(name = "rol", length = 20)
     private Role role;
 
-    @OneToMany(mappedBy = "user") 
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Task> tasks;
 
     @ManyToOne
-    @JoinColumn(name = "position_id") 
+    @JoinColumn(name = "position_id")
     private Position position;
 }
