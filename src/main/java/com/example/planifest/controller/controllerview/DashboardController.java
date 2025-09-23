@@ -42,7 +42,13 @@ public class DashboardController {
 
     // Dashboard de administrador
     @GetMapping("/dashboard/admin")
-    public String adminDashboard(Model model) {
+    public String adminDashboard(Model model, Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
+
+        if (user == null || user.getRole() != Role.ADMIN) {
+                return "error/403";
+        }
+        
 
         long totalEmpleados = userService.countEmployees();
         long totalEventos = eventService.count();
@@ -87,17 +93,12 @@ public class DashboardController {
 
     // Dashboard de empleado (con el mapa)
     @GetMapping("/dashboard/empleado")
-public String empleadoDashboard(Model model) {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName(); 
-
-    User empleado = userService.getAll().stream()
-            .filter(u -> u.getEmail().equalsIgnoreCase(username))
-            .findFirst()
-            .orElse(null);
-
-    model.addAttribute("empleado", empleado); // <-- importante
-
+ public String empleadoDashboard(Model model) { 
+        Authentication auth = 
+        SecurityContextHolder.getContext().getAuthentication(); 
+        String username = auth.getName(); 
+        User empleado = userService.getAll().stream() 
+        .filter(u -> u.getEmail().equalsIgnoreCase(username)) .findFirst() .orElse(null); if (empleado == null || empleado.getRole() != Role.EMPLOYEE) { return "error/403"; } model.addAttribute("empleado", empleado);
     if (empleado != null) {
         List<Task> tareasEmpleado = taskService.getAll().stream()
                 .filter(task -> task.getUser() != null &&
@@ -125,7 +126,14 @@ public String empleadoDashboard(Model model) {
 
     // Dashboard de inventario
     @GetMapping("/dashboard/stock")
-    public String stockDashboard(Model model) {
+    public String stockDashboard(Model model, Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
+
+        if (user == null || user.getRole() != Role.STOCK_ADMIN) {
+                return "error/403";
+
+        }
+
 
         long totalSupplies = supplyService.count();
         model.addAttribute("totalSupplies", totalSupplies);
