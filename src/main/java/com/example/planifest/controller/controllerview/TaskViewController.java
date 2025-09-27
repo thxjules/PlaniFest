@@ -2,6 +2,8 @@ package com.example.planifest.controller.controllerview;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,8 @@ import com.example.planifest.entity.Event;
 import com.example.planifest.entity.Task;
 import com.example.planifest.entity.User;
 import com.example.planifest.service.EventServiceImp;
-import com.example.planifest.service.TaskExcelService;
+
+import com.example.planifest.service.TaskImportService;
 import com.example.planifest.service.TaskServiceImp;
 import com.example.planifest.service.UserServiceImp;
 
@@ -30,16 +33,16 @@ public class TaskViewController {
     private final TaskServiceImp taskService;
     private final UserServiceImp userService;
     private final EventServiceImp eventService;
-    private final TaskExcelService taskExcelService;
+    private final TaskImportService taskImportService;
 
     public TaskViewController(TaskServiceImp taskService,
                               UserServiceImp userService,
                               EventServiceImp eventService,
-                              TaskExcelService taskExcelService) {
+                              TaskImportService taskImportService) {
         this.taskService = taskService;
         this.userService = userService;
         this.eventService = eventService;
-        this.taskExcelService = taskExcelService;
+        this.taskImportService = taskImportService;
     }
 
     // MOSTRAR LISTA DE TAREAS Y FORMULARIO VACÍO
@@ -138,21 +141,35 @@ public class TaskViewController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la tarea: " + ex.getMessage());
         }
         return "redirect:/tasks-view";
+
+
     }
 
-    // IMPORTACIÓN DE EXCEL CON VALIDACIÓN DE DUPLICADOS
-    @PostMapping("/import-excel")
-    public String importarExcel(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-        List<String> duplicadas = taskExcelService.importarTareasDesdeExcel(file);
-
-        if (!duplicadas.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "⚠️ Estas tareas ya existen y no se importaron: " 
-                    + String.join(", ", duplicadas));
-        } else {
-            redirectAttributes.addFlashAttribute("successMessage", "✅ Todas las tareas se importaron correctamente.");
-        }
-
+   @PostMapping("/import-tasks")
+public String importarTareas(@RequestParam("file") MultipartFile file, RedirectAttributes redirect) {
+    if (file.isEmpty()) {
+        redirect.addFlashAttribute("errorMessage", "Archivo vacío");
         return "redirect:/tasks-view";
     }
-    
-}
+
+    try {
+        Map<String, List<String>> resultado = taskImportService.importarArchivo(file);
+        List<String> duplicadas = resultado.get("duplicadas");
+        List<String> errores = resultado.get("errores");
+
+        if (!errores.isEmpty()) {
+            redirect.addFlashAttribute("errorMessage",
+                    "Se encontraron errores en la importación: " + String.join(", ", errores));
+        } else if (!duplicadas.isEmpty()) {
+            redirect.addFlashAttribute("warningMessage",
+                    "Archivo importado con duplicados: " + String.join(", ", duplicadas));
+        } else {
+            redirect.addFlashAttribute("successMessage", "Archivo importado correctamente.");
+        }
+
+    } catch (Exception e) {
+        redirect.addFlashAttribute("errorMessage", "Error al importar archivo: " + e.getMessage());
+    }
+
+    return "redirect:/tasks-view";
+}}

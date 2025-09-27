@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.planifest.entity.Task;
-import com.example.planifest.service.TaskExcelService;
+import com.example.planifest.service.TaskImportService;
+
 import com.example.planifest.service.TaskServiceImp;
 
 @RestController
@@ -22,11 +23,11 @@ public class TaskController {
     
 //    carga masiva 
     private final TaskServiceImp taskService;
-    private final TaskExcelService taskExcelService;
+    private final TaskImportService taskImportService;
 
-    public TaskController(TaskServiceImp taskService, TaskExcelService taskExcelService) {
+    public TaskController(TaskServiceImp taskService, TaskImportService taskImportService) {
         this.taskService = taskService;
-        this.taskExcelService = taskExcelService;
+        this.taskImportService = taskImportService;
     }
 
    // public TaskController(TaskServiceImp taskService) {

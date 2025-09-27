@@ -123,4 +123,8 @@ public class TaskServiceImp implements Idao<Task, Long> {
     return taskRepository.countByStatus("PENDIENTE"); 
 }
 
+    public void saveOrUpdate(Task task) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

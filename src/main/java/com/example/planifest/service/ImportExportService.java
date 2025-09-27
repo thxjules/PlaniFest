@@ -1,13 +1,14 @@
 package com.example.planifest.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.planifest.service.exportstrategy.ExportStrategy;
 import com.example.planifest.service.exportstrategy.ExportStrategyFactory;
 import com.example.planifest.service.importstrategy.ImportStrategy;
 import com.example.planifest.service.importstrategy.ImportStrategyFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Service
 public class ImportExportService {
@@ -23,7 +24,11 @@ public class ImportExportService {
     // ================== Importación ==================
     public List<String> importData(MultipartFile file, Class<?> entityClass) {
         ImportStrategy<?> strategy = importFactory.getStrategy(entityClass);
-        return strategy.importData(file);
+        List<String> errores = strategy.validate(file); // validar primero
+        if (errores.isEmpty()) {
+            strategy.saveAll(file); // si no hay errores, guardar todo
+        }
+        return errores;
     }
 
     // ================== Exportación ==================
