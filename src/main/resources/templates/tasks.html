@@ -15,7 +15,7 @@
         <!-- ENCABEZADO -->
         <div class="header-section mb-4 text-center">
             <img th:src="@{/images/planifest.png}" alt="Logo Planifest" style="max-height: 200px;">
-            <h1 class="mb-0">📝 Gestión de Tareas</h1>
+            <h1 class="mb-0"> Gestión de Tareas</h1>
             <p class="mt-2">Crea y organiza tareas para tus eventos</p>
         </div>
 
@@ -31,10 +31,10 @@
 
         <!-- BOTONES ENCIMA DE LA TABLA -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <a href="/dashboard/admin" class="btn btn-outline-secondary btn-sm">🏠 Volver</a>
+            <a href="/dashboard/admin" class="btn btn-outline-secondary btn-sm"> Volver</a>
             <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse"
                 data-bs-target="#formularioTarea" aria-expanded="false" aria-controls="formularioTarea">
-                ➕ Nueva tarea
+                 Nueva tarea
             </button>
         </div>
 
@@ -45,7 +45,7 @@
                 <input class="form-control" type="file" name="file" id="file" required>
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             </div>
-            <button type="submit" class="btn btn-success">📤 Importar</button>
+            <button type="submit" class="btn btn-success"> Importar</button>
         </form>
 
 
@@ -53,7 +53,7 @@
         <div class="collapse" id="formularioTarea"
             th:classappend="${task.id == null || task.id != null} ? ' show' : ''">
             <div class="card shadow-sm border-0 mb-4 fondo-transparente">
-                <div class="card-header bg-primary text-white">
+                 <div class="card-header nueva-tarea">
                     <h5 class="mb-0" th:text="${task.id == null} ? 'Nueva Tarea' : 'Editar Tarea'">Formulario de Tarea
                     </h5>
                 </div>
@@ -123,7 +123,7 @@
 
                         <div class="mt-4 text-end">
                             <button type="submit" class="btn btn-success">
-                                <span th:text="${task.id == null} ? '💾 Guardar tarea' : '🔄 Actualizar tarea'"></span>
+                                <span th:text="${task.id == null} ? ' Guardar tarea' : 'Actualizar tarea'"></span>
                             </button>
                         </div>
                     </form>
@@ -155,15 +155,15 @@
         </select>
     </div>
     <div class="col-12 col-sm-12 col-md-2 d-flex gap-2">
-        <button type="submit" class="btn btn-primary btn-lg w-100">🔍 Buscar</button>
-        <button type="button" class="btn btn-success btn-lg w-100" onclick="limpiarFiltros()">🧹 Limpiar</button>
+        <button type="submit" class="btn btn-primary btn-lg w-100"> Buscar</button>
+        <button type="button" class="btn btn-success btn-lg w-100" onclick="limpiarFiltros()"> Limpiar</button>
     </div>
 </form>
 
 <!-- TABLA DE TAREAS -->
 <div class="card shadow-sm border-0 fondo-transparente">
-    <div class="card-header bg-dark text-white">
-        <h5 class="mb-0">📋 Lista de Tareas</h5>
+    <div class="card-header lista-tareas">
+        <h5 class="mb-0"> Lista de Tareas</h5>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -192,8 +192,8 @@
                         <td th:text="${#temporals.format(t.event.date, 'dd/MM/yyyy')}"></td>
                         <td th:text="${#temporals.format(t.date, 'dd/MM/yyyy')}"></td>
                         <td class="text-center">
-                            <a th:href="@{/tasks-view(id=${t.id})}" class="btn btn-sm btn-outline-primary me-1">✏️</a>
-                            <a th:href="@{/tasks-view/delete/{id}(id=${t.id})}" class="btn btn-sm btn-outline-danger">🗑</a>
+                            <a th:href="@{/tasks-view(id=${t.id})}" class="btn btn-sm btn-outline-primary me-1">Editar</a>
+                            <a th:href="@{/tasks-view/delete/{id}(id=${t.id})}" class="btn btn-sm btn-outline-danger">Eliminar</a>
                         </td>
                     </tr>
                     <tr th:if="${tareas.size() == 0}">

@@ -1,194 +1,95 @@
-/* ---------- FUENTE Y CUERPO ---------- */
+/* === PALETA DE COLORES === */
+:root {
+    --golden-brown: #9F6920;   /* Botones principales */
+    --rob-roy: #DAA755;        /* Secundario */
+    --marzipan: #E9C579;       /* Suave */
+    --buttermilk: #F1DEA8;     /* Ligero */
+    --wasabi: #809076;         /* Verde intenso */
+    --text-dark: #2b1d14;      /* Texto */
+    --text-light: white;       /* Texto suave */
+}
+
+/* === FONDO GENERAL CON GRADIENTE === */
 body {
-    background-image: url('/images/tareas/tareas.jpeg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    background: -webkit-linear-gradient(90deg, #111a19,#2b4139);                   
+    background: linear-gradient(90deg, #111a19,#2b4139);
     min-height: 100vh;
     margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', sans-serif;
-    color: #333;
+    color: var(--text-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ---------- CONTENEDOR TRANSPARENTE ---------- */
-.fondo-transparente {
-    background-color: rgba(255, 255, 255, 0.85);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-}
-
-/* ---------- ENCABEZADO ---------- */
-.header-section {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.header-section img {
-    height: 200px;
-    object-fit: contain;
-    margin-bottom: 10px;
-}
-
+/* === ENCABEZADO PRINCIPAL === */
 .header-section h1 {
-    font-size: 2.5rem;
-    color: #0097b2;
-    margin-bottom: 0.5rem;
+    color: var(--buttermilk);
+    font-weight: bold;
 }
-
 .header-section p {
-    font-size: 1.1rem;
-    color: #666;
+    color: var(--marzipan);
 }
 
-/* ---------- BOTONES UNIFORMES ---------- */
-.btn-planifest {
-    min-width: 130px;
-    height: 40px;
-    padding: 0.5rem 1rem;
-    font-size: 0.95rem;
-    font-weight: 500;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    text-align: center;
-    white-space: nowrap;
-}
-
-/* ---------- BOTONES GENERALES ---------- */
-.btn-outline-primary {
-    color: #0097b2;
-    border-color: #0097b2;
-}
-
-.btn-outline-primary:hover {
-    background-color: #0097b2;
-    color: #fdf8f0;
-}
-
+/* === BOTONES (Golden Brown / Wasabi) === */
+.btn,
+.btn-primary,
+.btn-success,
+.btn-outline-primary,
 .btn-outline-secondary {
-    border-color: #555;
-    color: #555;
+    background-color: var(--golden-brown) !important;
+    border-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.btn:hover {
+    background-color: #b97b29 !important; /* tono más claro */
+    border-color: #b97b29 !important;
+    transform: scale(1.05);
 }
 
-.btn-outline-secondary:hover {
-    background-color: #555;
-    color: #fff;
-}
-
-.btn-success {
-    background-color: #84b200;
-    border-color: #84b200;
-}
-
-.btn-success:hover {
-    background-color: #6d9100;
-    border-color: #6d9100;
-}
-
-/* ---------- BOTONES PERSONALIZADOS PARA FILTROS ---------- */
-.btn-custom-primary {
-    background-color: #0097b2 !important;
-    color: #fff !important;
-    border: 1px solid #0097b2 !important;
-    transition: all 0.3s ease;
-}
-
-.btn-custom-primary:hover {
-    background-color: #007a92 !important;
-    border-color: #007a92 !important;
-    color: #fdf8f0 !important;
-}
-
-.btn-custom-secondary {
-    background-color: #84b200 !important;
-    color: #fff !important;
-    border: 1px solid #84b200 !important;
-    transition: all 0.3s ease;
-}
-
-.btn-custom-secondary:hover {
-    background-color: #6d9100 !important;
-    border-color: #6d9100 !important;
-    color: #fdf8f0 !important;
-}
-
-/* ---------- CABECERAS DE CARDS ---------- */
-.card-header.bg-primary {
-    background-color: #0097b2 !important;
-    color: #fdf8f0;
-}
-
-.card-header.bg-dark {
-    background-color: #84b200 !important;
-    color: #fdf8f0;
-}
-
-/* ---------- TABLAS ---------- */
-.table thead {
-    background-color: #0097b2;
-    color: #fdf8f0;
-}
-
-.table td, .table th {
-    vertical-align: middle;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0, 151, 178, 0.05);
-}
-
-/* ---------- ESTADOS ---------- */
+/* === BADGES DE ESTADO === */
 .badge.bg-warning {
-    background-color: #ffc107;
-    color: #333;
+    background-color: var(--rob-roy) !important;
+    color: var(--text-dark) !important;
 }
-
 .badge.bg-success {
-    background-color: #84b200;
-    color: #fff;
+    background-color: var(--wasabi) !important;
+    color: var(--text-light) !important;
+}
+.badge.bg-info {
+    background-color: var(--marzipan) !important;
+    color: var(--text-dark) !important;
 }
 
-/* ---------- ALERTAS ---------- */
-.alert {
-    border-radius: 10px;
-    font-size: 0.95rem;
+/* === TABLA DE TAREAS === */
+.table thead {
+    background-color: var(--wasabi);
+    color: var(--text-light);
+    font-weight: bold;
+}
+.table tbody tr:hover {
+    background-color: rgba(233, 197, 121, 0.25);
+    transition: 0.3s;
 }
 
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
+/* === CARDS GENERALES === */
+.card.fondo-transparente {
+    background-color: rgba(241, 222, 168, 0.4);
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    backdrop-filter: blur(6px);
 }
 
-.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
+/* === ENCABEZADOS ESPECIALES === */
+/* Nueva Tarea → Golden Brown */
+.card-header.nueva-tarea {
+    background-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+    font-weight: bold;
 }
 
-/* ---------- FORMULARIOS Y FILTROS ---------- */
-form label {
-    font-weight: 500;
-}
-
-form .form-control,
-form .form-select {
-    border-radius: 8px;
-    box-shadow: none;
-}
-
-/* ---------- FILTROS Y BOTONES JUNTOS ---------- */
-.filtro-botones {
-    display: flex;
-    gap: 0.5rem;
-    align-items: end;
-}
-
-/* ---------- RESPONSIVE ---------- */
-@media (max-width: 768px) {
-    .header-section h1 {
-        font-size: 2rem;
-    }
+/* Lista de Tareas */
+.card-header.lista-tareas {
+    background-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+    font-weight: bold;
 }
