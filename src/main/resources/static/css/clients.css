@@ -1,94 +1,119 @@
+/* === PALETA DE COLORES === */
+:root {
+    --golden-brown: #9F6920;   /* Dorado principal */
+    --rob-roy: #DAA755;        /* Dorado medio */
+    --marzipan: #E9C579;       /* Dorado suave */
+    --buttermilk: #F1DEA8;     /* Dorado claro */
+    --white: #ffffff;          /* Blanco */
+    --black: #15181e;          /* Fondo oscuro */
+}
 
+/* === ESTILOS GENERALES === */
 body {
-    background-image: url('/images/cliente/client.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: -webkit-linear-gradient(90deg, #111a19, #2b4139);
+    background: linear-gradient(90deg, #111a19, #2b4139);
+    color: var(--white);
+    margin: 0;
+    padding: 0;
 }
 
-/* Imagen encabezado */
-.text-center img {
-    max-height: 190px;
-    margin-bottom: 15px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(214, 19, 19, 0.782);
+/* === BOTONES DORADOS === */
+.btn,
+button,
+input[type="submit"],
+input[type="button"] {
+    background-color: var(--golden-brown) !important;
+    color: var(--white) !important;
+    border: none !important;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
 
-/* Título princi */
+.btn:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    background-color: var(--rob-roy) !important;
+    color: var(--white) !important;
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Botón deshabilitado */
+.btn:disabled,
+button:disabled,
+input[type="submit"]:disabled,
+input[type="button"]:disabled {
+    background-color: var(--marzipan) !important;
+    color: var(--buttermilk) !important;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
 .header-section h1 {
-    font-weight: 700;
-    color:  #da2e2e;
-}
-
-.header-section p {
-    color: #000000;
-    font-size: 15px;
+    color: var(--buttermilk);
     font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
 }
-
-/*Contiene tabla o formulario */
-.card {
-    border-radius: 10px;
-    background-color: #fbdf99cc; /* Transparencia sutil */
-}
-
-/* Encabezado tarjetas */
-.card-header {
-    background-color: #000000 !important;
-    color: #ffffff !important;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+.header-section p {
+    color: var(--buttermilk);  /* También dorado claro */
+    font-size: 1.1rem;
+    margin-top: 5px;
     text-align: center;
 }
 
-/* Título encabezado */
-.card-header h5 {
-    font-weight: 600;
-}
-
-/* Tabla celdas encabezados */
-.table td,
-.table th {
-    vertical-align: middle;
-}
-
-.table thead th {
-    background-color: #ce361c;
-    color: #000000;
-}
-
-/* Botones */
-.btn-outline-primary,
-.btn-outline-danger {
-    border-radius: 20px;
-    padding: 4px 12px;
-}
-
+/* === ENCABEZADOS CON FONDO DORADO === */
 .card-header {
-    background: #e22626;
-    
+    background-color: #9F6920 !important; /* DORADO */
+    color: #ffffff !important;           /* Texto blanco */
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
 }
-/* Etiqueta visual estados */
-.badge {
-    font-size: 0.9rem;
-    padding: 5px 10px;
-    border-radius: 12px;
-    text-transform: capitalize;
+.bg-light,
+.bg-dark {
+    background-color: #9F6920 !important; /* DORADO */
+    color: #ffffff !important;
+}
+/* Encabezados de tarjetas (Editar Cliente, Nuevo Cliente, Lista de Clientes) */
+.card-header {
+    background-color: #9F6920 !important; /* DORADO */
+    color: #ffffff !important;            /* Texto blanco */
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
 }
 
-/* Alertas*/
-.alert {
-    font-size: 0.95rem;
+/* Encabezado de la tabla de clientes */
+.table thead th {
+    background-color: #9F6920 !important; /* DORADO */
+    color: #ffffff !important;
+    font-weight: bold;
+    text-align: center;
+}
+/* Encabezado de tabla en blanco */
+.table thead th {
+    background-color: #ffffff !important; /* Fondo blanco */
+    color: #000000 !important;            /* Letras negras para contraste */
+    font-weight: bold;
+    text-align: center;
 }
 
-/* Textareas  */
-textarea.form-control {
-    resize: vertical;
+
+
+/* === TABLAS === */
+.table {
+    background: var(--white);
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-/* Etiquetas formularios */
-form .form-label {
-    font-weight: 500;
+.table tbody tr:hover {
+    background-color: var(--buttermilk);
 }

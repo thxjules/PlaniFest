@@ -11,10 +11,13 @@
     <div th:if="${success}" class="alert alert-success text-center" role="alert">
         <span th:text="${success}"></span>
     </div>
+    <div class="header-section mb-4 text-center">
+            <img th:src="@{/images/planifest.png}" alt="Logo Planifest" style="max-height: 200px;">
+          <h1 class="mb-4 text-center">Empleados</h1>
+            <p class="mt-2">Empleados Registrados</p>
+        </div>
 
-    <h2 class="mb-4 text-center">Empleados</h2>
-
-    
+    <
 
     <form th:action="@{/employees-view}" method="get" class="row mb-4">
         <div class="col-md-4 offset-md-4 d-flex align-items-center gap-2">

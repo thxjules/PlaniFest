@@ -1,73 +1,130 @@
+/* === PALETA DE COLORES === */
+:root {
+    --golden-brown: #9F6920;   /* Dorado principal */
+    --rob-roy: #DAA755;        /* Secundario dorado */
+    --marzipan: #E9C579;       /* Suave */
+    --buttermilk: #F1DEA8;     /* Ligero */
+    --wasabi: #809076;         /* Verde oliva */
+    --emerald: #058774;        /* Verde esmeralda */
+    --emerald-dark: #034e49;   /* Verde oscuro */
+    --text-dark: #2b1d14;      /* Texto oscuro */
+    --text-light: #ffffff;     /* Texto claro */
+}
+
+/* === FONDO GENERAL === */
 body {
-    background: url('../images/fondoempleado.png');
+    background: -webkit-linear-gradient(90deg, #111a19,#2b4139);                   
+    background: linear-gradient(90deg, #111a19,#2b4139);
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text-dark);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #008386;
-}
-.table > thead > tr > th {
-    background-color: #058774 !important;
-    color: white !important;
-    text-align: center;
-    font-weight: 600;
-    border-color: #058774;
 }
 
-h2 {
+/* === ENCABEZADOS GENERALES === */
+h1, h2, h3, .header-section h1 {
+    color: var(--buttermilk);
     font-weight: bold;
-    color: #008386;
-    margin-bottom: 30px;
+    text-align: center;
+}
+.header-section p {
+    color: var(--marzipan);
 }
 
+/* === BOTONES === */
+.btn,
+.btn-primary,
+.btn-success,
+.btn-outline-primary,
+.btn-outline-secondary {
+    background-color: var(--golden-brown) !important;
+    border-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.btn:hover {
+    background-color: #b97b29 !important; /* tono más claro del dorado */
+    border-color: #b97b29 !important;
+    transform: scale(1.05);
+}
+.btn-outline-secondary {
+    border: 2px solid var(--golden-brown);
+    color: var(--golden-brown) !important;
+    background: transparent !important;
+}
+.btn-outline-secondary:hover {
+    background-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+}
+
+/* === TABLAS === */
 .table {
-    background-color: #058774;
+    background-color: var(--text-light);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
-
-.table thead {
-    background-color: #058774 !important;
-    color: white;
+.table thead th {
+    background-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
     text-align: center;
     font-weight: 600;
+    border-color: var(--emerald);
 }
-
 .table tbody td {
     vertical-align: middle;
     text-align: center;
 }
+.table tbody tr:hover {
+    background-color: rgba(233, 197, 121, 0.25); /* dorado suave hover */
+    transition: 0.3s;
+}
 
-.alert-success {
-    background-color: #058774;
-    color: #ffffff;
+/* === CARDS === */
+.card.fondo-transparente {
+    background-color: rgba(241, 222, 168, 0.4);
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    backdrop-filter: blur(6px);
+}
+.card-header {
+    background-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* === BADGES DE ESTADO === */
+.badge.bg-warning {
+    background-color: var(--rob-roy) !important;
+    color: var(--text-dark) !important;
+}
+.badge.bg-success {
+    background-color: var(--emerald) !important;
+    color: var(--text-light) !important;
+}
+.badge.bg-info {
+    background-color: var(--marzipan) !important;
+    color: var(--text-dark) !important;
+}
+.form-label {
+    color: var(--text-light) !important; /* Blanco de tu paleta */
     font-weight: 500;
-    border: 1px solid #058774;
+}
+
+/* === ALERTAS === */
+.alert-success {
+    background-color: var(--emerald);
+    color: var(--text-light);
+    font-weight: 500;
+    border: 1px solid var(--emerald);
     border-radius: 6px;
 }
 
-.btn-primary {
-    background-color: #034e49;
-    border-color: #034e49;
-    font-weight: 500;
-}
-
-.btn-outline-secondary {
-    border-color: #058774;
-    color: #058774;
-}
-
-.btn-outline-secondary:hover {
-    background-color: #058774;
-    color: white;
-}
-
-.form-select-sm {
-    font-size: 0.875rem;
-    padding: 0.25rem 0.5rem;
-    height: auto;
-}
-
+/* === OTROS TEXTOS === */
 .text-muted {
     font-style: normal;
     font-weight: 700;
-    color: #057f7b !important;
+    color: var(--emerald) !important;
 }
