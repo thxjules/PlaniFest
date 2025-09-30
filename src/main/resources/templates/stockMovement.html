@@ -42,7 +42,7 @@
     <!-- FORMULARIO DE TAREA -->
     <div th:class="${stockMovement.id != null} ? 'collapse show' : 'collapse'" id="formularioStock">
         <div class="card shadow-sm border-0 mb-4">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header nuevo-movimiento">
                 <h5 class="mb-0" th:text="${stockMovement.id != null} ? 'Editar Stock' : 'Nueva Stock'">Formulario de Movimiento stock</h5>
             </div>
             <div class="card-body">
@@ -96,9 +96,9 @@
     <div class="row g-3 align-items-end">
 
         <!-- Cantidad-->
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label for="nombre" class="form-label">Cantidad</label>
-            <input type="number" id="cantidad" name="cantidad" class="form-control" th:value="${cantidad}">
+            <input type="number" id="cantidad" name="cantidad" class="form-control" placeholder="20" th:value="${cantidad}">
         </div>
 
         <!-- Tipo -->
@@ -130,13 +130,8 @@
     </div>
 </form>
 
-
-
-
-
-    <!-- TABLA DE TAREAS -->
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-dark text-black">
+        <div class="card-header lista-movimiento">
             <h5 class="mb-0">📋 Lista de Movimientos</h5>
         </div>
         <div class="card-body p-0">
@@ -159,9 +154,9 @@
                             <td th:text="${t.type}"></td>
                             <td th:text="${t.remarks}"></td>
                             <td th:text="${t.supply.Name}"></td>
-                            <td class="text-center">
-                                <a th:href="@{/stock-view(id=${t.id})}" class="btn btn-sm btn-outline-primary me-1">✏️</a>
-                                <a th:href="@{/stock-view/delete/{id}(id=${t.id})}" class="btn btn-sm btn-outline-danger">🗑</a>
+                            <td class="text-center Botones">
+                                <a th:href="@{/stock-view(id=${t.id})}" class="btn btn-sm btn-outline-primary me-1">Editar</a>
+                                <a th:href="@{/stock-view/delete/{id}(id=${t.id})}" class="btn btn-sm btn-outline-danger">Eliminar</a>
                             </td>
                         </tr>
                         </tr>

@@ -1,150 +1,99 @@
-/* Fondo con imagen */
+/* === PALETA DE COLORES === */
+:root {
+    --golden-brown: #9F6920;   /* Botones principales */
+    --rob-roy: #DAA755;        /* Secundario */
+    --marzipan: #E9C579;       /* Suave */
+    --buttermilk: #F1DEA8;     /* Ligero */
+    --wasabi: #809076;         /* Verde intenso */
+    --text-dark: #2b1d14;      /* Texto */
+    --text-light: white;       /* Texto suave */
+}
+
+/* === FONDO GENERAL CON GRADIENTE === */
 body {
-    background-image: url('/images/supply/fondo.jpg'); /* asegúrate que existe */
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    background: -webkit-linear-gradient(90deg, #111a19,#2b4139);                   
+    background: linear-gradient(90deg, #111a19,#2b4139);
     min-height: 100vh;
     margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', sans-serif;
-    color: #333;
+    color: var(--text-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Contenedor transparente para dejar ver el fondo */
-.fondo-transparente {
-    background-color: rgba(255, 255, 255, 0.85); /* blanco con opacidad */
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-}
-
-/* Header con logo y título */
-.header-section {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.header-section img {
-    height: 200px;
-    width: auto;
-    object-fit: contain;
-    margin-bottom: 10px;
-    border-radius: 10px;
-        box-shadow: 0 0 15px rgba(83, 49, 118, 0.2);
-}
-
+/* === ENCABEZADO PRINCIPAL === */
 .header-section h1 {
-    font-size: 2.5rem;
-    color: #0097b2;
-    margin: 0 1rem 0 0;
+    color: var(--buttermilk);
+    font-weight: bold;
 }
-
-.header-section .btn {
-    margin-top: 0.25rem;
-}
-
 .header-section p {
-    font-size: 1.1rem;
-    color: #666;
+    color: var(--marzipan);
 }
 
-/* Botón azul */
-.btn-outline-primary  {
-    color: #0097b2;
-    border-color: #0097b2;
-    border-width: 10px;
+/* === BOTONES (Golden Brown / Wasabi) === */
+.btn,
+.btn-primary,
+.btn-success,
+.btn-outline-primary,
+.btn-outline-secondary {
+    background-color: var(--golden-brown) !important;
+    border-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
     font-weight: bold;
+    transition: 0.3s;
+}
+.btn:hover {
+    background-color: #b97b29 !important; /* tono más claro */
+    border-color: #b97b29 !important;
+    transform: scale(1.05);
 }
 
-
-.btn-outline-primary:hover {
-    background-color: #0097b2;
-    color: #fdf8f0;
-}
-
-/* Botón verde */
-.btn-success {
-    background-color: #84b200;
-    border-color: #84b200;
-}
-
-.btn-success:hover {
-    background-color: #6d9100;
-    border-color: #6d9100;
-}
-
-/* Card Headers */
-.card-header.bg-primary {
-    background-color: #0097b2 !important;
-    color: #fdf8f0;
-}
-
-.card-header.bg-dark {
-    background-color: #7136b9 !important;
-    color: #fdf8f0;
-}
-
-/* Tabla */
-.table thead {
-    color: #fdf8f0;
-}
-
-/* Etiquetas de estado */
+/* === BADGES DE ESTADO === */
 .badge.bg-warning {
-    background-color: #ffc107;
+    background-color: var(--rob-roy) !important;
+    color: var(--text-dark) !important;
 }
 
+.col-md-2 filtro-botones{
+    padding-left: 100vh;
+}
 .badge.bg-success {
-    background-color: #84b200;
+    background-color: var(--wasabi) !important;
+    color: var(--text-light) !important;
 }
-
-.contenedor-tabla {
-    max-width: 100%;
-    margin: 0 auto;
-}
-
-@media (min-width: 1200px) {
-    .contenedor-tabla {
-        max-width: 1200px;
-    }
+.badge.bg-info {
+    background-color: var(--marzipan) !important;
+    color: var(--text-dark) !important;
 }
 
 
-/* Estilo de los filtros */
-
-.align-items-end{
-    padding-bottom: 10px;
-    padding-top: 0;
-    height: 90%;
-    text-align: center;
-    align-items: center;
-    border-radius: 10px;
-    border-color: black;
-    margin-bottom: 5px;
-}
-
-.align-items-end label{
-    font-size: 20px;
+.table thead {
+    background-color: var(--wasabi);
+    color: var(--text-light);
     font-weight: bold;
-    color: black;
-    font-style: italic;
+}
+.table tbody tr:hover {
+    background-color: rgba(233, 197, 121, 0.25);
+    transition: 0.3s;
 }
 
-.btn-planifest{
-        margin: 5px;
+/* === CARDS GENERALES === */
+.card.fondo-transparente {
+    background-color: rgba(241, 222, 168, 0.4);
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    backdrop-filter: blur(6px);
 }
 
-.filtro-botones{
-    color: black;
-    font-weight: bold !important;
-
-
+/* === ENCABEZADOS ESPECIALES === */
+/* Nueva Tarea → Golden Brown */
+.card-header.nuevo-suministro {
+    background-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+    font-weight: bold;
 }
 
-.form-control{
-    border-color: black !important ;
-    border-radius: 5px  !important    ; 
-    border-width: 5px  !important    ;
-    border-style: solid !important    ;
+/* Lista de Tareas */
+.card-header.lista-suministros {
+    background-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+    font-weight: bold;
 }
