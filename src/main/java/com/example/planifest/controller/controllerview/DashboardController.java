@@ -87,6 +87,7 @@ public class DashboardController {
         model.addAttribute("notificaciones", notificaciones);
         model.addAttribute("empleadoDelMes", empleadoDelMes);
         model.addAttribute("activePage", "dashboard");
+        
 
         return "dashboard/admin";
     }

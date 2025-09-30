@@ -15,8 +15,8 @@ public class EmailController {
     @GetMapping("/enviar-masivo")
     public String enviarMasivo() {
         emailSend.enviarCorreosMasivos(
-            "prueba masiva",
-            "Este es un correo enviado a todos los usuarios de la BD."
+            "Notificación importante de PlaniFest",
+            "Hola, gracias por ser parte de nuestra comunidad, Estamos trabajando para que disfrutes de los mejores eventos."
         );
 
         return "Correos enviados";

@@ -5,6 +5,10 @@
   font-family: "Poppins", sans-serif;
 }
 
+body{
+    background-color: #111419;
+
+}
 
 .dashboard-wrapper {
   display: flex;
@@ -14,7 +18,7 @@
 .main {
   flex: 1;
   padding: 1rem;
-  background-color: #ffffff84;
+  background-color: #111419;
 }
 
 .main h2 {

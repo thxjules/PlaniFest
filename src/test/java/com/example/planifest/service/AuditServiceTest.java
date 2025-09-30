@@ -29,6 +29,6 @@ class AuditServiceTest {
         assertThat(log.getAction()).isEqualTo("CREATE");
         assertThat(log.getEntityName()).isEqualTo("Event");
         assertThat(log.getEntityId()).isEqualTo(100L);
-        assertThat(log.getPerformedBy()).isEqualTo("SYSTEM"); // si no hay usuario autenticado
+        assertThat(log.getPerformedBy()).isEqualTo("SYSTEM"); 
     }
 }
