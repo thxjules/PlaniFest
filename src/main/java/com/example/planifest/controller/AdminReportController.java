@@ -63,7 +63,7 @@ public ResponseEntity<byte[]> generateAdminReport() throws Exception {
 
     // Logo exclusivo para reporte admin
     String logoAdmin = reportService.encodeImageToBase64(
-        "src/main/resources/static/images/dashboard/admin.png"
+        "src/main/resources/static/images/dashboard/logoplanifest.png"
     );
     data.put("logoBase64", logoAdmin);
 
