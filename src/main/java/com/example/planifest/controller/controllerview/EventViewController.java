@@ -1,17 +1,25 @@
 package com.example.planifest.controller.controllerview;
 
-import com.example.planifest.entity.Event;
-import com.example.planifest.service.ClientServiceImp;
-import com.example.planifest.service.EventServiceImp;
-import com.example.planifest.service.SupplyServiceImp;
-import com.example.planifest.service.MapService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute; // ✅ agrega esta importación
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.planifest.entity.Event;
+import com.example.planifest.entity.PlaniService;
+import com.example.planifest.service.ClientServiceImp;
+import com.example.planifest.service.EventServiceImp;
+import com.example.planifest.service.MapService;
+import com.example.planifest.service.PlaniServiceImp;
+import com.example.planifest.service.SupplyServiceImp;
 
 @Controller
 @RequestMapping("/events-view")
@@ -21,13 +29,19 @@ public class EventViewController {
     private final ClientServiceImp clientService;
     private final SupplyServiceImp supplyService;
     private final MapService mapService;
+    private final PlaniServiceImp planiService; // ✅ agrega esta línea
 
-    public EventViewController(EventServiceImp eventService, ClientServiceImp clientService,
-                               SupplyServiceImp supplyService, MapService mapService) {
+    // 🔧 Inyecta también planiService en el constructor
+    public EventViewController(EventServiceImp eventService,
+                               ClientServiceImp clientService,
+                               SupplyServiceImp supplyService,
+                               MapService mapService,
+                               PlaniServiceImp planiService) {
         this.eventService = eventService;
         this.clientService = clientService;
         this.supplyService = supplyService;
         this.mapService = mapService;
+        this.planiService = planiService; // ✅ asignación
     }
 
     @GetMapping
@@ -41,7 +55,6 @@ public class EventViewController {
         Event event = (id != null) ? eventService.findById(id).orElse(new Event()) : new Event();
         List<Event> eventos = eventService.getAll();
 
-        // Aplicar filtros
         if (nombre != null && !nombre.isBlank()) {
             eventos = eventos.stream()
                     .filter(e -> e.getEventName().toLowerCase().contains(nombre.toLowerCase()))
@@ -64,34 +77,47 @@ public class EventViewController {
         model.addAttribute("eventos", eventos);
         model.addAttribute("clientes", clientService.getAll());
         model.addAttribute("suministros", supplyService.getAll());
+        model.addAttribute("allservicios", planiService.getAll()); // ✅ ahora sí muestra los servicios
 
-        // Generar URL del mapa usando el MapService
         String mapUrl = mapService.getMapEmbed(event.getLocation());
         model.addAttribute("mapUrl", mapUrl);
 
         return "events";
     }
 
-    @PostMapping("/save")
-    public String guardarEvento(@ModelAttribute Event event, Model model, RedirectAttributes redirectAttributes) {
-        try {
-            if (event.getId() == null) {
-                eventService.create(event);
-                redirectAttributes.addFlashAttribute("successMessage", "Evento creado exitosamente.");
-            } else {
-                eventService.update(event);
-                redirectAttributes.addFlashAttribute("successMessage", "Evento actualizado correctamente.");
-            }
-            return "redirect:/events-view";
-        } catch (RuntimeException ex) {
-            model.addAttribute("event", event);
-            model.addAttribute("eventos", eventService.getAll());
-            model.addAttribute("clientes", clientService.getAll());
-            model.addAttribute("suministros", supplyService.getAll());
-            model.addAttribute("errorMessage", ex.getMessage());
-            return "events";
+   @PostMapping("/save")
+public String guardarEvento(@ModelAttribute Event event, Model model, RedirectAttributes redirectAttributes) {
+    try {
+        // 🔧 Asegurarse de que todos los servicios estén persistidos
+        if (event.getPlaniServices() != null) {
+            List<PlaniService> serviciosPersistidos = event.getPlaniServices().stream()
+                .map(s -> planiService.getAll().stream()
+                    .filter(p -> p.getServiceId().equals(s.getServiceId()))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Servicio no encontrado: " + s.getName()))
+                )
+                .collect(Collectors.toList());
+            event.setPlaniServices(serviciosPersistidos);
         }
+
+        if (event.getId() == null) {
+            eventService.create(event);
+            redirectAttributes.addFlashAttribute("successMessage", "Evento creado exitosamente.");
+        } else {
+            eventService.update(event);
+            redirectAttributes.addFlashAttribute("successMessage", "Evento actualizado correctamente.");
+        }
+        return "redirect:/events-view";
+    } catch (RuntimeException ex) {
+        model.addAttribute("event", event);
+        model.addAttribute("eventos", eventService.getAll());
+        model.addAttribute("clientes", clientService.getAll());
+        model.addAttribute("suministros", supplyService.getAll());
+        model.addAttribute("allservicios", planiService.getAll());
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "events";
     }
+}
 
     @GetMapping("/delete/{id}")
     public String eliminarEvento(@PathVariable Long id, RedirectAttributes redirectAttributes) {

@@ -77,7 +77,7 @@ public class EventSeeder implements CommandLineRunner {
             event1.setLocation("Auditorio Central");
             event1.setStatus(EventStatus.INACTIVE);
             event1.setClient(clients.get(0));
-            event1.setServices(List.of(services.get(0)));
+            event1.setPlaniServices(List.of(services.get(0)));
             eventService.create(event1);
 eventSupplyRepository.save(new EventSupply(event1, supplies.get(0), 4)); // 50 globos
 eventSupplyRepository.save(new EventSupply(event1, supplies.get(1), 7)); // 100 pulseras // Globos, pulseras
@@ -92,7 +92,7 @@ eventSupplyRepository.save(new EventSupply(event1, supplies.get(1), 7)); // 100 
             event2.setLocation("Finca campestre Lagos");
             event2.setStatus(EventStatus.ACTIVE);
             event2.setClient(clients.get(1));
-            event2.setServices(List.of(services.get(1)));
+            event2.setPlaniServices(List.of(services.get(1)));
             eventService.create(event2);
             eventSupplyRepository.save(new EventSupply(event2, supplies.get(1), 2)); // Fuentes de agua
             eventSupplyRepository.save(new EventSupply(event2, supplies.get(0), 2)); 
@@ -107,7 +107,7 @@ eventSupplyRepository.save(new EventSupply(event1, supplies.get(1), 7)); // 100 
             event3.setLocation("Salón comunal Rincón de los Ángeles");
             event3.setStatus(EventStatus.ACTIVE);
             event3.setClient(clients.get(2));
-            event3.setServices(List.of(services.get(2)));
+            event3.setPlaniServices(List.of(services.get(2)));
             eventService.create(event3);
             eventSupplyRepository.save(new EventSupply(event3, supplies.get(3), 2)); 
 
@@ -121,7 +121,7 @@ eventSupplyRepository.save(new EventSupply(event1, supplies.get(1), 7)); // 100 
             event4.setLocation("Parque Principal");
             event4.setStatus(EventStatus.ACTIVE);
             event4.setClient(clients.get(3));
-            event4.setServices(List.of(services.get(0), services.get(1)));
+            event4.setPlaniServices(List.of(services.get(0), services.get(1)));
             eventService.create(event4);
             eventSupplyRepository.save(new EventSupply(event4, supplies.get(0), 3)); 
 

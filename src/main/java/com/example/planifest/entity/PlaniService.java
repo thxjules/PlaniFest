@@ -1,5 +1,6 @@
 package com.example.planifest.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,7 +25,7 @@ public class PlaniService {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long serviceId;
 
-    @Column(nullable = false, length =50)
+    @Column(nullable = false, length = 50)
     private String name;
 
     @Column(length = 500)
@@ -33,7 +34,8 @@ public class PlaniService {
     @Column(length = 500)
     private String type;
 
-    @ManyToMany(mappedBy = "services")
-    @JsonIgnore
-    private List<Event> events;
+    // Relación ManyToMany con eventos
+   @ManyToMany(mappedBy = "planiServices")
+@JsonIgnore
+private List<Event> events = new ArrayList<>();
 }

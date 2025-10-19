@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PlaniFest - Gestión de Servicios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/planservices.css}">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <div class="container py-5">
+
+        <!-- ENCABEZADO -->
+        <div class="text-center mb-4">
+            <div class="logo text-center mt-3">
+                <img th:src="@{/images/dashboard/logoplanifest.png}" alt="Logo de la Empresa" width="150">
+            </div>
+            <h1 class="mt-3">Gestión de Servicios</h1>
+            <p class="text-muted">Administra los servicios disponibles en tus eventos</p>
+        </div>
+
+        <!-- BOTONES Y FORMULARIO NUEVO SERVICIO -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="/dashboard/admin" class="btn btn-outline-secondary btn-sm">Volver</a>
+            <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse"
+                data-bs-target="#formularioServicio" aria-expanded="false">
+                + Nuevo servicio
+            </button>
+        </div>
+
+        <div class="collapse" id="formularioServicio">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Agregar Servicio</h5>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/planservices/create}" method="post" th:object="${nuevoServicio}">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" th:field="*{name}" class="form-control" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Tipo</label>
+                                <input type="text" th:field="*{type}" class="form-control" required />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Descripción</label>
+                                <textarea th:field="*{description}" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-end">
+                            <button type="submit" class="btn btn-success">Guardar servicio</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTROS -->
+        <form th:action="@{/planservices}" method="get" class="row g-2 mb-4">
+            <div class="col-md-5">
+                <input type="text" name="filtroNombre" th:value="${filtroNombre}" class="form-control"
+                    placeholder="Filtrar por nombre">
+            </div>
+            <div class="col-md-5">
+                <input type="text" name="filtroTipo" th:value="${filtroTipo}" class="form-control"
+                    placeholder="Filtrar por tipo">
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                <button type="button" class="btn btn-secondary w-100" onclick="limpiarFiltros()">Limpiar</button>
+            </div>
+        </form>
+
+        <!-- TABLA DE SERVICIOS -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Lista de Servicios</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="s : ${servicios}">
+                            <td th:text="${s.name}"></td>
+                            <td th:text="${s.type}"></td>
+                            <td th:text="${s.description}"></td>
+                            <td class="text-center">
+                                <!-- Botón Editar -->
+                                <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#editarServicioModal"
+                                    th:attr="data-id=${s.serviceId}, data-nombre=${s.name}, data-tipo=${s.type}, data-descripcion=${s.description}">
+                                    Editar
+                                </button>
+
+                                <!-- Botón Eliminar -->
+                                <form th:action="@{/planservices/delete/{serviceId}(serviceId=${s.serviceId})}"
+                                    method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${servicios.size() == 0}">
+                            <td colspan="4" class="text-center text-muted">No hay servicios registrados.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR SERVICIO -->
+    <div class="modal fade" id="editarServicioModal" tabindex="-1" aria-labelledby="editarServicioModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/planservices/update}" method="post">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="editarServicioModalLabel">Editar Servicio</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="serviceId" id="editServiceId">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" name="name" id="editName" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tipo</label>
+                            <input type="text" name="type" id="editType" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea name="description" id="editDescription" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cargar datos al modal de edición
+        const editarModal = document.getElementById('editarServicioModal');
+        editarModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            const tipo = button.getAttribute('data-tipo');
+            const descripcion = button.getAttribute('data-descripcion');
+
+            document.getElementById('editServiceId').value = id;
+            document.getElementById('editName').value = nombre;
+            document.getElementById('editType').value = tipo;
+            document.getElementById('editDescription').value = descripcion;
+        });
+
+        // Limpiar filtros
+        function limpiarFiltros() {
+            document.querySelector('input[name="filtroNombre"]').value = '';
+            document.querySelector('input[name="filtroTipo"]').value = '';
+        }
+    </script>
+</body>
+
+</html>

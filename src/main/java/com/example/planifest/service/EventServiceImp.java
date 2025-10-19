@@ -13,10 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.planifest.entity.Client;
 import com.example.planifest.entity.Event;
 import com.example.planifest.entity.EventSupply;
+import com.example.planifest.entity.PlaniService;
 import com.example.planifest.entity.Supply;
 import com.example.planifest.repository.ClientRepository;
 import com.example.planifest.repository.EventRepository;
 import com.example.planifest.repository.EventSupplyRepository;
+import com.example.planifest.repository.PlaniServiceRepository;
 import com.example.planifest.repository.SupplyRepository;
 import com.example.planifest.service.dao.Idao;
 
@@ -27,15 +29,18 @@ public class EventServiceImp implements Idao<Event, Long> {
     private final SupplyRepository supplyRepository;
     private final EventSupplyRepository eventSupplyRepository;
     private final ClientRepository clientRepository;
+    private final PlaniServiceRepository planiServiceRepository; // 👈 Nuevo
 
     public EventServiceImp(EventRepository eventRepository,
                            SupplyRepository supplyRepository,
                            EventSupplyRepository eventSupplyRepository,
-                           ClientRepository clientRepository) {
+                           ClientRepository clientRepository,
+                           PlaniServiceRepository planiServiceRepository) { // 👈 Nuevo
         this.eventRepository = eventRepository;
         this.supplyRepository = supplyRepository;
         this.eventSupplyRepository = eventSupplyRepository;
         this.clientRepository = clientRepository;
+        this.planiServiceRepository = planiServiceRepository;
     }
 
     /* ================== CREAR EVENTO ================== */
@@ -43,51 +48,65 @@ public class EventServiceImp implements Idao<Event, Long> {
     @Override
     @Transactional
     public void create(Event event) {
-        saveEventWithSupplies(event);
+        saveEventWithSuppliesAndServices(event, null);
     }
 
     @Transactional
     public Event createAndReturn(Event event) {
-        return saveEventWithSupplies(event);
+        return saveEventWithSuppliesAndServices(event, null);
     }
 
-    private Event saveEventWithSupplies(Event event) {
+    // 👇 Método central que maneja suministros y servicios
+    private Event saveEventWithSuppliesAndServices(Event event, List<Long> serviceIds) {
         validateEvent(event);
 
-        // Aseguramos cliente válido
+        // Cliente
         if (event.getClient() != null && event.getClient().getId() != null) {
             Client client = clientRepository.findById(event.getClient().getId())
                     .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
             event.setClient(client);
         }
 
-        // Manejo de suministros
-        for (EventSupply es : event.getEventSupplies()) {
-            if (es.getSupply() == null || es.getSupply().getId() == null) {
-                throw new RuntimeException("Debe seleccionar un suministro válido.");
+        // Manejo de suministros (igual que antes)
+        if (event.getEventSupplies() != null) {
+            for (EventSupply es : event.getEventSupplies()) {
+                if (es.getSupply() == null || es.getSupply().getId() == null) {
+                    throw new RuntimeException("Debe seleccionar un suministro válido.");
+                }
+
+                Supply supply = supplyRepository.findById(es.getSupply().getId())
+                        .orElseThrow(() -> new RuntimeException("El suministro no se ha encontrado."));
+
+                if (es.getQuantitySupply() <= 0) {
+                    throw new RuntimeException("La cantidad del suministro debe ser mayor a 0.");
+                }
+
+                if (es.getQuantitySupply() > supply.getCurrentStock()) {
+                    throw new RuntimeException("La cantidad solicitada excede el stock disponible.");
+                }
+
+                supply.setCurrentStock(supply.getCurrentStock() - es.getQuantitySupply());
+                supplyRepository.save(supply);
+
+                es.setEvent(event);
+                es.setSupply(supply);
             }
+        }
 
-            Supply supply = supplyRepository.findById(es.getSupply().getId())
-                    .orElseThrow(() -> new RuntimeException("El suministro no se ha encontrado."));
-
-            if (es.getQuantitySupply() <= 0) {
-                throw new RuntimeException("La cantidad del suministro debe ser mayor a 0.");
-            }
-
-            if (es.getQuantitySupply() > supply.getCurrentStock()) {
-                throw new RuntimeException("La cantidad solicitada excede el stock disponible.");
-            }
-
-            // Descontar stock
-            supply.setCurrentStock(supply.getCurrentStock() - es.getQuantitySupply());
-            supplyRepository.save(supply);
-
-            // Relaciones
-            es.setEvent(event);
-            es.setSupply(supply);
+        // 👇 Manejo de servicios asociados
+        if (serviceIds != null && !serviceIds.isEmpty()) {
+            List<PlaniService> servicios = planiServiceRepository.findAllById(serviceIds);
+            event.setPlaniServices(servicios);
         }
 
         return eventRepository.save(event);
+    }
+
+    /* ================== GUARDAR EVENTO CON SERVICIOS ================== */
+
+    @Transactional
+    public Event saveWithServices(Event event, List<Long> serviceIds) {
+        return saveEventWithSuppliesAndServices(event, serviceIds);
     }
 
     /* ================== OBTENER EVENTOS ================== */
@@ -112,6 +131,16 @@ public class EventServiceImp implements Idao<Event, Long> {
 
         validateEvent(event);
 
+        // 🔸 Actualizar servicios (sin tocar suministros aún)
+        if (event.getPlaniServices() != null) {
+            List<Long> ids = event.getPlaniServices().stream()
+                    .map(PlaniService::getServiceId)
+                    .toList();
+            List<PlaniService> serviciosActualizados = planiServiceRepository.findAllById(ids);
+            event.setPlaniServices(serviciosActualizados);
+        }
+
+        // 🔸 Luego manejar suministros igual que antes
         List<EventSupply> existingList = eventSupplyRepository.findByEventId(event.getId());
         Map<Long, EventSupply> existingById = existingList.stream()
                 .filter(es -> es.getId() != null)
@@ -195,13 +224,13 @@ public class EventServiceImp implements Idao<Event, Long> {
                 .orElseThrow(() -> new RuntimeException("No se puede eliminar el evento porque no existe."));
 
         List<EventSupply> supplies = eventSupplyRepository.findByEventId(id);
-
         for (EventSupply es : supplies) {
             Supply supply = es.getSupply();
             supply.setCurrentStock(supply.getCurrentStock() + es.getQuantitySupply());
             supplyRepository.save(supply);
         }
 
+        event.getPlaniServices().clear(); // 👈 Limpia las relaciones ManyToMany
         eventSupplyRepository.deleteAll(supplies);
         eventRepository.delete(event);
     }
@@ -217,33 +246,19 @@ public class EventServiceImp implements Idao<Event, Long> {
     }
 
     private void validateEvent(Event event) {
-        if (isBlank(event.getEventName())) {
-            throw new RuntimeException("El nombre del evento es obligatorio.");
-        }
-        if (isBlank(event.getDescription())) {
-            throw new RuntimeException("La descripción del evento es obligatoria.");
-        }
-        if (event.getDate() == null) {
-            throw new RuntimeException("La fecha del evento es obligatoria.");
-        }
-        if (event.getStartTime() == null || event.getEndTime() == null) {
+        if (isBlank(event.getEventName())) throw new RuntimeException("El nombre del evento es obligatorio.");
+        if (isBlank(event.getDescription())) throw new RuntimeException("La descripción del evento es obligatoria.");
+        if (event.getDate() == null) throw new RuntimeException("La fecha del evento es obligatoria.");
+        if (event.getStartTime() == null || event.getEndTime() == null)
             throw new RuntimeException("La hora de inicio y fin del evento es obligatoria.");
-        }
-        if (event.getEndTime().isBefore(event.getStartTime())) {
-            throw new RuntimeException("La hora de fin no puede ser anterior a la hora de inicio.");
-        }
-        if (event.getGuestCount() == null || event.getGuestCount() <= 0) {
+        if (event.getEndTime().isBefore(event.getStartTime()))
+            throw new RuntimeException("La hora de fin no puede ser anterior a la de inicio.");
+        if (event.getGuestCount() == null || event.getGuestCount() <= 0)
             throw new RuntimeException("El número de invitados debe ser mayor a cero.");
-        }
-        if (event.getLocation() == null) {
-            throw new RuntimeException("La ubicación del evento es obligatoria.");
-        }
-        if (event.getStatus() == null) {
-            throw new RuntimeException("El estado del evento es obligatorio.");
-        }
-        if (event.getClient() == null || event.getClient().getId() == null) {
-            throw new RuntimeException("El evento debe tener un cliente válido asignado.");
-        }
+        if (event.getLocation() == null) throw new RuntimeException("La ubicación del evento es obligatoria.");
+        if (event.getStatus() == null) throw new RuntimeException("El estado del evento es obligatorio.");
+        if (event.getClient() == null || event.getClient().getId() == null)
+            throw new RuntimeException("Debe tener un cliente válido asignado.");
     }
 
     private boolean isBlank(String str) {

@@ -1,87 +1,138 @@
+/* === PALETA DE COLORES === */
+:root {
+    --golden-brown: #9F6920;   /* Botones principales */
+    --rob-roy: #DAA755;        /* Secundario */
+    --marzipan: #E9C579;       /* Suave */
+    --buttermilk: #F1DEA8;     /* Ligero */
+    --wasabi: #809076;         /* Verde intenso */
+    --text-dark: #2b1d14;      /* Texto */
+    --text-light: white;        /* Texto suave */
+}
 
+/* === FONDO GENERAL CON GRADIENTE === */
 body {
-    background-image: url('/images/Fondoevent.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
+    background: linear-gradient(90deg, #111a19, #2b4139);
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text-dark);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Imagen encabezado */
-.header-section img {
-    max-height: 190px;
-    margin-bottom: 15px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(249, 225, 9, 0.782);
-}
-
-/* Título princi */
+/* === ENCABEZADO PRINCIPAL === */
 .header-section h1 {
-    font-weight: 700;
-    color: #f59507;
+    color: var(--buttermilk);
+    font-weight: bold;
 }
-
 .header-section p {
-    color: #000000;
+    color: var(--marzipan);
 }
 
-/*Contiene tabla o formulario */
-.card {
-    border-radius: 10px;
-    background-color: #fbdf99cc; /* Transparencia sutil */
-}
-
-/* Encabezado tarjetas */
-.card-header {
-    background-color: #000000 !important;
-    color: #ffffff !important;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-/* Título encabezado */
-.card-header h5 {
-    font-weight: 600;
-}
-
-/* Tabla celdas encabezados */
-.table td,
-.table th {
-    vertical-align: middle;
-}
-
-.table thead th {
-    background-color: #fbde4b;
-    color: #000000;
-}
-
-/* Botones */
+/* === BOTONES === */
+.btn,
+.btn-primary,
+.btn-success,
 .btn-outline-primary,
-.btn-outline-danger {
-    border-radius: 20px;
-    padding: 4px 12px;
+.btn-outline-secondary {
+    background-color: var(--golden-brown) !important;
+    border-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.btn:hover {
+    background-color: #b97b29 !important;
+    border-color: #b97b29 !important;
+    transform: scale(1.05);
 }
 
-/* Etiqueta visual estados */
-.badge {
-    font-size: 0.9rem;
-    padding: 5px 10px;
+/* === BADGES DE ESTADO === */
+.badge.bg-warning { background-color: var(--rob-roy) !important; color: var(--text-dark) !important; }
+.badge.bg-success { background-color: var(--wasabi) !important; color: var(--text-light) !important; }
+.badge.bg-info { background-color: var(--marzipan) !important; color: var(--text-dark) !important; }
+
+/* === TABLA DE EVENTOS === */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: rgba(255,255,255,0.05);
+}
+.table thead {
+    background-color: var(--wasabi);
+    color: var(--text-light);
+    font-weight: bold;
+}
+.table tbody tr:hover {
+    background-color: rgb(238, 237, 235);
+    transition: 0.3s;
+}
+
+/* === CARDS === */
+.card.fondo-transparente {
+    background-color: rgba(241, 222, 168, 0.4);
     border-radius: 12px;
-    text-transform: capitalize;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    backdrop-filter: blur(6px);
+}
+.card-header.nuevo-evento,
+.card-header.lista-eventos {
+    background-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+    font-weight: bold;
 }
 
-/* Alertas*/
-.alert {
-    font-size: 0.95rem;
+/* === FORM CONTROLS === */
+.form-control:focus, .form-select:focus {
+    border-color: var(--golden-brown);
+    box-shadow: 0 0 0 0.2rem rgba(238, 236, 235, 0.25);
 }
 
-/* Textareas  */
-textarea.form-control {
-    resize: vertical;
+/* === BOTONES DE ACCIÓN EN TABLA === */
+.action-btn { margin-right: 8px; }
+.btn-sm { min-width: 80px; text-align: center; }
+.btn-edit {
+    background-color: var(--golden-brown);
+    border-color: var(--golden-brown);
+    color: var(--text-light);
+    font-weight: bold;
+    transition: 0.3s;
+}
+.btn-edit:hover {
+    background-color: #b97b29;
+    border-color: #b97b29;
+    transform: scale(1.05);
+}
+.btn-delete {
+    background-color: var(--rob-roy);
+    border-color: var(--rob-roy);
+    color: var(--text-dark);
+    font-weight: bold;
+    transition: 0.3s;
+}
+.btn-delete:hover {
+    background-color: #d4a85c;
+    border-color: #d4a85c;
+    transform: scale(1.05);
 }
 
-/* Etiquetas formularios */
-form .form-label {
-    font-weight: 500;
+/* === BOTONES NUEVO EVENTO === */
+.btn-nuevo-evento {
+    background-color: var(--golden-brown) !important;
+    border-color: var(--golden-brown) !important;
+    color: var(--text-light) !important;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.btn-nuevo-evento:hover {
+    background-color: #b97b29 !important;
+    border-color: #b97b29 !important;
+    transform: scale(1.05);
+}
+
+/* === BARRA LISTA EVENTOS === */
+.lista-eventos-bar {
+    background-color: var(--golden-brown) !important;
+    color: var(--text-light);
+    font-weight: bold;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
 }

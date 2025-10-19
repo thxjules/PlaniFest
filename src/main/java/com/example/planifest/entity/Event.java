@@ -70,18 +70,16 @@ public class Event {
     private Client client;
 
     // Relación con Tareas
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
+    // Relación ManyToMany con servicios
     @ManyToMany
-    @JoinTable(name = "event_service", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
-    private List<PlaniService> services;
+    @JoinTable(name = "event_services", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private List<PlaniService> planiServices = new ArrayList<>();
 
-    /* Relacion con Suministros */
+    // Relación con Suministros
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventSupply> eventSupplies = new ArrayList<>();
-
-    @Enumerated(EnumType.STRING)
-    private EventStatus eventStatus;
 }
