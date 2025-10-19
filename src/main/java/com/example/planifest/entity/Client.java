@@ -2,6 +2,9 @@ package com.example.planifest.entity;
 
 import java.util.List;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -10,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,12 +21,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "clients")
+@SQLDelete(sql = "UPDATE clients SET deleted = true WHERE client_id = ?")
+@Where(clause = "deleted = false")
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
-    @SequenceGenerator(name = "client_seq", sequenceName = "client_seq", allocationSize = 1)
-    @Column(name = "client_id", nullable = false, updatable = false, insertable = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "client_id", nullable = false)
     private Long id;
 
     @Column(nullable = false, length = 100)
@@ -35,6 +38,9 @@ public class Client {
 
     @Column(length = 20)
     private String phone;
+
+    /* Soft Delete */
+    private boolean deleted = false;
 
     @OneToMany(mappedBy = "client")
     @JsonIgnore

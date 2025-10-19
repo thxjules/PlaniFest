@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.planifest.entity.PlaniService;
 import com.example.planifest.service.PlaniServiceImp;
@@ -24,8 +25,8 @@ public class PlanServiceViewController {
 
     @GetMapping
     public String listarServicios(Model model,
-                                  @RequestParam(required = false) String filtroNombre,
-                                  @RequestParam(required = false) String filtroTipo) {
+            @RequestParam(required = false) String filtroNombre,
+            @RequestParam(required = false) String filtroTipo) {
 
         List<PlaniService> servicios = planiServiceImp.getAll();
 
@@ -47,21 +48,23 @@ public class PlanServiceViewController {
     }
 
     @PostMapping("/create")
-    public String crearServicio(@ModelAttribute("nuevoServicio") PlaniService servicio) {
+    public String crearServicio(@ModelAttribute("nuevoServicio") PlaniService servicio, RedirectAttributes redirectAttributes) {
         planiServiceImp.create(servicio);
+                    redirectAttributes.addFlashAttribute("successMessage", "El Servicio se ha creado exitosamente.");
         return "redirect:/planservices";
     }
 
     @PostMapping("/update")
-    public String actualizarServicio(@ModelAttribute PlaniService servicio) {
+    public String actualizarServicio(@ModelAttribute PlaniService servicio, RedirectAttributes redirectAttributes) {
         planiServiceImp.update(servicio);
+                    redirectAttributes.addFlashAttribute("successMessage", "El Servicio se ha Actualizado exitosamente.");
         return "redirect:/planservices";
     }
 
     @PostMapping("/delete/{serviceId}")
-public String eliminarServicio(@PathVariable Long serviceId) {
-    planiServiceImp.deleteById(serviceId);
-    return "redirect:/planservices";
-}
+    public String eliminarServicio(@PathVariable Long serviceId) {
+        planiServiceImp.deleteById(serviceId);
+        return "redirect:/planservices";
+    }
 
 }

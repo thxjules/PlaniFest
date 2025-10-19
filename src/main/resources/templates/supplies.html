@@ -17,7 +17,10 @@
 
     <!-- MENSAJE DE ERROR Y BOTÓN NUEVO Suministro -->
     <div class="text-end mb-3">
-        
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Error:</strong> <span th:text="${error}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
@@ -176,10 +179,5 @@
     </div>
 
 </div>
-<script>
-  const stockInput = document.getElementById("currentStock");
-  stockInput.addEventListener("keydown", e => e.preventDefault()); // evita teclear
-  stockInput.addEventListener("paste", e => e.preventDefault());   // evita pegar
-</script>
 </body>
 </html>

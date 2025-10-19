@@ -27,32 +27,33 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
     @Override
     // Metodo create donde retorna en una lista
     public List<StockMovement> getAll() {
-        return stockMovementRepository.findAll();
+        return stockMovementRepository.findByDeletedFalse();
 
     }
-    
+
     public long count() {
         return stockMovementRepository.count();
     }
 
-    public Optional<StockMovement> findById(Long id){
+    public Optional<StockMovement> findById(Long id) {
         return stockMovementRepository.findById(id);
     }
 
     /* Filtros para esta entidad */
-    public List <StockMovement> filtrosMultitabla(Integer cantidad, String tipo, Long suministroId){
+    public List<StockMovement> filtrosMultitabla(Integer cantidad, String tipo, Long suministroId) {
         return stockMovementRepository.findAll().stream()
-        .filter(m -> cantidad == null || m.getQuantity() == cantidad)
-        .filter(m -> tipo == null || tipo.isBlank() || m.getType().name().equalsIgnoreCase(tipo))
-        .filter(m -> suministroId == null || (m.getSupply() !=null && m.getSupply().getId().equals(suministroId) ))
-        .toList();
+                .filter(m -> cantidad == null || m.getQuantity() == cantidad)
+                .filter(m -> tipo == null || tipo.isBlank() || m.getType().name().equalsIgnoreCase(tipo))
+                .filter(m -> suministroId == null
+                        || (m.getSupply() != null && m.getSupply().getId().equals(suministroId)))
+                .toList();
     }
 
     @Override
     public void create(StockMovement stockMovement) {
         Supply supply = stockMovement.getSupply();
 
-            // Validar que no sea nulo
+        // Validar que no sea nulo
         if (supply == null || supply.getId() == null) {
             throw new IllegalArgumentException("El movimiento debe estar asociado a un insumo existente.");
         }
@@ -81,8 +82,8 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
 
     public StockMovement getById(Long id) {
         return stockMovementRepository.findById(id)
-        .orElseThrow(
-        () -> new RuntimeException("El movimiento de stock no ha sido encontrado con este id " + id));
+                .orElseThrow(
+                        () -> new RuntimeException("El movimiento de stock no ha sido encontrado con este id " + id));
     }
 
     @Override
@@ -93,11 +94,10 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
 
     @Override
     public void deleteById(Long id) {
-        if (stockMovementRepository.existsById(id)) {
-            stockMovementRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("No se puede eliminar el movimiento de stock porque no existe.");
-        }
+        StockMovement stockMovement = stockMovementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El movimiento de stock a eliminar no se ha encontrado"));
+        stockMovement.setDeleted(true);
+        stockMovementRepository.save(stockMovement);
     }
 
     private void stockMovementInfoRequired(StockMovement stockMovement) {

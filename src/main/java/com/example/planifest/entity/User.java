@@ -2,6 +2,9 @@ package com.example.planifest.entity;
 
 import java.util.List;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.example.planifest.enums.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -23,6 +26,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "users")
+@SQLDelete(sql = "UPDATE users SET deleted = true WHERE user_id = ?")
+@Where(clause = "deleted = false")
 public class User {
 
     @Id
@@ -45,6 +50,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "rol", length = 20)
     private Role role;
+
+    private boolean deleted = false; // soft Delete
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference

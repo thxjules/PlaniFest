@@ -32,10 +32,10 @@ public class EventServiceImp implements Idao<Event, Long> {
     private final PlaniServiceRepository planiServiceRepository; // 👈 Nuevo
 
     public EventServiceImp(EventRepository eventRepository,
-                           SupplyRepository supplyRepository,
-                           EventSupplyRepository eventSupplyRepository,
-                           ClientRepository clientRepository,
-                           PlaniServiceRepository planiServiceRepository) { // 👈 Nuevo
+            SupplyRepository supplyRepository,
+            EventSupplyRepository eventSupplyRepository,
+            ClientRepository clientRepository,
+            PlaniServiceRepository planiServiceRepository) { // 👈 Nuevo
         this.eventRepository = eventRepository;
         this.supplyRepository = supplyRepository;
         this.eventSupplyRepository = eventSupplyRepository;
@@ -113,7 +113,10 @@ public class EventServiceImp implements Idao<Event, Long> {
 
     @Override
     public List<Event> getAll() {
-        return eventRepository.findAll();
+        return eventRepository.findAll()
+        .stream()
+        .filter(e -> !e.isDeleted())
+        .collect(Collectors.toList());
     }
 
     public List<Event> findByClientId(Long clientId) {
@@ -220,19 +223,36 @@ public class EventServiceImp implements Idao<Event, Long> {
     @Override
     @Transactional
     public void deleteById(Long id) {
+
+        //Validaciones Para encontrar el ID
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se puede eliminar el evento porque no existe."));
 
+                //En caso de que el evento fue eliminado
+        if(event.isDeleted()){
+            throw new RuntimeException("El evento fue eliminado Anteriormente");
+        }
+
+        event.setDeleted(true);
+
         List<EventSupply> supplies = eventSupplyRepository.findByEventId(id);
+
         for (EventSupply es : supplies) {
             Supply supply = es.getSupply();
+
+            //Devolucion al Stock actual
             supply.setCurrentStock(supply.getCurrentStock() + es.getQuantitySupply());
             supplyRepository.save(supply);
+        
+
+        //Valida la eliminacion de la relacion
+        es.setDeleted(true);
+        eventSupplyRepository.save(es);
         }
 
         event.getPlaniServices().clear(); // 👈 Limpia las relaciones ManyToMany
-        eventSupplyRepository.deleteAll(supplies);
-        eventRepository.delete(event);
+
+        eventRepository.save(event);
     }
 
     /* ================== UTILIDADES ================== */
@@ -246,17 +266,22 @@ public class EventServiceImp implements Idao<Event, Long> {
     }
 
     private void validateEvent(Event event) {
-        if (isBlank(event.getEventName())) throw new RuntimeException("El nombre del evento es obligatorio.");
-        if (isBlank(event.getDescription())) throw new RuntimeException("La descripción del evento es obligatoria.");
-        if (event.getDate() == null) throw new RuntimeException("La fecha del evento es obligatoria.");
+        if (isBlank(event.getEventName()))
+            throw new RuntimeException("El nombre del evento es obligatorio.");
+        if (isBlank(event.getDescription()))
+            throw new RuntimeException("La descripción del evento es obligatoria.");
+        if (event.getDate() == null)
+            throw new RuntimeException("La fecha del evento es obligatoria.");
         if (event.getStartTime() == null || event.getEndTime() == null)
             throw new RuntimeException("La hora de inicio y fin del evento es obligatoria.");
         if (event.getEndTime().isBefore(event.getStartTime()))
             throw new RuntimeException("La hora de fin no puede ser anterior a la de inicio.");
         if (event.getGuestCount() == null || event.getGuestCount() <= 0)
             throw new RuntimeException("El número de invitados debe ser mayor a cero.");
-        if (event.getLocation() == null) throw new RuntimeException("La ubicación del evento es obligatoria.");
-        if (event.getStatus() == null) throw new RuntimeException("El estado del evento es obligatorio.");
+        if (event.getLocation() == null)
+            throw new RuntimeException("La ubicación del evento es obligatoria.");
+        if (event.getStatus() == null)
+            throw new RuntimeException("El estado del evento es obligatorio.");
         if (event.getClient() == null || event.getClient().getId() == null)
             throw new RuntimeException("Debe tener un cliente válido asignado.");
     }

@@ -24,25 +24,29 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
 
     @Override
     public List<Supply> getAll() {
-        return supplyRepository.findAll();
+        /* Retornaa los suministros que no esten marcados como eliminados */
+        return supplyRepository.findByDeletedFalse();
     }
 
     /* Filtros para insumos */
-    public List<Supply> filtrosMultiTabla(String nombre, String lugarAlmacen, Integer stockActual ){
-        return supplyRepository.findAll().stream()
-            .filter(s -> nombre == null || nombre.isBlank() || s.getName().toLowerCase().contains(nombre.toLowerCase())) 
-            .filter(s -> lugarAlmacen == null || lugarAlmacen.isBlank() || s.getStorageLocation().toLowerCase().contains(lugarAlmacen.toLowerCase()))
-            .filter(s -> stockActual == null || s.getCurrentStock() == stockActual)
-            .toList();
+    public List<Supply> filtrosMultiTabla(String nombre, String lugarAlmacen, Integer stockActual) {
+        return supplyRepository.findByDeletedFalse().stream()
+                .filter(s -> nombre == null || nombre.isBlank()
+                        || s.getName().toLowerCase().contains(nombre.toLowerCase()))
+                .filter(s -> lugarAlmacen == null || lugarAlmacen.isBlank()
+                        || s.getStorageLocation().toLowerCase().contains(lugarAlmacen.toLowerCase()))
+                .filter(s -> stockActual == null || s.getCurrentStock() == stockActual)
+                .toList();
     }
-    
+
     public long count() {
         return supplyRepository.count();
     }
-    
+
     /* Encontrar por Id */
-    public Optional<Supply> findById(Long id){
-        return supplyRepository.findById(id);
+    public Optional<Supply> findById(Long id) {
+        return supplyRepository.findById(id)
+                .filter(s -> !s.isDeleted());
     }
 
     @Override
@@ -59,28 +63,12 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
 
     @Override
     public void deleteById(Long id) {
-        Optional<Supply> optionalSupply = supplyRepository.findById(id);
+        Supply supply = supplyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se puede eliminar el recurso porque no existe."));
 
-        if (optionalSupply.isEmpty()) {
-            throw new RuntimeException("No se puede eliminar el recurso porque no existe.");
-        }
-
-        Supply supply = optionalSupply.get();
-
-        try {
-            // Eliminar relaciones con eventos
-            supply.getEventSupplies().forEach(eventSupply -> {
-                Event event = eventSupply.getEvent();
-                event.getEventSupplies().remove(eventSupply);
-            });
-            supply.getEventSupplies().clear();
-            supplyRepository.save(supply);
-
-            // Eliminar el suministro
-            supplyRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new SupplyDeletionException("No se puede eliminar el suministro porque está vinculado a eventos.");
-        }
+        // Marcar como eliminado (soft delete)
+        supply.setDeleted(true);
+        supplyRepository.save(supply);
     }
 
     private void supplyInfoRequired(Supply supply) {

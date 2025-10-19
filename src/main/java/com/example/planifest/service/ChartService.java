@@ -14,28 +14,26 @@ import org.springframework.stereotype.Service;
 
 import com.example.planifest.entity.Supply;
 
-
 @Service
 public class ChartService {
 
     // Gráfico de barras: Reporte Administración
-    public String generarGraficoAdministracion(long empleados, long eventos, long tareas, long insumos) throws Exception {
-    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    dataset.addValue(empleados, "Empleados", "Empleados");
-    dataset.addValue(eventos, "Eventos", "Eventos");
-    dataset.addValue(tareas, "Tareas", "Tareas");
-    dataset.addValue(insumos, "Insumos", "Insumos");
+    public String generarGraficoAdministracion(long empleados, long eventos, long tareas, long insumos)
+            throws Exception {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        dataset.addValue(empleados, "Empleados", "Empleados");
+        dataset.addValue(eventos, "Eventos", "Eventos");
+        dataset.addValue(tareas, "Tareas", "Tareas");
+        dataset.addValue(insumos, "Insumos", "Insumos");
 
-    JFreeChart chart = ChartFactory.createBarChart(
-            "Resumen Administración",
-            "Métricas",
-            "Cantidad",
-            dataset
-    );
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Resumen Administración",
+                "Métricas",
+                "Cantidad",
+                dataset);
 
-    return convertirGraficoABase64(chart, 500, 300);
-}
-
+        return convertirGraficoABase64(chart, 500, 300);
+    }
 
     public String generarGraficoInventario(Map<String, Integer> stockPorTipo) throws Exception {
         DefaultPieDataset dataset = new DefaultPieDataset();
@@ -44,31 +42,28 @@ public class ChartService {
         JFreeChart chart = ChartFactory.createPieChart(
                 "Distribución de Stock por Tipo",
                 dataset,
-                true, true, false
-        );
+                true, true, false);
 
         return convertirGraficoABase64(chart, 500, 300);
     }
 
     public String generarGraficoStockMinimo(List<Supply> supplies) throws Exception {
-    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-    for (Supply s : supplies) {
-        dataset.addValue(s.getCurrentStock(), "Stock Actual", s.getName());
-        dataset.addValue(s.getMinStock(), "Stock Mínimo", s.getName());
-        dataset.addValue(s.getMaxStock(), "Stock Máximo", s.getName());
+        for (Supply s : supplies) {
+            dataset.addValue(s.getCurrentStock(), "Stock Actual", s.getName());
+            dataset.addValue(s.getMinStock(), "Stock Mínimo", s.getName());
+            dataset.addValue(s.getMaxStock(), "Stock Máximo", s.getName());
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Stock Actual vs. Stock Mínimo y Máximo",
+                "Insumos",
+                "Cantidad",
+                dataset);
+
+        return convertirGraficoABase64(chart, 700, 400);
     }
-
-    JFreeChart chart = ChartFactory.createBarChart(
-        "Stock Actual vs. Stock Mínimo y Máximo",
-        "Insumos",
-        "Cantidad",
-        dataset
-    );
-
-    return convertirGraficoABase64(chart, 700, 400);
-}
-
 
     private String convertirGraficoABase64(JFreeChart chart, int width, int height) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

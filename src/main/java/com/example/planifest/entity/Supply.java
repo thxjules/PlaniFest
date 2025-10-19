@@ -6,7 +6,6 @@ import java.util.List;
 import com.example.planifest.enums.SupplyStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +13,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -59,6 +57,8 @@ public class Supply {
     @Column(name = "packaging_unit", nullable = false, length = 50)
     private String packagingUnit;
 
+    /* Soft delete */
+    private boolean deleted = false;
 
     @OneToMany(mappedBy = "supply")
     private List<EventSupply> eventSupplies = new ArrayList<>();

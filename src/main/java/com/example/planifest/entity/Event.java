@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.planifest.enums.EventStatus;
@@ -31,6 +33,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "events")
+@SQLDelete(sql = "UPDATE events SET deleted = true WHERE event_id = ?")
+@Where(clause = "deleted = false")
 public class Event {
 
     @Id
@@ -63,6 +67,8 @@ public class Event {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private EventStatus status;
+
+    private boolean deleted = false; // soft Delete
 
     // Relación con Cliente
     @ManyToOne

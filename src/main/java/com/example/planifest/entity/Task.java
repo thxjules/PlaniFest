@@ -2,6 +2,8 @@ package com.example.planifest.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.planifest.enums.TaskStatus;
@@ -25,6 +27,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "tasks")
+@SQLDelete(sql = "UPDATE tasks SET deleted = true WHERE task_id = ?")
+@Where(clause = "deleted = false")
 public class Task {
 
     @Id
@@ -43,11 +47,11 @@ public class Task {
     @Column(name = "date", nullable = false)
     private LocalDateTime date;
 
-    
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TaskStatus status;
+
+    private boolean deleted = false; // soft Delete
 
     // Relationship
     @ManyToOne

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.planifest.entity.StockMovement;
 import com.example.planifest.service.StockMovementServiceImp;
@@ -50,12 +51,14 @@ public class StockMovementViewController {
     }
 
 @PostMapping("/save")
-public String guardarStock(@ModelAttribute StockMovement stockMovement, Model model) {
+public String guardarStock(@ModelAttribute StockMovement stockMovement, Model model, RedirectAttributes redirectAttributes) {
     try {
         if (stockMovement.getId() == null) {
             stockMovementService.create(stockMovement);
+                        redirectAttributes.addFlashAttribute("successMessage", "El movimiento de stock ha sido creado correctamente.");
         } else {
             stockMovementService.update(stockMovement);
+                       redirectAttributes.addFlashAttribute("successMessage", "El movimiento de Stock ha actualizado correctamente.");
         }
         return "redirect:/stock-view";
     } catch (RuntimeException ex) {
@@ -72,8 +75,13 @@ public String guardarStock(@ModelAttribute StockMovement stockMovement, Model mo
 
 
     @GetMapping("/delete/{id}")
-    public String eliminarStock(@PathVariable Long id) {
-        stockMovementService.deleteById(id);
+    public String eliminarStock(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+                try {
+                    stockMovementService.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Movimiento de stock eliminado correctamente.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar el Movimiento: " + e.getMessage());
+        }
         return "redirect:/stock-view";
     }
 

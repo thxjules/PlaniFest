@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.planifest.entity.Client;
 import com.example.planifest.service.ClientServiceImp;
@@ -45,12 +46,14 @@ public class ClientViewController {
     }
 
     @PostMapping("/save")
-    public String guardarCliente(@ModelAttribute Client client, Model model) {
+    public String guardarCliente(@ModelAttribute Client client, Model model, RedirectAttributes redirectAttributes) {
         try {
             if (client.getId() == null) {
                 clientService.create(client);
+                redirectAttributes.addFlashAttribute("successMessage", "Cliente creado exitosamente.");
             } else {
                 clientService.update(client);
+                redirectAttributes.addFlashAttribute("successMessage", "Cliente actualizado exitosamente.");
             }
             return "redirect:/clients-view";
         } catch (RuntimeException e) {

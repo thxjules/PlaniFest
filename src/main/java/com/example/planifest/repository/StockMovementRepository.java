@@ -11,6 +11,6 @@ import com.example.planifest.entity.StockMovement;
 @Remove
 public interface StockMovementRepository extends JpaRepository<StockMovement, Long> {
 
-    
+    List<StockMovement> findByDeletedFalse();
     List<StockMovement> findByDate(LocalDate date);
 }

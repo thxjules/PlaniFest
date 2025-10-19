@@ -3,6 +3,9 @@ package com.example.planifest.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -19,10 +22,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "services")
+@SQLDelete(sql = "UPDATE services SET deleted = true WHERE service_id = ?")
+@Where(clause = "deleted = false")
 public class PlaniService {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "service_id")
     private Long serviceId;
 
     @Column(nullable = false, length = 50)
@@ -34,8 +40,10 @@ public class PlaniService {
     @Column(length = 500)
     private String type;
 
+    private boolean deleted = false; // soft Delete
+
     // Relación ManyToMany con eventos
-   @ManyToMany(mappedBy = "planiServices")
-@JsonIgnore
-private List<Event> events = new ArrayList<>();
+    @ManyToMany(mappedBy = "planiServices")
+    @JsonIgnore
+    private List<Event> events = new ArrayList<>();
 }

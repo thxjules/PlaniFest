@@ -21,6 +21,17 @@
             <p class="text-muted">Administra los servicios disponibles en tus eventos</p>
         </div>
 
+        <!-- Mensaje de alerta -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        
         <!-- BOTONES Y FORMULARIO NUEVO SERVICIO -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="/dashboard/admin" class="btn btn-outline-secondary btn-sm">Volver</a>

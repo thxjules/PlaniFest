@@ -42,6 +42,9 @@ public class StockMovement {
     @Column(length = 200, nullable = false)
     private String remarks;
 
+    // Soft delete
+    private boolean deleted = false;
+
     // Relationships
     @ManyToOne
     @JoinColumn(name = "supply_id", nullable = false)

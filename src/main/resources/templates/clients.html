@@ -10,6 +10,15 @@
 <body>
     <div class="container py-5">
 
+        <!-- Mensajes de alerta -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <!-- ENCABEZADO GENERAL -->
         <div class="text-center mb-4 header-section">
             <img src="/images/planifest.png" alt="Logo Planifest" style="max-height: 200px;">

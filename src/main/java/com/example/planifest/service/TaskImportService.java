@@ -28,17 +28,19 @@ public class TaskImportService {
     private final EventServiceImp eventService;
 
     public TaskImportService(TaskRepository taskRepository,
-                             UserServiceImp userService,
-                             EventServiceImp eventService) {
+            UserServiceImp userService,
+            EventServiceImp eventService) {
         this.taskRepository = taskRepository;
         this.userService = userService;
         this.eventService = eventService;
     }
 
-    // ================================ IMPORTAR ARCHIVO =================================
+    // ================================ IMPORTAR ARCHIVO
+    // =================================
     public Map<String, List<String>> importarArchivo(MultipartFile file) throws Exception {
         String filename = file.getOriginalFilename();
-        if (filename == null) throw new Exception("Archivo sin nombre");
+        if (filename == null)
+            throw new Exception("Archivo sin nombre");
 
         if (filename.endsWith(".csv")) {
             return importarCSV(file);
@@ -59,7 +61,8 @@ public class TaskImportService {
 
         // Eliminar BOM
         reader.mark(1);
-        if (reader.read() != 0xFEFF) reader.reset();
+        if (reader.read() != 0xFEFF)
+            reader.reset();
 
         // Leer encabezado
         String headerLine = reader.readLine();
@@ -140,8 +143,7 @@ public class TaskImportService {
                         getCellString(row.getCell(headerMap.get("status"))),
                         getCellString(row.getCell(headerMap.get("user_id"))),
                         getCellString(row.getCell(headerMap.get("event_id"))),
-                        duplicadas
-                );
+                        duplicadas);
             } catch (Exception e) {
                 errores.add("Fila con error: " + e.getMessage());
             }
@@ -152,24 +154,30 @@ public class TaskImportService {
     }
 
     private String getCellString(Cell cell) {
-        if (cell == null) return "";
+        if (cell == null)
+            return "";
         switch (cell.getCellType()) {
-            case STRING: return cell.getStringCellValue().trim();
+            case STRING:
+                return cell.getStringCellValue().trim();
             case NUMERIC:
                 if (DateUtil.isCellDateFormatted(cell)) {
                     LocalDateTime dateTime = cell.getLocalDateTimeCellValue();
                     return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy H:mm"));
-                } else return String.valueOf((long) cell.getNumericCellValue());
-            case BOOLEAN: return String.valueOf(cell.getBooleanCellValue());
-            case FORMULA: return cell.getCellFormula();
+                } else
+                    return String.valueOf((long) cell.getNumericCellValue());
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
             case BLANK:
-            default: return "";
+            default:
+                return "";
         }
     }
 
     // ================================ AUXILIARES =================================
     private void procesarFila(String nombreTarea, String desc, String fechaStr, String estado,
-                              String userIdStr, String eventIdStr, List<String> duplicadas) throws Exception {
+            String userIdStr, String eventIdStr, List<String> duplicadas) throws Exception {
         Long userId = Long.parseLong(userIdStr.trim());
         Long eventId = Long.parseLong(eventIdStr.trim());
         LocalDateTime fecha = parseFecha(fechaStr);
@@ -190,8 +198,10 @@ public class TaskImportService {
 
         boolean exists = taskRepository.existsByNameAndDateAndUser_IdAndEvent_Id(
                 nombreTarea, fecha, userId, eventId);
-        if (exists) duplicadas.add(nombreTarea);
-        else taskRepository.save(task);
+        if (exists)
+            duplicadas.add(nombreTarea);
+        else
+            taskRepository.save(task);
     }
 
     private LocalDateTime parseFecha(String fechaStr) {
@@ -199,26 +209,27 @@ public class TaskImportService {
                 "dd/MM/yyyy H:mm", "dd/MM/yyyy",
                 "dd-MM-yyyy H:mm", "dd-MM-yyyy",
                 "yyyy/MM/dd H:mm", "yyyy/MM/dd",
-                "yyyy-MM-dd H:mm", "yyyy-MM-dd"
-        );
+                "yyyy-MM-dd H:mm", "yyyy-MM-dd");
         for (String pattern : patterns) {
             try {
                 return LocalDateTime.parse(fechaStr.trim(), DateTimeFormatter.ofPattern(pattern));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         return null;
     }
 
     private TaskStatus parseStatus(String estado) {
         switch (estado.toUpperCase()) {
-            case "PENDING": return TaskStatus.PENDING;
-            case "IN_PROGRESS": return TaskStatus.IN_PROGRESS;
-            case "COMPLETE": return TaskStatus.COMPLETED;
-            default: return TaskStatus.PENDING;
+            case "PENDING":
+                return TaskStatus.PENDING;
+            case "IN_PROGRESS":
+                return TaskStatus.IN_PROGRESS;
+            case "COMPLETE":
+                return TaskStatus.COMPLETED;
+            default:
+                return TaskStatus.PENDING;
         }
     }
 
 }
-
-
-

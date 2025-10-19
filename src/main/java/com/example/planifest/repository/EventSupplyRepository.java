@@ -12,4 +12,5 @@ public interface EventSupplyRepository extends JpaRepository<EventSupply, Long>{
 
     List<EventSupply> findByEventId(Long eventId);
 
+    List<EventSupply> findByDeletedFalse();
 }

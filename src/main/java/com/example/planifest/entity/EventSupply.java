@@ -33,15 +33,16 @@ public class EventSupply {
     @JoinColumn(name = "supply_id", nullable = false)
     private Supply supply;
 
+    // Soft Delete
+    private boolean deleted = false;
     /* Atributo de cantidad referente a esta tabla */
-    @Column(name = "quantity_supply",nullable = false )
+    @Column(name = "quantity_supply", nullable = false)
     private int quantitySupply;
 
     public EventSupply(Event event, Supply supply, int quantitySupply) {
-    this.event = event;
-    this.supply = supply;
-    this.quantitySupply = quantitySupply;
-}
-
+        this.event = event;
+        this.supply = supply;
+        this.quantitySupply = quantitySupply;
+    }
 
 }

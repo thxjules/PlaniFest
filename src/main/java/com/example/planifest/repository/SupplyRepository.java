@@ -20,6 +20,9 @@ public interface SupplyRepository extends JpaRepository<Supply, Long> {
     // Consulta por el stock actual
     List<Supply> findByCurrentStock(int currentStock);
 
+    //Traer los registros que no estan eliminados
+    List<Supply> findByDeletedFalse();
+
     boolean existsByName(String name);
 
     @Query("SELECT s.supplyType, COUNT(s) FROM Supply s GROUP BY s.supplyType")

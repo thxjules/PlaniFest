@@ -51,12 +51,15 @@ public class SupplyViewController {
 
     /* Usan el mismo formulario (Por eso la condicional) */
     @PostMapping("/save")
-    public String guardarSupply(@ModelAttribute Supply supply, Model model) {
+    public String guardarSupply(@ModelAttribute Supply supply, Model model, RedirectAttributes redirectAttributes) {
         try {
             if (supply.getId() == null) {
-                supplyService.create(supply);/* Creacion de un suministro */
+                supplyService.create(supply);
+                redirectAttributes.addFlashAttribute("successMessage", "El suministro se ha creado exitosamente.");
+                /* Creacion de un suministro */
             } else {
-                supplyService.update(supply);/* Actualizacion */
+                supplyService.update(supply);
+                redirectAttributes.addFlashAttribute("successMessage", "El suministro ha sido actualizado correctamente.");/* Actualizacion */
             }
             return "redirect:/supplies-view";
         } catch (RuntimeException ex) {
@@ -72,7 +75,7 @@ public class SupplyViewController {
     public String eliminarSupply(@PathVariable Long id, RedirectAttributes redirectAttributes) {
             try {
         supplyService.deleteById(id);
-        redirectAttributes.addFlashAttribute("success", "Suministro eliminado correctamente.");
+        redirectAttributes.addFlashAttribute("successMessage", "Suministro eliminado correctamente.");
     } catch (SupplyDeletionException e) {
         redirectAttributes.addFlashAttribute("error", e.getMessage());
     }
