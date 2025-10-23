@@ -67,8 +67,8 @@
         <h2 class="fw-bold">Administrador</h2>
       </div>
       <a th:href="@{/employees-view}" th:classappend="${activePage == 'employees'} ? 'active'"><i class="bx bx-user"></i> Empleados</a>
-      <a th:href="@{/events-view}" th:classappend="${activePage == 'events'} ? 'active'"><i class="bx bx-calendar"></i> Eventos</a>
       <a th:href="@{/clients-view}" th:classappend="${activePage == 'clients'} ? 'active'"><i class="bx bx-user"></i> Clientes</a>
+      <a th:href="@{/events-view}" th:classappend="${activePage == 'events'} ? 'active'"><i class="bx bx-calendar"></i> Eventos</a>
       <a th:href="@{/tasks-view}" th:classappend="${activePage == 'tasks'} ? 'active'"><i class="bx bx-task"></i> Tareas</a>
       <a th:href="@{/supply-admin}" th:classappend="${activePage == 'supplies'} ? 'active'"><i class="bx bx-box"></i> Suministros</a>
       <a th:href="@{/planservices}" th:classappend="${activePage == 'services'} ? 'active'"><i class="bx bx-transfer"></i> Servicios</a>
@@ -91,7 +91,7 @@
 
   <!-- Contenido principal -->
   <div class="main">
-    <h1>Dashboard</h1>
+    <h1>>Panel de Administración</h1>
 
     <!-- KPIs -->
     <div class="kpi-grid">

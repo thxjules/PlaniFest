@@ -41,6 +41,9 @@ public class PositionSeeder implements CommandLineRunner {
         position4.setName("Cordinador");
         positionService.create(position4);
 
+        
+       
+
         System.out.println("Seeder de Position Ejecutado");
     }
 
