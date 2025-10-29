@@ -1,11 +1,16 @@
 package com.example.planifest.controller;
 
-import com.example.planifest.service.ImportExportService;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import com.example.planifest.service.ImportExportService;
 
 @RestController
 @RequestMapping("/api/import-export")
@@ -32,43 +37,7 @@ public class ImportExportController {
         }
     }
 
-    // ================== Exportación ==================
-    @GetMapping("/{entity}/export/json")
-    public ResponseEntity<String> exportJson(@PathVariable String entity) {
-        try {
-            Class<?> entityClass = getEntityClass(entity);
-            String json = importExportService.exportJson(entityClass);
-            return ResponseEntity.ok(json);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @GetMapping("/{entity}/export/csv")
-    public ResponseEntity<byte[]> exportCsv(@PathVariable String entity) {
-        try {
-            Class<?> entityClass = getEntityClass(entity);
-            byte[] data = importExportService.exportCsv(entityClass);
-            return ResponseEntity.ok()
-                    .header("Content-Disposition", "attachment; filename=" + entity + ".csv")
-                    .body(data);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    @GetMapping("/{entity}/export/excel")
-    public ResponseEntity<byte[]> exportExcel(@PathVariable String entity) {
-        try {
-            Class<?> entityClass = getEntityClass(entity);
-            byte[] data = importExportService.exportExcel(entityClass);
-            return ResponseEntity.ok()
-                    .header("Content-Disposition", "attachment; filename=" + entity + ".xlsx")
-                    .body(data);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
+    
 
     // ================== Helper ==================
     private Class<?> getEntityClass(String entity) {
