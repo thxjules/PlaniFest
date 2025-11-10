@@ -128,6 +128,9 @@ public class UserServiceImp implements Idao<User, Long> {
         if (user.getPhoneNumber() == null || user.getPhoneNumber().isBlank()) {
             throw new RuntimeException("El teléfono del usuario no puede estar vacío.");
         }
+         if (user.getPhoneNumber().length() < 10 || user.getPhoneNumber().length()>10) {
+            throw new RuntimeException("El telefono no tiene la cantidad de digitos correctos.");
+        }
 
         if (user.getRole() == null) {
             throw new RuntimeException("El rol del usuario no puede estar vacío.");

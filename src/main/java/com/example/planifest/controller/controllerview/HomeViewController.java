@@ -35,21 +35,32 @@ public class HomeViewController {
     }
 
     @PostMapping("/registro")
-    public String procesarRegistro(@ModelAttribute("user") User user, Model model) {
-        try {
-            if (userService.existsbyEmail(user.getEmail())) {
-                model.addAttribute("error", "El correo ya está registrado.");
-                return "registro";
-            }
-
-            user.setRole(Role.EMPLOYEE);
-            userService.create(user);
-            return "redirect:/login";
-
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
+public String procesarRegistro(@ModelAttribute("user") User user,
+                               Model model,
+                               org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+    try {
+        // Si el correo ya existe
+        if (userService.existsbyEmail(user.getEmail())) {
+            model.addAttribute("error", "El correo ya está registrado.");
             return "registro";
         }
+
+        // Crear el usuario
+        user.setRole(Role.EMPLOYEE);
+        userService.create(user);
+
+        // Enviar mensaje de éxito temporal
+        redirectAttributes.addFlashAttribute("success", true);
+
+        // Redirigir de nuevo a la página de registro (Thymeleaf mostrará el mensaje)
+        return "redirect:/registro";
+
+    } catch (RuntimeException e) {
+        model.addAttribute("error", e.getMessage());
+        return "registro";
+    }
+}
+
 
        // user.setPassword((user.getPassword())); // encriptar contraseña
         //user.setRole(Role.EMPLOYEE); // o el rol que tú definas por defecto
@@ -58,4 +69,3 @@ public class HomeViewController {
         //model.addAttribute("success", "¡Registro exitoso!");
         //return "redirect:/login";
     }
-}
