@@ -20,13 +20,12 @@
       <strong>¡Sus datos han sido registrados correctamente!</strong>
       <br>Será redirigido al inicio de sesión en unos segundos.
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  <script>
-    setTimeout(() => {
-      window.location.href = /*[[@{/login}]]*/ '/login';
-    }, 3000);
-  </script>
+      <script>
+        setTimeout(() => {
+          window.location.href = /*[[@{/login}]]*/ '/login';
+        }, 6000);
+      </script>
     </div>
-    
 
     <!-- MENSAJE DE ERROR -->
     <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -36,28 +35,25 @@
     </div>
 
     <!-- FORMULARIO DE REGISTRO -->
-    <form th:action="@{/registro}" method="post">
+    <form th:action="@{/registro}" th:object="${user}" method="post">
       <div class="mb-3">
         <label for="username" class="form-label">Nombre Completo</label>
-        <input type="text" class="form-control" id="username" name="username"
-               th:value="${username}" required />
+        <input type="text" class="form-control" id="username" th:field="*{username}" required />
       </div>
 
       <div class="mb-3">
         <label for="email" class="form-label">Correo Electrónico</label>
-        <input type="email" class="form-control" id="email" name="email"
-               th:value="${email}" required />
+        <input type="email" class="form-control" id="email" th:field="*{email}" required />
       </div>
 
       <div class="mb-3">
         <label for="phoneNumber" class="form-label">Teléfono</label>
-        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber"
-               th:value="${phoneNumber}" required />
+        <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" required />
       </div>
 
       <div class="mb-3">
         <label for="password" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" id="password" name="password" required />
+        <input type="password" class="form-control" id="password" th:field="*{password}" required />
       </div>
 
       <div class="mb-3">
