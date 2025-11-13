@@ -25,19 +25,17 @@ public class ClientServiceImp implements Idao<Client, Long> {
     }
 
     /* Encontrar por ID */
-        public Optional<Client> findById(Long id){
+    public Optional<Client> findById(Long id) {
         return clientRepository.findById(id);
     }
 
     /* Filtro para empleados */
-    public List<Client> filtroNombreEmail(String nombre, String email){
-
+    public List<Client> filtroNombreEmail(String nombre, String email) {
         return clientRepository.findAll().stream()
-        .filter(c -> nombre == null || nombre.isBlank() || c.getName().toLowerCase().contains(nombre.toLowerCase()))
-        .filter(c -> email == null || email.isBlank() || c.getEmail().toLowerCase().contains(email.toLowerCase()))
-        .toList();
+                .filter(c -> nombre == null || nombre.isBlank() || c.getName().toLowerCase().contains(nombre.toLowerCase()))
+                .filter(c -> email == null || email.isBlank() || c.getEmail().toLowerCase().contains(email.toLowerCase()))
+                .toList();
     }
-
 
     @Override
     public void create(Client client) {
@@ -45,9 +43,10 @@ public class ClientServiceImp implements Idao<Client, Long> {
         clientRepository.save(client);
     }
 
-    public long count(){
+    public long count() {
         return clientRepository.count();
     }
+
     @Override
     public void update(Client client) {
         if (client.getId() == null || !clientRepository.existsById(client.getId())) {
@@ -65,7 +64,9 @@ public class ClientServiceImp implements Idao<Client, Long> {
         clientRepository.deleteById(id);
     }
 
+    /* 🔍 Validación general del cliente */
     private void validateClient(Client client, boolean isCreate) {
+        // Validar nombre
         if (isBlank(client.getName())) {
             throw new RuntimeException("El nombre del cliente es obligatorio.");
         }
@@ -73,6 +74,12 @@ public class ClientServiceImp implements Idao<Client, Long> {
             throw new RuntimeException("El nombre del cliente no puede superar los 100 caracteres.");
         }
 
+        // 💡 Nueva validación: solo letras y espacios (sin números ni signos)
+        if (!isValidName(client.getName())) {
+            throw new RuntimeException("El nombre solo puede contener letras y espacios (sin números ni símbolos).");
+        }
+
+        // Validar correo
         if (isBlank(client.getEmail())) {
             throw new RuntimeException("El correo del cliente es obligatorio.");
         }
@@ -86,11 +93,13 @@ public class ClientServiceImp implements Idao<Client, Long> {
             throw new RuntimeException("Ya existe un cliente con ese correo.");
         }
 
+        // Validar teléfono
         if (client.getPhone() != null && client.getPhone().length() > 20) {
             throw new RuntimeException("El teléfono no puede superar los 20 caracteres.");
         }
     }
 
+    /* 📘 Métodos auxiliares */
     private boolean isBlank(String str) {
         return str == null || str.isBlank();
     }
@@ -98,5 +107,12 @@ public class ClientServiceImp implements Idao<Client, Long> {
     private boolean isValidEmail(String email) {
         String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return Pattern.matches(regex, email);
+    }
+
+    /* ✅ Nueva validación: solo letras y espacios */
+    private boolean isValidName(String name) {
+        // Solo letras (mayúsculas/minúsculas), acentos, ñ y espacios
+        String regex = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$";
+        return Pattern.matches(regex, name);
     }
 }

@@ -92,6 +92,10 @@
   <!-- Contenido principal -->
   <div class="main">
     <h1>>Panel de Administración</h1>
+<div class="alert alert-success mt-3" role="alert"
+       style="background-color:#f8d794; color:#111419; border:none; font-weight:600;">
+     ¡Bienvenido Administrador! Nos alegra verte de nuevo en Planifest.
+  </div>
 
     <!-- KPIs -->
     <div class="kpi-grid">
@@ -174,5 +178,16 @@
       });
     });
   </script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const alert = document.querySelector(".alert-success");
+    if (alert) {
+      setTimeout(() => {
+        alert.style.transition = "opacity 1s ease";
+        alert.style.opacity = "0";
+      }, 5000); // desaparece en 5 segundos
+    }
+  });
+</script>
 </body>
 </html>

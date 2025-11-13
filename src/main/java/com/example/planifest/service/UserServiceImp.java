@@ -66,18 +66,15 @@ public class UserServiceImp implements Idao<User, Long> {
     }
 
     public List<User> getEmployeesFilteredByPosition(Long positionId) {
-        List<User> empleados = userRepository.findAll().stream()
-                .filter(user -> user.getRole() == Role.EMPLOYEE)
-                .filter(user -> positionId == null ||
-                        (user.getPosition() != null &&
-                                user.getPosition().getId().equals(positionId)))
+        List<User> empleados = userRepository.findAll().stream().filter(user -> user.getRole() == Role.EMPLOYEE)
+                .filter(user -> positionId == null
+                        || (user.getPosition() != null && user.getPosition().getId().equals(positionId)))
                 .toList();
         return empleados;
     }
 
     public void actualizarSoloPosicion(Long userId, Long positionId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
 
         if (user.getRole() == Role.ADMIN || user.getRole() == Role.STOCK_ADMIN) {
             throw new RuntimeException("No se puede cambiar la posición de un administrador.");
@@ -117,6 +114,13 @@ public class UserServiceImp implements Idao<User, Long> {
             throw new RuntimeException("El nombre del usuario no puede estar vacío.");
         }
 
+        if (user.getUsername().length() < 3) {
+            throw new RuntimeException("El nombre del usuario debe tener al menos 3 caracteres.");
+        }
+        if (!user.getUsername().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            throw new RuntimeException("El nombre del usuario solo puede contener letras y espacios.");
+        }
+
         if (user.getPassword() == null || user.getPassword().isBlank()) {
             throw new RuntimeException("La contraseña del usuario no puede estar vacía.");
         }
@@ -128,9 +132,14 @@ public class UserServiceImp implements Idao<User, Long> {
         if (user.getPhoneNumber() == null || user.getPhoneNumber().isBlank()) {
             throw new RuntimeException("El teléfono del usuario no puede estar vacío.");
         }
-         if (user.getPhoneNumber().length() < 10 || user.getPhoneNumber().length()>10) {
+        if (user.getPhoneNumber().length() < 10 || user.getPhoneNumber().length() > 10) {
             throw new RuntimeException("El telefono no tiene la cantidad de digitos correctos.");
         }
+        if (!user.getPhoneNumber().matches("^[0-9]+$")) {
+            throw new RuntimeException("El telefono solo puede contener numeros.");
+        }
+
+
 
         if (user.getRole() == null) {
             throw new RuntimeException("El rol del usuario no puede estar vacío.");
