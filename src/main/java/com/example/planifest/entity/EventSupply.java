@@ -35,6 +35,7 @@ public class EventSupply {
 
     // Soft Delete
     private boolean deleted = false;
+    
     /* Atributo de cantidad referente a esta tabla */
     @Column(name = "quantity_supply", nullable = false)
     private int quantitySupply;

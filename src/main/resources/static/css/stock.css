@@ -4,11 +4,6 @@ body {
   overflow-x: hidden;
 }
 
-html, body {
-  width: 100%;
-  max-width: 100%;
-  font-family: "Poppins", sans-serif;
-}
 
 /* Contenedor principal */
 .dashboard-wrapper {
@@ -19,17 +14,14 @@ html, body {
 /* Sidebar */
 .sidebar {
   width: 270px;
-  background-color: #e0ca9f;
+  background-color: #213431;
+  color: #F1DEAB;
   padding: 2rem 1rem;
   display: flex;
+  text-align: center;
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.sidebar h2 {
-  text-align: center;
-  color: #000000;
 }
 
 .sidebar .logo img {
@@ -47,16 +39,17 @@ html, body {
   padding: 10px 15px;
   margin: 10px auto;
   border-radius: 10px;
-  color: #000000;
+  color: #F1DEAB;
   font-weight: 500;
   text-decoration: none;
   transition: background 0.2s ease;
   width: 100%;
 }
 
+
 .logout-button {
-  background-color: #af4c0f;
-  color: #ffffff;
+  background-color: #F1DEAB;
+  color: #000000;
   font-weight: 600;
   justify-content: center;
   border: none;
@@ -64,18 +57,19 @@ html, body {
 
 .sidebar a:hover,
 .logout-button:hover {
-  background-color: #c9572a;
+  background-color: #F1DEAB;
   color: #000000;
 }
 .main {
   padding: 2rem;
+  background-color:#fdfdf5f1;
   min-width: 0;
 }
 
 .main h1 {
   font-size: 2rem;
-  color: #ffff;
-  background: #af4c0f;
+  color: #F1DEAB;
+  background: #213431;
   padding: 1rem;
   text-align: center;
   border-radius: 10px;
@@ -83,9 +77,8 @@ html, body {
 
 /* Botón personalizado */
 .btn-gold {
-  background-color: #af4c0fbe;
   border: none;
-  color: white;
+  color: rgb(0, 0, 0);
   padding: 0.5rem 1rem;
   font-weight: bold;
   border-radius: 5px;
@@ -94,12 +87,8 @@ html, body {
 
 .btn-gold:hover {
   background-color: #b58c4f;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
-/* Texto personalizado */
-.text-gold {
-  color: #c59d5f;
-}
 
 

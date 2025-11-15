@@ -10,22 +10,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-   <link rel="stylesheet" th:href="@{/css/dashboard.css}">
-<link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+  <link rel="stylesheet" th:href="@{/css/stock.css}">
+  <link rel="icon" th:href="@{/images/planifest.png}" type="image/png">
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* 🎨 Colores */
-    :root {
-      --emerald-green: #284139;
-      --wasabi: #809076;
-      --creased-khaki: #F8D794;
-      --egyptian-earth: #B86830;
-      --noir-de-vigne: #111A19;
-      --text-light: #f8f9fa;
-    }
-
-
     canvas {
       max-height: 180px;
     }
@@ -45,12 +36,11 @@
         <a th:href="@{/stock-view}" th:classappend="${activePage == 'stock'} ? 'active'">
           <i class="bx bx-transfer"></i> Movimientos de stock
         </a>
-
-         <div class="text-center mt-4">
-                    <a th:href="@{/admin/stock/report}" class="btn-gold">
-                        📄 Descargar reporte PDF
-                    </a>
-                </div>
+        <div class="reporte">
+          <a th:href="@{/admin/stock/report}" class="btn-gold">
+            📄 Descargar reporte PDF
+          </a>
+        </div>
       </div>
 
       <form id="logout-form" th:action="@{/logout}" method="post">
@@ -61,7 +51,7 @@
       </form>
 
       <div class="logo text-center">
-        <img th:src="@{/images/dashboard/logoplanifest.png}" alt="Logo Planifest">
+        <img th:src="@{/images/1.png}" alt="Logo Planifest" height="210px" width="210px">
       </div>
     </div>
 
@@ -84,14 +74,14 @@
         </div>
       </div>
 
-        <div class="col-md-12 mb-4">
-          <div class="card shadow p-3">
-            <h5>Movimientos de stock</h5>
-            <canvas id="movementChart"></canvas>
-          </div>
+      <div class="col-md-12 mb-4">
+        <div class="card shadow p-3">
+          <h5>Movimientos de stock</h5>
+          <canvas id="movementChart"></canvas>
         </div>
       </div>
     </div>
+  </div>
   </div>
 
   <!-- Scripts gráficos -->

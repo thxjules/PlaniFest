@@ -7,7 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
-    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/empleado.css}">
+    <link rel="icon" th:href="@{/images/planifest.png}" type="image/png">
+
 </head>
 
 <body>
@@ -16,15 +18,12 @@
         <div class="sidebar" id="sidebar">
             <div class="brand text-center p-3">
                 <h5 class="mb-0"><span sec:authentication="name">Empleado</span></h5>
-                <p class="text-muted" th:text="${empleado.position != null ? empleado.position.name : 'Sin asignar'}">Cargo</p>
-                <p class="text-muted" th:text="${empleado?.email} ?: 'empleado@ejemplo.com'">empleado@ejemplo.com</p>
                 <a th:href="@{/employee-profile/edit}" class="btn btn-outline-light btn-sm mt-2">
                     <i class="bx bx-edit"></i> Editar perfil
                 </a>
-
-                 <div class="logo text-center mt-3">
-      <img th:src="@{/images/dashboard/logoplanifest.png}" alt="Logo de la Empresa">
-    </div>
+                <div class="logo text-center mt-3">
+                    <img th:src="@{/images/1.png}" alt="Logo Planifest" height="210px" width="210px">
+                </div>
             </div>
             <div class="text-center mt-auto mb-3">
                 <form method="post" th:action="@{/logout}">
@@ -36,13 +35,11 @@
             </div>
         </div>
 
-        
 
         <!-- Contenido principal -->
         <div id="content" class="main">
             <main class="p-4">
-                <h1 class="mb-4" th:text="'Bienvenida ' + ${empleado.username}">Bienvenida Empleado</h1>
-
+                <h1 class="mb-4" th:text=" ${empleado.username}">Empleado</h1>
                 <!-- Filtros -->
                 <div class="row mb-4 justify-content-center">
                     <div class="col-md-3">
@@ -60,7 +57,8 @@
                     </div>
                     <div class="col-md-3 d-flex align-items-end gap-2">
                         <button type="button" onclick="filtrarTareas()" class="btn btn-gold w-100">Filtrar</button>
-                        <button type="button" onclick="limpiarFiltros()" class="btn btn-secondary w-100">Limpiar</button>
+                        <button type="button" onclick="limpiarFiltros()"
+                            class="btn btn-secondary w-100">Limpiar</button>
                     </div>
                 </div>
 
@@ -80,9 +78,8 @@
                             <tr th:each="tarea : ${tareasAsignadas}">
                                 <td th:text="${tarea.event.eventName}">Área</td>
                                 <td>
-                                    <a href="javascript:void(0)"
-                                       th:text="${tarea.event.location}"
-                                       th:attr="onclick=|mostrarUbicacion('${tarea.event.location}')|">
+                                    <a href="javascript:void(0)" th:text="${tarea.event.location}"
+                                        th:attr="onclick=|mostrarUbicacion('${tarea.event.location}')|">
                                     </a>
                                 </td>
                                 <td th:text="${tarea.event.description}">Descripción</td>
@@ -180,7 +177,7 @@
 
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgZPwudO2MG358I1CqrzctaVrIfclADcQ&callback=initMap">
-    </script>
+        </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
