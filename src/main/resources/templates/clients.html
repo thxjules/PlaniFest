@@ -15,10 +15,12 @@
             <span th:text="${successMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+
         <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <span th:text="${error}"></span>
+            <span th:text="${errorMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+
         <!-- ENCABEZADO GENERAL -->
         <div class="text-center mb-4 header-section">
             <img src="/images/planifest.png" alt="Logo Planifest" style="max-height: 200px;">
@@ -28,10 +30,6 @@
 
         <!-- BOTONES ARRIBA -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Error:</strong> <span th:text="${error}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-            </div>
             <a th:href="@{/dashboard/admin}" class="btn btn-outline-secondary btn-sm">Volver</a>
             <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse"
                     data-bs-target="#formularioCliente">
@@ -125,10 +123,18 @@
                             <td th:text="${c.email}"></td>
                             <td th:text="${c.phone}"></td>
                             <td class="text-center">
-                                <a th:href="@{/clients-view(id=${c.id})}" class="btn btn-sm btn-outline-primary me-1">Editar</a>
-                                <a th:href="@{/clients-view/delete/{id}(id=${c.id})}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                                <a th:href="@{/clients-view(id=${c.id})}"
+                                   class="btn btn-sm btn-outline-primary me-1">Editar</a>
+
+                                <!-- CONFIRMACIÓN DE ELIMINAR -->
+                                <a th:href="@{/clients-view/delete/{id}(id=${c.id})}"
+                                   class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('¿Seguro que deseas eliminar este cliente?');">
+                                   Eliminar
+                                </a>
                             </td>
                         </tr>
+
                         <tr th:if="${clientes.size() == 0}">
                             <td colspan="4" class="text-center text-muted">No hay clientes registrados.</td>
                         </tr>
@@ -138,6 +144,7 @@
         </div>
 
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

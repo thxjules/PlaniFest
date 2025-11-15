@@ -97,6 +97,10 @@ public class ClientServiceImp implements Idao<Client, Long> {
         if (client.getPhone() != null && client.getPhone().length() > 20) {
             throw new RuntimeException("El teléfono no puede superar los 20 caracteres.");
         }
+        if (client.getPhone() != null && !client.getPhone().matches("\\d+")) {
+            throw new RuntimeException("El teléfono solo puede contener números.");
+        }
+
     }
 
     /* 📘 Métodos auxiliares */

@@ -21,60 +21,67 @@ import com.example.planifest.service.EventServiceImp;
 public class ClientViewController {
 
     private final ClientServiceImp clientService;
-    private final EventServiceImp  eventoService;
+    private final EventServiceImp eventoService;
 
-    public ClientViewController(ClientServiceImp clientService, EventServiceImp  eventoService) {
+    public ClientViewController(ClientServiceImp clientService, EventServiceImp eventoService) {
         this.clientService = clientService;
         this.eventoService = eventoService;
     }
 
     @GetMapping
     public String mostrarClientes(
-        @RequestParam(name = "id", required = false) Long id,
-        @RequestParam(required = false) String nombre,
-        @RequestParam(required = false) String email,
-        Model model) {
-        Client client = (id != null) ? clientService.findById(id).orElse(new Client()):new Client();
+            @RequestParam(name = "id", required = false) Long id,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String email,
+            Model model) {
 
+        Client client = (id != null) ? clientService.findById(id).orElse(new Client()) : new Client();
         List<Client> clients = clientService.filtroNombreEmail(nombre, email);
 
         model.addAttribute("nombre", nombre);
         model.addAttribute("email", email);
         model.addAttribute("client", client);
         model.addAttribute("clientes", clients);
+
         return "clients";
     }
 
     @PostMapping("/save")
     public String guardarCliente(@ModelAttribute Client client, Model model, RedirectAttributes redirectAttributes) {
+
         try {
             if (client.getId() == null) {
                 clientService.create(client);
-                redirectAttributes.addFlashAttribute("successMessage", "Cliente creado exitosamente.");
+                redirectAttributes.addFlashAttribute("successMessage", "Cliente creado correctamente.");
             } else {
                 clientService.update(client);
-                redirectAttributes.addFlashAttribute("successMessage", "Cliente actualizado exitosamente.");
+                redirectAttributes.addFlashAttribute("successMessage", "Cliente actualizado correctamente.");
             }
+
             return "redirect:/clients-view";
+
         } catch (RuntimeException e) {
             model.addAttribute("client", client);
             model.addAttribute("clientes", clientService.getAll());
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());  // ✔️ corregido
+
             return "clients";
         }
     }
 
-@GetMapping("/delete/{id}")
-public String eliminarCliente(@PathVariable Long id, Model model) {
-    if (!eventoService.findByClientId(id).isEmpty()) {
-        model.addAttribute("client", new Client()); // ✅ Agregar esto
-        model.addAttribute("clientes", clientService.getAll());
-        model.addAttribute("error", "No se puede eliminar el cliente porque tiene eventos asociados.");
-        return "clients";
+    @GetMapping("/delete/{id}")
+    public String eliminarCliente(@PathVariable Long id, RedirectAttributes redirectAttributes, Model model) {
+
+        // ❗ NO eliminar si tiene eventos asociados
+        if (!eventoService.findByClientId(id).isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "No se puede eliminar el cliente porque tiene eventos asociados.");
+            return "redirect:/clients-view";
+        }
+
+        clientService.deleteById(id);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Cliente eliminado correctamente.");
+        return "redirect:/clients-view";
     }
-
-    clientService.deleteById(id);
-    return "redirect:/clients-view";
-}
-
 }
