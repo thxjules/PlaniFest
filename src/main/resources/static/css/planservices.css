@@ -1,47 +1,32 @@
-/* === PALETA DE COLORES (igual que en Tasks) === */
-:root {
-    --golden-brown: #9F6920;   /* Botones principales */
-    --rob-roy: #DAA755;        /* Secundario */
-    --marzipan: #E9C579;       /* Suave */
-    --buttermilk: #F1DEA8;     /* Ligero */
-    --wasabi: #809076;         /* Verde intenso */
-    --text-dark: #2b1d14;      /* Texto */
-    --text-light: white;       /* Texto claro */
-}
-
-/* === FONDO GENERAL CON GRADIENTE === */
 body {
-    background: linear-gradient(90deg, #111a19, #2b4139);
+    background-color: #ffff; /* color suave en lugar de gradiente */
     min-height: 100vh;
-    color: var(--text-dark);
+    color: #142b20; /* texto oscuro */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* === ENCABEZADO PRINCIPAL === */
 h1 {
-    color: var(--buttermilk);
+    color: #142b20; 
     font-weight: bold;
 }
 
 p.text-muted {
-    color: var(--marzipan) !important;
+    color: #142b20 !important; /* marzipan */
 }
 
-/* === LOGO === */
 .logo img {
     filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
 }
 
-/* === BOTONES === */
 .btn,
 .btn-primary,
 .btn-success,
 .btn-outline-primary,
 .btn-outline-secondary,
 .btn-outline-danger {
-    background-color: var(--golden-brown) !important;
-    border-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #9F6920 !important; /* golden-brown */
+    border-color: #9F6920 !important;
+    color: white !important;
     font-weight: bold;
     transition: 0.3s;
     border-radius: 8px;
@@ -55,8 +40,8 @@ p.text-muted {
 
 /* Botón secundario gris */
 .btn-outline-secondary {
-    background-color: var(--wasabi) !important;
-    border-color: var(--wasabi) !important;
+    background-color: #809076 !important; /* wasabi */
+    border-color: #809076 !important;
 }
 
 .btn-outline-secondary:hover {
@@ -64,7 +49,6 @@ p.text-muted {
     border-color: #9bb68c !important;
 }
 
-/* === CARD GENERAL === */
 .card {
     background-color: rgba(241, 222, 168, 0.4);
     border: none;
@@ -73,17 +57,15 @@ p.text-muted {
     backdrop-filter: blur(6px);
 }
 
-/* === CARD HEADERS === */
 .card-header {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #9F6920 !important; /* golden-brown */
+    color: white !important;
     font-weight: bold;
 }
 
-/* === TABLA DE SERVICIOS === */
 .table thead {
-    background-color: var(--wasabi);
-    color: var(--text-light);
+    background-color: #809076; /* wasabi */
+    color: white;
     font-weight: bold;
 }
 
@@ -98,11 +80,10 @@ p.text-muted {
 
 /* === FORMULARIO NUEVO SERVICIO === */
 #formularioServicio .card-header {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #9F6920 !important;
+    color: white !important;
 }
 
-/* === MODAL EDITAR SERVICIO === */
 .modal-content {
     background-color: rgba(241, 222, 168, 0.9);
     border-radius: 10px;
@@ -110,13 +91,13 @@ p.text-muted {
 }
 
 .modal-header {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #9F6920 !important;
+    color: white !important;
     font-weight: bold;
 }
 
 .modal-footer .btn-secondary {
-    background-color: var(--wasabi) !important;
+    background-color: #809076 !important;
     border: none;
 }
 
@@ -124,29 +105,8 @@ p.text-muted {
     background-color: #9bb68c !important;
 }
 
-/* === CAMPOS DE FORMULARIO === */
 .form-control {
     border-radius: 6px;
-    border: 1px solid var(--rob-roy);
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
-.form-control:focus {
-    border-color: var(--golden-brown);
-    box-shadow: 0 0 5px var(--rob-roy);
-}
-
-/* === TEXTOS === */
-.text-center.text-muted {
-    color: var(--marzipan) !important;
-}
-
-/* === ANIMACIÓN SUAVE DE ENTRADA === */
-.card, .table, .modal-content {
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    border: 1px solid #DAA755; 
+    background-color: #ffffffe6
 }

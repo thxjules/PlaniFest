@@ -6,70 +6,111 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Admin Report</title>
+
     <style type="text/css">
         body {
-            color: #000;
+            color: #222;
             font-family: "Cormorant Garamond", serif;
-            padding: 30px;
-            background-color: #f9f9f9;
+            padding: 40px;
+            background-color: #f5f4ef;
+            line-height: 1.5;
         }
 
         .report-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(210, 180, 140, 0.3);
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 18px rgba(0,0,0,0.12);
         }
 
-        h1 {
-            text-align: center;
-            font-size: 2rem;
+        .header-flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
             margin-bottom: 25px;
-            color: #222;
+        }
+
+        .header-flex img {
+            width: 120px;
+        }
+
+        .header-flex h1 {
+            font-size: 2.4rem;
+            margin: 0;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        h2 {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 1.7rem;
+            color: #37474f;
+            border-left: 5px solid #054328;
+            padding-left: 10px;
+        }
+
+        .resumen {
+            background: #e6fdf4;
+            border-left: 5px solid #55c49d;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.1rem;
         }
 
         table {
-            width: 60%;
+            width: 75%;
             margin: 0 auto;
             border-collapse: collapse;
-            font-size: 14px;
+            font-size: 15px;
             margin-top: 20px;
         }
 
         th, td {
-            border: 1px solid #0288d1;
+            border: 1px solid #209f64;
             padding: 10px;
             text-align: center;
         }
 
         th {
-            background-color: #01579b;
+            background-color: #209f88;
             color: #ffffff;
             font-weight: bold;
         }
 
         tr:nth-child(even) {
-            background-color: #e1f5fe;
+            background-color: #d1f8ef;
         }
 
         .value {
             font-weight: bold;
-            color: #0277bd;
+            color: #0a4d3f;
         }
 
-        .chart-container {
+        .trend-up {
+            color: rgb(0, 128, 66);
+            font-weight: bold;
+        }
+
+        .trend-down {
+            color: #044b47;
+            font-weight: bold;
+        }
+
+        .double-chart {
             display: flex;
             justify-content: center;
-            margin-top: 40px;
+            gap: 25px;
+            margin-top: 35px;
         }
 
-        .chart-container img {
-            border: 1px solid #ccc;
-            border-radius: 10px;
+        .double-chart img {
+            border: 1px solid #ddd;
+            border-radius: 12px;
             background-color: #fff;
             padding: 10px;
-            max-width: 500px;
-            height: auto;
+            max-width: 480px;
         }
 
         .footer {
@@ -79,54 +120,116 @@
             color: #555;
         }
 
-        img.logo {
-            display: block;
-            margin: 0 auto 20px auto;
-            width: 120px;
+        .firma {
+            margin-top: 60px;
+            text-align: center;
+            font-family: "Cormorant Garamond", serif;
+            font-size: 1.1rem;
+        }
+
+        .firma .linea {
+            width: 250px;
+            height: 1px;
+            background-color: #333;
+            margin: 10px auto;
         }
     </style>
 </head>
+
 <body>
-    <img th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" class="logo"/>
 
-    <div class="report-container">
-        <h1>Reporte de Administración - PlaniFest</h1>
+<div class="report-container">
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Métrica</th>
-                    <th>Valor</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Total de empleados</td>
-                    <td class="value" th:text="${totalEmpleados}">0</td>
-                </tr>
-                <tr>
-                    <td>Total de eventos</td>
-                    <td class="value" th:text="${totalEventos}">0</td>
-                </tr>
-                <tr>
-                    <td>Total de tareas</td>
-                    <td class="value" th:text="${totalTareas}">0</td>
-                </tr>
-                <tr>
-                    <td>Total de suministros</td>
-                    <td class="value" th:text="${totalInsumos}">0</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="chart-container">
-            <img th:src="'data:image/png;base64,' + ${graficoAdmin}" alt="Gráfico Administración"/>
-        </div>
-
-        <div class="footer">
-            Reporte generado automáticamente por el sistema el
-            <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
-        </div>
+    <div class="header-flex">
+        <img th:src="'data:image/png;base64,' + ${logoBase64}" alt="Logo PlaniFest"/>
+        <h1>Reporte General de Administración - PlaniFest</h1>
     </div>
+
+    <!-- ✔ RESUMEN EJECUTIVO DINÁMICO -->
+    <div class="resumen">
+        <strong>Resumen Ejecutivo:</strong>
+        <p th:text="${resumenEjecutivo}">
+            Texto del resumen.
+        </p>
+    </div>
+
+    <!-- TABLA PRINCIPAL -->
+    <h2>Métricas Generales</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Métrica</th>
+            <th>Valor Actual</th>
+            <th>Tendencia</th>
+            <th>Comparativa</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            <td>Total de empleados</td>
+            <td class="value" th:text="${totalEmpleados}"></td>
+            <td th:classappend="${tendenciaEmpleados > 0} ? 'trend-up' : 'trend-down'"
+                th:text="${tendenciaEmpleados}"></td>
+            <td th:text="${comparativaEmpleados}"></td>
+        </tr>
+
+        <tr>
+            <td>Total de eventos</td>
+            <td class="value" th:text="${totalEventos}"></td>
+            <td th:classappend="${tendenciaEventos > 0} ? 'trend-up' : 'trend-down'"
+                th:text="${tendenciaEventos}"></td>
+            <td th:text="${comparativaEventos}"></td>
+        </tr>
+
+        <!-- ✔ ITEMS FINALES DE MÉTRICAS DINÁMICOS -->
+        <tr>
+            <td>Total de tareas</td>
+            <td class="value" th:text="${totalTareas}"></td>
+            <td th:classappend="${tendenciaTareas > 0} ? 'trend-up' : 'trend-down'"
+                th:text="${tendenciaTareas}"></td>
+            <td th:text="${comparativaTareas}"></td>
+        </tr>
+
+        <tr>
+            <td>Total de suministros</td>
+            <td class="value" th:text="${totalInsumos}"></td>
+            <td th:classappend="${tendenciaInsumos > 0} ? 'trend-up' : 'trend-down'"
+                th:text="${tendenciaInsumos}"></td>
+            <td th:text="${comparativaInsumos}"></td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    
+    <div class="double-chart">
+        <img th:src="'data:image/png;base64,' + ${graficoAdmin}" alt="Gráfico General"/>
+    </div>
+
+    <!-- ✔ RECOMENDACIONES DINÁMICAS -->
+    <h2>Recomendaciones del Sistema</h2>
+
+    <div class="resumen">
+        <ul style="margin:0; padding-left:20px;">
+            <li th:each="rec : ${recomendaciones}" th:text="${rec}">Recomendación X</li>
+        </ul>
+    </div>
+
+    <!-- PIE -->
+    <div class="footer">
+        Reporte generado automáticamente el
+        <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}"></span>.
+    </div>
+
+    <!-- FIRMA -->
+    <div class="firma">
+        <div class="linea"></div>
+        <p>Dirección Administrativa – PlaniFest</p>
+    </div>
+
+</div>
+
 </body>
 </html>

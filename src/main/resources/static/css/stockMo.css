@@ -1,77 +1,71 @@
-/* === PALETA DE COLORES === */
-:root {
-    --golden-brown: #9F6920;   /* Botones principales */
-    --rob-roy: #DAA755;        /* Secundario */
-    --marzipan: #E9C579;       /* Suave */
-    --buttermilk: #F1DEA8;     /* Ligero */
-    --wasabi: #809076;         /* Verde intenso */
-    --text-dark: #2b1d14;      /* Texto */
-    --text-light: white;       /* Texto suave */
-}
-
-/* === FONDO GENERAL CON GRADIENTE === */
 body {
-    background: -webkit-linear-gradient(90deg, #111a19,#2b4139);                   
-    background: linear-gradient(90deg, #111a19,#2b4139);
+    background-color: #fdfdf5f1; 
     min-height: 100vh;
     margin: 0;
-    color: var(--text-dark);
+    color: #072821; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* === ENCABEZADO PRINCIPAL === */
 .header-section h1 {
-    color: var(--buttermilk);
+    color: #F1DEA8; /* buttermilk */
     font-weight: bold;
 }
 .header-section p {
-    color: var(--marzipan);
+    color: #E9C579; /* marzipan */
+}
+.header-section h1 {
+    color: #0a422b; 
+    font-weight: bold;
+}
+.header-section p {
+    color: #0a422b; 
+}
+.header-section {
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    gap: 20px; 
+    text-align: left; 
 }
 
-/* === BOTONES (Golden Brown / Wasabi) === */
 .btn,
 .btn-primary,
 .btn-success,
 .btn-outline-primary,
 .btn-outline-secondary {
-    background-color: var(--golden-brown) !important;
-    border-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #9F6920; /* golden-brown */
+    border-color: #9F6920;
+    color: white;
     font-weight: bold;
     transition: 0.3s;
 }
 .btn:hover {
-    background-color: #b97b29 !important; /* tono más claro */
-    border-color: #b97b29 !important;
+    background-color: #b97b29; /* tono más claro */
+    border-color: #b97b29;
     transform: scale(1.05);
 }
 
-/* === BADGES DE ESTADO === */
 .badge.bg-warning {
-    background-color: var(--rob-roy) !important;
-    color: var(--text-dark) !important;
-}
-
-.col-md-2 filtro-botones{
-    padding-left: 100vh;
+    background-color: #DAA755; /* rob-roy */
+    color: #2b1d14;
 }
 .badge.bg-success {
-    background-color: var(--wasabi) !important;
-    color: var(--text-light) !important;
+    background-color: #809076; /* wasabi */
+    color: white;
 }
 .badge.bg-info {
-    background-color: var(--marzipan) !important;
-    color: var(--text-dark) !important;
+    background-color: #E9C579; /* marzipan */
+    color: #2b1d14;
 }
 
-.row g-3{
-    padding-right: 0;
-    align-content: center;
-
-}
-
-.ol-md-2 .filtro-botones{
+.filtro-botones {
     display: flex;
+    gap: 0.5rem;
+}
+
+.row.g-3 {
+    padding-right: 0;
+    align-items: center;
 }
 
 @media (min-width: 768px) {
@@ -80,9 +74,10 @@ body {
         width: 24.666667% !important;
     }
 }
+
 .table thead {
-    background-color: var(--wasabi);
-    color: var(--text-light);
+    background-color: #809076; /* wasabi */
+    color: white;
     font-weight: bold;
 }
 .table tbody tr:hover {
@@ -90,7 +85,6 @@ body {
     transition: 0.3s;
 }
 
-/* === CARDS GENERALES === */
 .card.fondo-transparente {
     background-color: rgba(241, 222, 168, 0.4);
     border-radius: 12px;
@@ -98,17 +92,13 @@ body {
     backdrop-filter: blur(6px);
 }
 
-/* === ENCABEZADOS ESPECIALES === */
-/* Nueva Tarea → Golden Brown */
 .card-header.nuevo-movimiento {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #9F6920; /* golden-brown */
+    color: white;
     font-weight: bold;
 }
-
-/* Lista de Tareas */
 .card-header.lista-movimiento {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #9F6920; /* golden-brown */
+    color: white;
     font-weight: bold;
 }

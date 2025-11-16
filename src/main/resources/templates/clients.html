@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Planifest - Gestión de Clientes</title>
     <link rel="stylesheet" th:href="@{/css/clients.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon"  th:href="@{/images/planifest.png}" type="image/png">
+    <link rel="icon" th:href="@{/images/planifest.png}" type="image/png">
 
 </head>
 
@@ -22,19 +23,23 @@
             <span th:text="${errorMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-
         <!-- ENCABEZADO GENERAL -->
-        <div class="text-center mb-4 header-section">
-            <img src="/images/planifest.png" alt="Logo Planifest" style="max-height: 200px;">
-            <h1>Gestión de Clientes</h1>
-            <p>Agrega, edita o elimina clientes</p>
+        <div class="header-section mb-4 d-flex align-items-center justify-content-center">
+            <div class="text-section me-3 text-end">
+                <h1 class="mb-0">Gestión de Clientes</h1>
+                <p class="mt-2">Agrega, edita o elimina clientes</p>
+            </div>
+            <div class="logo">
+                <img th:src="@{/images/planifestBlanco.png}" alt="Logo Planifest" height="100" width="100">
+            </div>
         </div>
+
 
         <!-- BOTONES ARRIBA -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a th:href="@{/dashboard/admin}" class="btn btn-outline-secondary btn-sm">Volver</a>
             <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#formularioCliente">
+                data-bs-target="#formularioCliente">
                 Nuevo cliente
             </button>
         </div>
@@ -90,12 +95,12 @@
                 <div class="col-md-3">
                     <label for="nombre" class="form-label">Nombre</label>
                     <input type="text" id="nombre" name="nombre" class="form-control" th:value="${nombre}"
-                           placeholder="Diana ...">
+                        placeholder="Diana ...">
                 </div>
                 <div class="col-md-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" id="email" name="email" class="form-control" th:value="${email}"
-                           placeholder="nombre@gmail.com">
+                        placeholder="nombre@gmail.com">
                 </div>
                 <div class="col-md-2 filtro-botones">
                     <button type="submit" class="btn btn-outline-primary btn-planifest">Filtrar</button>
@@ -126,13 +131,13 @@
                             <td th:text="${c.phone}"></td>
                             <td class="text-center">
                                 <a th:href="@{/clients-view(id=${c.id})}"
-                                   class="btn btn-sm btn-outline-primary me-1">Editar</a>
+                                    class="btn btn-sm btn-outline-primary me-1">Editar</a>
 
                                 <!-- CONFIRMACIÓN DE ELIMINAR -->
                                 <a th:href="@{/clients-view/delete/{id}(id=${c.id})}"
-                                   class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('¿Seguro que deseas eliminar este cliente?');">
-                                   Eliminar
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('¿Seguro que deseas eliminar este cliente?');">
+                                    Eliminar
                                 </a>
                             </td>
                         </tr>
@@ -149,4 +154,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

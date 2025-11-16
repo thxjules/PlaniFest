@@ -1,49 +1,11 @@
 body {
   background-size: contain;
-  background-color: #000000;
-}
-
-.sidebar {
-  width: 270px;
-  background-color: #213431;
-  color: #F1DEAB;
-  padding: 2rem 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.sidebar .brand img {
-  max-width: 250px;
-  height: auto;
-  display: block;
-  margin: 0 auto 2rem;
-  position: center;
-}
-
-.sidebar h4 {
-  text-align: center;
-  color: #ffffff;
-}
-
-.sidebar a,
-.logout-button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
-  margin: 10px auto;
-  border-radius: 10px;
-  color: #F1DEAB;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background 0.2s ease;
+  background-color: #032a20;
 }
 
 .logout-button {
   background-color: #daa755;
-  color: #ffffff;
+  color: #e49d9d;
   font-weight: 600;
   justify-content: center;
   width: 100%;
@@ -53,7 +15,7 @@ body {
 .sidebar a:hover,
 .logout-button:hover {
   background-color: #daa755;
-  color: #000000;
+  color: #032a20;
 }
 
 .main {
@@ -71,6 +33,25 @@ body {
   border-radius: 10px;
   font-family: "Poppins", sans-serif;
 
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  margin-top: 2rem;
+  border-radius: 10px;
+  background-color: #F1DEAB;
+  color: #000;
+  font-weight: 600;
+  text-decoration: none;
+  justify-content: center;
+}
+
+.logout-button:hover {
+  background-color: #daa755;
+  color: #000000;
 }
 
 .btn-gold {

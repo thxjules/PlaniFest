@@ -1,101 +1,140 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8"/>
-    <title>Stock Report</title>
+    <meta charset="UTF-8" />
+    <title>Reporte de Inventario - PlaniFest</title>
+
     <style>
         body {
             background-color: #ffffff;
-            color: #000000;
+            color: #222;
             font-family: "Cormorant Garamond", serif;
-            padding: 30px;
+            padding: 20px;
+            line-height: 1.4;
         }
 
         .report-container {
-            background-color: #fdfdfd;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(210, 180, 140, 0.3);
+            background: #ffffff;
+            padding: 20px;
+            border: 1px solid #c8e5d6;
+            border-radius: 8px;
+        }
+
+        /* Logo */
+        .logo {
+            display: block;
+            width: 120px;
+            margin: 0 auto 15px auto;
         }
 
         h1 {
             text-align: center;
-            font-size: 24px;
-            margin-bottom: 25px;
-            color: #2e2e2e;
+            font-size: 22px;
+            color: #2c3e50;
+            margin-bottom: 15px;
         }
 
         h2 {
-            text-align: center;
             font-size: 18px;
-            margin-top: 40px;
+            color: #054328;
+            border-left: 4px solid #054328;
+            padding-left: 8px;
+            margin-top: 25px;
+        }
+
+        /* Resumen ejecutivo */
+        .resumen {
+            background: #e6fdf4;
+            border-left: 4px solid #55c49d;
+            padding: 10px 15px;
+            border-radius: 6px;
             margin-bottom: 20px;
-            color: #2e2e2e;
+            font-size: 14px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            border: 1px solid #209f64;
             font-size: 13px;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #a54c03;
-            padding: 8px;
-            text-align: center;
+            table-layout: fixed;
         }
 
         th {
-            background-color: #3b2004;
+            background-color: #209f88;
             color: #ffffff;
+            padding: 6px;
+            border: 1px solid #1b7c70;
             font-weight: bold;
         }
 
+        td {
+            border: 1px solid #209f64;
+            padding: 6px;
+            word-wrap: break-word;
+        }
+
         tr:nth-child(even) {
-            background-color: #f3f2d3;
+            background-color: #d1f8ef;
         }
 
         .low-stock {
             font-weight: bold;
-            color: #d32f2f;
+            color: #c62828;
         }
 
         .chart-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 40px;
-            margin-top: 30px;
+            width: 100%;
+            margin-top: 25px;
         }
 
-        .chart-container img {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            background-color: #fff;
-            padding: 10px;
-        }
-
-        .footer {
-            margin-top: 40px;
-            font-size: 10px;
+        .chart-block {
+            width: 100%;
             text-align: center;
-            color: #555;
+            margin-bottom: 25px;
         }
 
-        img.logo {
-            display: block;
-            margin: 0 auto 20px auto;
-            width: 120px;
+        .chart-block img {
+            width: 420px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 8px;
+        }
+         .firma {
+            margin-top: 60px;
+            text-align: center;
+            font-family: "Cormorant Garamond", serif;
+            font-size: 1.1rem;
+        }
+
+        .firma .linea {
+            width: 250px;
+            height: 1px;
+            background-color: #333;
+            margin: 10px auto;
+        }
+        .footer {
+            margin-top: 35px;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
         }
     </style>
 </head>
+
 <body>
-    <img th:src="'data:image/png;base64,' + ${logoBase64}" alt="logo" class="logo"/>
+
+    <!-- LOGO -->
+    <img th:src="'data:image/png;base64,' + ${logoBase64}" alt="Logo PlaniFest" class="logo" />
 
     <div class="report-container">
+
         <h1>Reporte de Inventario - PlaniFest</h1>
 
-        <!-- Tabla de insumos -->
+        <!-- TABLA DE INSUMOS -->
+        <h2>Inventario General</h2>
+
         <table>
             <thead>
                 <tr>
@@ -110,39 +149,55 @@
                     <th>Unidad</th>
                 </tr>
             </thead>
+
             <tbody>
-                <tr th:each="supply : ${supplies}">
-                    <td th:text="${supply.name}">Nombre</td>
-                    <td th:text="${supply.supplyType}">Tipo</td>
-                    <td th:text="${supply.description}">Descripción</td>
-                    <td th:text="${supply.storageLocation}">Ubicación</td>
-                    <td th:text="${supply.status}">Estado</td>
-                    <td th:text="${supply.currentStock}" 
-                        th:classappend="${supply.currentStock} &lt;= ${supply.minStock} ? 'low-stock' : ''">Actual</td>
-                    <td th:text="${supply.minStock}">Min</td>
-                    <td th:text="${supply.maxStock}">Max</td>
-                    <td th:text="${supply.packagingUnit}">Unidad</td>
+                <tr th:each="s : ${supplies}">
+                    <td th:text="${s.name}">Nombre</td>
+                    <td th:text="${s.supplyType}">Tipo</td>
+                    <td th:text="${s.description}">Descripción</td>
+                    <td th:text="${s.storageLocation}">Ubicación</td>
+                    <td th:text="${s.status}">Estado</td>
+                    <td th:text="${s.currentStock}"
+                        th:classappend="${s.currentStock} &lt;= ${s.minStock} ? 'low-stock' : ''">
+                        Actual
+                    </td>
+                    <td th:text="${s.minStock}">Min</td>
+                    <td th:text="${s.maxStock}">Max</td>
+                    <td th:text="${s.packagingUnit}">Unidad</td>
                 </tr>
             </tbody>
         </table>
 
-        <!-- Contenedor de gráficas -->
+        <!-- GRÁFICOS -->
+        <h2>Distribución del Inventario</h2>
         <div class="chart-container">
-            <div>
-                <h2>Distribución del Inventario</h2>
-                <img th:src="'data:image/png;base64,' + ${chartBase64}" alt="Gráfico Pastel" style="width:400px; height:300px;"/>
+
+            <div class="chart-block">
+                <img th:src="'data:image/png;base64,' + ${chartBase64}" alt="Gráfico de Inventario" />
             </div>
 
-            <div>
-                <h2>Stock Actual vs. Mínimo y Máximo</h2>
-                <img th:src="'data:image/png;base64,' + ${chartBarras}" alt="Gráfico Barras" style="width:500px; height:300px;"/>
+            <div class="chart-block">
+                <h2>Stock Actual vs Mínimo y Máximo</h2>
+                <img th:src="'data:image/png;base64,' + ${chartBarras}" alt="Gráfico Comparativo" />
             </div>
+
         </div>
 
+        <div class="firma">
+            <div class="linea"></div>
+            <p>Dirección Administrativa – PlaniFest</p>
+        </div>
+
+        <!-- FOOTER -->
         <div class="footer">
-            Reporte generado automáticamente por el sistema el 
-            <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">fecha</span>.
+            Reporte generado automáticamente el
+            <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">
+                fecha
+            </span>.
         </div>
+
     </div>
+
 </body>
+
 </html>

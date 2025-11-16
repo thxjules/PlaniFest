@@ -13,12 +13,15 @@
 
 <div class="container py-5">
 
-
-    <div class="header-section text-center mb-5">
-        <img th:src="@{/images/planifest.png}" alt="Logo Planifest" style="max-height: 300px;">
-        <h1>📝 Gestión de Movimiento stock</h1>
-        <p>Reporte de Suministros</p>
-    </div>
+     <div class="header-section mb-4 d-flex align-items-center justify-content-center">
+            <div class="text-section me-3">
+                <h1 class="mb-0">Gestión de movimiento</h1>
+                <p class="mt-2">Crea y organiza los movimientos de stock</p>
+            </div>
+            <div class="logo">
+                <img th:src="@{/images/planifestBlanco.png}" alt="Logo Planifest" height="100" width="100">
+            </div>
+        </div>
 
     <!-- MENSAJE DE ERROR Y BOTÓN NUEVA TAREA -->
             <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
@@ -31,14 +34,14 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
         </div>
          <div class="d-flex justify-content-between align-items-center mb-3">
-        <a href="/dashboard/stock" class="btn btn-outline-secondary btn-sm">🏠 Volver</a>
+        <a href="/dashboard/stock" class="btn btn-outline-secondary btn-sm">Volver</a>
         <button class="btn btn-outline-primary btn-sm"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#formularioStock"
                 aria-expanded="false"
                 aria-controls="formularioStock">
-            ➕ Nuevo Movimiento
+            Nuevo Movimiento
         </button>
     </div>
 
@@ -89,7 +92,7 @@
                     </div>
                     <div class="mt-4 text-end">
                         <button type="submit" class="btn btn-success">
-                            <span th:text="${stockMovement.id != null} ? '🔄 Actualizar Movimiento stock' : '💾 Guardar Movimiento stock'">💾 Guardar Movimiento stock</span>
+                            <span th:text="${stockMovement.id != null} ? 'Actualizar Movimiento stock' : 'Guardar Movimiento stock'">Guardar Movimiento stock</span>
                         </button> 
                     </div>
                 </form>
@@ -129,8 +132,8 @@
 
         <!-- Botones -->
         <div class="col-md-2 filtro-botones">
-    <button type="submit" class="btn btn-outline-primary btn-planifest">🔍 Filtrar</button>
-    <a href="/stock-view" class="btn btn-outline-secondary btn-planifest">♻ Limpiar</a>
+    <button type="submit" class="btn btn-outline-primary btn-planifest">Filtrar</button>
+    <a href="/stock-view" class="btn btn-outline-secondary btn-planifest">Limpiar</a>
 </div>
 
     </div>
@@ -138,7 +141,7 @@
 
     <div class="card shadow-sm border-0">
         <div class="card-header lista-movimiento">
-            <h5 class="mb-0">📋 Lista de Movimientos</h5>
+            <h5 class="mb-0">Lista de Movimientos</h5>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Planifest - Lista de Suministros ⛺</title>
+    <title>Planifest - Lista de Suministros</title>
     <link rel="stylesheet" th:href="@{/css/supply.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -13,8 +13,9 @@
 
 <div class="container py-5">
     <div class="header-section text-center mb-5">
-        <img th:src="@{/images/planifest.png}" alt="Logo Planifest" style="max-height: 180px;">
-        <h1>📝 Gestión de Suministros</h1>
+        <h1>Gestión de Suministros</h1>
+        <img th:src="@{/images/planifestBlanco.png}" alt="Logo Planifest" height="100" width="100">
+
     </div>
 
     <!-- MENSAJE DE ERROR Y BOTÓN NUEVO Suministro -->
@@ -28,7 +29,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
         </div>
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <a href="/dashboard/stock" class="btn btn-outline-secondary btn-sm">🏠 Volver</a>
+        <a href="/dashboard/stock" class="btn btn-outline-secondary btn-sm">Volver</a>
         <button class="btn btn-outline-primary btn-sm"
                 type="button"
                 data-bs-toggle="collapse"
@@ -92,7 +93,7 @@
                     </div>
                     <div class="mt-4 text-end">
                         <button type="submit" class="btn btn-success btn-sm">
-                            <span th:text="${supply.id != null} ? '🔄 Actualizar Suministro' : '💾 Guardar Suministro'">💾 Guardar Suministro</span>
+                            <span th:text="${supply.id != null} ? 'Actualizar Suministro' : ' Guardar Suministro'">Guardar Suministro</span>
                         </button>
                     </div>
                 </form>
@@ -132,7 +133,7 @@
     <div class="contenedor-tabla">
         <div class="card shadow-sm border-0 fondo-transparente">
             <div class="card-header lista-suministros">
-                <h5 class="mb-0">📋 Lista de Suministros</h5>
+                <h5 class="mb-0">Lista de Suministros</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">

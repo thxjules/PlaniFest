@@ -1,73 +1,72 @@
-/* === PALETA DE COLORES === */
-:root {
-    --golden-brown: #9F6920;   /* Botones principales */
-    --rob-roy: #DAA755;        /* Secundario */
-    --marzipan: #E9C579;       /* Suave */
-    --buttermilk: #F1DEA8;     /* Ligero */
-    --wasabi: #809076;         /* Verde intenso */
-    --text-dark: #2b1d14;      /* Texto */
-    --text-light: white;       /* Texto suave */
-}
-
-/* === FONDO GENERAL CON GRADIENTE === */
 body {
-    background: -webkit-linear-gradient(90deg, #111a19,#2b4139);                   
-    background: linear-gradient(90deg, #111a19,#2b4139);
+    background-color: #fdfdf5f1; 
     min-height: 100vh;
     margin: 0;
-    color: var(--text-dark);
+    color: #0c3a37; /* texto oscuro */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* === ENCABEZADO PRINCIPAL === */
 .header-section h1 {
-    color: var(--buttermilk);
+    color: #F1DEA8; /* buttermilk */
     font-weight: bold;
 }
 .header-section p {
-    color: var(--marzipan);
+    color: #E9C579; /* marzipan */
 }
-
-/* === BOTONES (Golden Brown / Wasabi) === */
+.header-section h1 {
+  color: #114442;
+  font-weight: bold;
+  margin: 0;
+}
+.header-section p {
+  color: #114442;
+  margin: 0;
+}
+.header-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.header-section .logo img {
+  max-height: 100px;
+  width: auto;
+}
 .btn,
 .btn-primary,
 .btn-success,
 .btn-outline-primary,
 .btn-outline-secondary {
-    background-color: var(--golden-brown) !important;
-    border-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #9F6920; /* golden-brown */
+    border-color: #9F6920;
+    color: white;
     font-weight: bold;
     transition: 0.3s;
 }
 .btn:hover {
-    background-color: #b97b29 !important; /* tono más claro */
-    border-color: #b97b29 !important;
+    background-color: #b97b29; /* tono más claro */
+    border-color: #b97b29;
     transform: scale(1.05);
 }
 
-/* === BADGES DE ESTADO === */
 .badge.bg-warning {
-    background-color: var(--rob-roy) !important;
-    color: var(--text-dark) !important;
-}
-
-.col-md-2 filtro-botones{
-    padding-left: 100vh;
+    background-color: #DAA755; /* rob-roy */
+    color: #2b1d14;
 }
 .badge.bg-success {
-    background-color: var(--wasabi) !important;
-    color: var(--text-light) !important;
+    background-color: #809076; /* wasabi */
+    color: white;
 }
 .badge.bg-info {
-    background-color: var(--marzipan) !important;
-    color: var(--text-dark) !important;
+    background-color: #E9C579; /* marzipan */
+    color: #2b1d14;
 }
 
-
 .table thead {
-    background-color: var(--wasabi);
-    color: var(--text-light);
+    background-color: #809076; /* wasabi */
+    color: white;
     font-weight: bold;
 }
 .table tbody tr:hover {
@@ -75,7 +74,6 @@ body {
     transition: 0.3s;
 }
 
-/* === CARDS GENERALES === */
 .card.fondo-transparente {
     background-color: rgba(241, 222, 168, 0.4);
     border-radius: 12px;
@@ -83,17 +81,14 @@ body {
     backdrop-filter: blur(6px);
 }
 
-/* === ENCABEZADOS ESPECIALES === */
-/* Nueva Tarea → Golden Brown */
 .card-header.nuevo-suministro {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #9F6920; /* golden-brown */
+    color: white;
     font-weight: bold;
 }
 
-/* Lista de Tareas */
 .card-header.lista-suministros {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #9F6920; /* golden-brown */
+    color: white;
     font-weight: bold;
 }

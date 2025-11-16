@@ -1,72 +1,73 @@
-/* === PALETA DE COLORES === */
-:root {
-    --golden-brown: #9F6920;   /* Botones principales */
-    --rob-roy: #DAA755;        /* Secundario */
-    --marzipan: #E9C579;       /* Suave */
-    --buttermilk: #F1DEA8;     /* Ligero */
-    --wasabi: #809076;         /* Verde intenso */
-    --text-dark: #2b1d14;      /* Texto */
-    --text-light: white;        /* Texto suave */
-}
-
-/* === FONDO GENERAL CON GRADIENTE === */
 body {
-    background: linear-gradient(90deg, #111a19, #2b4139);
+    background-color: #fdfdf5f1;
     min-height: 100vh;
     margin: 0;
-    color: var(--text-dark);
+    color: #222222; /* texto oscuro */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* === ENCABEZADO PRINCIPAL === */
 .header-section h1 {
-    color: var(--buttermilk);
+    color: #0a422b; 
     font-weight: bold;
 }
 .header-section p {
-    color: var(--marzipan);
+    color: #0a422b; 
+}
+.header-section {
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    gap: 20px; 
+    text-align: left; 
 }
 
-/* === BOTONES === */
+.header-section .text-section h1 {
+    color: var(--buttermilk);
+    font-weight: bold;
+}
+
+.header-section .text-section p {
+    color: var(--marzipan);
+    margin: 0;
+}
+
+
 .btn,
 .btn-primary,
 .btn-success,
 .btn-outline-primary,
 .btn-outline-secondary {
-    background-color: var(--golden-brown) !important;
-    border-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #d4a85c; 
+    border-color: #d4a85c;
+    color: #ffffff; 
     font-weight: bold;
     transition: 0.3s;
 }
 .btn:hover {
-    background-color: #b97b29 !important;
-    border-color: #b97b29 !important;
+    background-color: #b97b29;
+    border-color: #b97b29;
     transform: scale(1.05);
 }
 
-/* === BADGES DE ESTADO === */
-.badge.bg-warning { background-color: var(--rob-roy) !important; color: var(--text-dark) !important; }
-.badge.bg-success { background-color: var(--wasabi) !important; color: var(--text-light) !important; }
-.badge.bg-info { background-color: var(--marzipan) !important; color: var(--text-dark) !important; }
+.badge.bg-warning { background-color: #e1a95f; color: #222222; }
+.badge.bg-success { background-color: #5f9e5f; color: #ffffff; }
+.badge.bg-info { background-color: #f0e2c1; color: #222222; }
 
-/* === TABLA DE EVENTOS === */
 .table {
     border-radius: 10px;
     overflow: hidden;
     background-color: rgba(255,255,255,0.05);
 }
 .table thead {
-    background-color: var(--wasabi);
-    color: var(--text-light);
+    background-color: #5f9e5f; /* wasabi */
+    color: #e3d8d0;
     font-weight: bold;
 }
 .table tbody tr:hover {
-    background-color: rgb(238, 237, 235);
+    background-color:#e3d8d0;
     transition: 0.3s;
 }
 
-/* === CARDS === */
 .card.fondo-transparente {
     background-color: rgba(241, 222, 168, 0.4);
     border-radius: 12px;
@@ -75,24 +76,28 @@ body {
 }
 .card-header.nuevo-evento,
 .card-header.lista-eventos {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #d4a85c;
+    color: #ffffff;
     font-weight: bold;
 }
+.action-btn {
+    margin-right: 8px; 
+    margin-bottom: 5px; 
+    display: inline-block;
+}
 
-/* === FORM CONTROLS === */
+
 .form-control:focus, .form-select:focus {
-    border-color: var(--golden-brown);
+    border-color: #d4a85c;
     box-shadow: 0 0 0 0.2rem rgba(238, 236, 235, 0.25);
 }
 
-/* === BOTONES DE ACCIÓN EN TABLA === */
 .action-btn { margin-right: 8px; }
 .btn-sm { min-width: 80px; text-align: center; }
 .btn-edit {
-    background-color: var(--golden-brown);
-    border-color: var(--golden-brown);
-    color: var(--text-light);
+    background-color: #d4a85c;
+    border-color: #d4a85c;
+    color: #ffffff;
     font-weight: bold;
     transition: 0.3s;
 }
@@ -102,9 +107,9 @@ body {
     transform: scale(1.05);
 }
 .btn-delete {
-    background-color: var(--rob-roy);
-    border-color: var(--rob-roy);
-    color: var(--text-dark);
+    background-color: #e1a95f;
+    border-color: #e1a95f;
+    color: #222222;
     font-weight: bold;
     transition: 0.3s;
 }
@@ -114,24 +119,22 @@ body {
     transform: scale(1.05);
 }
 
-/* === BOTONES NUEVO EVENTO === */
 .btn-nuevo-evento {
-    background-color: var(--golden-brown) !important;
-    border-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
+    background-color: #d4a85c;
+    border-color: #d4a85c;
+    color: #ffffff;
     font-weight: bold;
     transition: 0.3s;
 }
 .btn-nuevo-evento:hover {
-    background-color: #b97b29 !important;
-    border-color: #b97b29 !important;
+    background-color: #b97b29;
+    border-color: #b97b29;
     transform: scale(1.05);
 }
 
-/* === BARRA LISTA EVENTOS === */
 .lista-eventos-bar {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light);
+    background-color: #d4a85c;
+    color: #ffffff;
     font-weight: bold;
     padding: 0.75rem 1rem;
     border-radius: 0.5rem 0.5rem 0 0;

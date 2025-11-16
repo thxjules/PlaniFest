@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/events.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="icon"  th:href="@{/images/planifest.png}" type="image/png">
+    <link rel="icon" th:href="@{/images/planifest.png}" type="image/png">
 
 </head>
 
@@ -16,13 +16,16 @@
     <div class="container py-5">
 
         <!-- ENCABEZADO -->
-        <div class="header-section mb-4 text-center">
-            <div class="logo text-center mt-3">
-                <img th:src="@{/images/dashboard/logoplanifest.png}" alt="Logo de la Empresa" width="150">
+        <div class="header-section mb-4 d-flex align-items-center justify-content-center">
+            <div class="text-section me-3">
+                <h1 class="mb-0">Gestión de Eventos</h1>
+                <p class="mt-2">Crea y organiza los eventos</p>
             </div>
-            <h1 class="mb-0">📅 Gestión de Eventos</h1>
-            <p class="mt-2">Crea y organiza los eventos</p>
+            <div class="logo">
+                <img th:src="@{/images/planifestBlanco.png}" alt="Logo Planifest" height="100" width="100">
+            </div>
         </div>
+
 
         <!-- MENSAJES DE ALERTA -->
         <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
@@ -41,7 +44,7 @@
             </a>
             <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse"
                 data-bs-target="#formularioEvento" aria-expanded="false" aria-controls="formularioEvento">
-                <span th:text="${event.id != null} ? '✏ Editar evento' : '➕ Nuevo evento'">➕ Nuevo evento</span>
+                <span th:text="${event.id != null} ? 'Editar evento' : 'Nuevo evento'">Nuevo evento</span>
             </button>
         </div>
 
@@ -164,7 +167,7 @@
 
                         <div class="mt-4 text-end">
                             <button type="submit" class="btn btn-success">
-                                <span th:text="${event.id != null} ? '🔄 Actualizar evento' : 'Guardar evento'"> Guardar
+                                <span th:text="${event.id != null} ? 'Actualizar evento' : 'Guardar evento'"> Guardar
                                     evento</span>
                             </button>
                         </div>
@@ -223,7 +226,7 @@
                                     <a th:href="@{/events-view(id=${e.id})}"
                                         class="btn btn-sm btn-edit action-btn">Editar</a>
                                     <a th:href="@{/events-view/delete/{id}(id=${e.id})}"
-                                        class="btn btn-sm btn-delete">Eliminar</a>
+                                        class="btn btn-sm btn-delete action-btn">Eliminar</a>
                                 </td>
                             </tr>
                             <tr th:if="${eventos.size() == 0}">

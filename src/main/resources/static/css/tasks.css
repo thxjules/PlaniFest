@@ -1,95 +1,106 @@
-/* === PALETA DE COLORES === */
-:root {
-    --golden-brown: #9F6920;   /* Botones principales */
-    --rob-roy: #DAA755;        /* Secundario */
-    --marzipan: #E9C579;       /* Suave */
-    --buttermilk: #F1DEA8;     /* Ligero */
-    --wasabi: #809076;         /* Verde intenso */
-    --text-dark: #2b1d14;      /* Texto */
-    --text-light: white;       /* Texto suave */
-}
-
-/* === FONDO GENERAL CON GRADIENTE === */
 body {
-    background: -webkit-linear-gradient(90deg, #111a19,#2b4139);                   
-    background: linear-gradient(90deg, #111a19,#2b4139);
-    min-height: 100vh;
-    margin: 0;
-    color: var(--text-dark);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fdfdf5f1;
+  min-height: 100vh;
+  margin: 0;
+  color: #142b1e;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* === ENCABEZADO PRINCIPAL === */
 .header-section h1 {
-    color: var(--buttermilk);
-    font-weight: bold;
+  color: #114442;
+  font-weight: bold;
+  margin: 0;
 }
 .header-section p {
-    color: var(--marzipan);
+  color: #114442;
+  margin: 0;
+}
+.header-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.header-section .logo img {
+  max-height: 100px;
+  width: auto;
 }
 
-/* === BOTONES (Golden Brown / Wasabi) === */
 .btn,
 .btn-primary,
 .btn-success,
 .btn-outline-primary,
 .btn-outline-secondary {
-    background-color: var(--golden-brown) !important;
-    border-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
-    font-weight: bold;
-    transition: 0.3s;
+  background-color: #9f6920;
+  border-color: #9f6920;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
 }
 .btn:hover {
-    background-color: #b97b29 !important; /* tono más claro */
-    border-color: #b97b29 !important;
-    transform: scale(1.05);
+  background-color: #b97b29;
+  border-color: #b97b29;
+  transform: scale(1.05);
 }
 
-/* === BADGES DE ESTADO === */
 .badge.bg-warning {
-    background-color: var(--rob-roy) !important;
-    color: var(--text-dark) !important;
+  background-color: #daa755; /* rob-roy */
+  color: #2b1d14;
 }
 .badge.bg-success {
-    background-color: var(--wasabi) !important;
-    color: var(--text-light) !important;
+  background-color: #809076; /* wasabi */
+  color: white;
 }
 .badge.bg-info {
-    background-color: var(--marzipan) !important;
-    color: var(--text-dark) !important;
+  background-color: #e9c579; /* marzipan */
+  color: #2b1d14;
 }
 
-/* === TABLA DE TAREAS === */
 .table thead {
-    background-color: var(--wasabi);
-    color: var(--text-light);
-    font-weight: bold;
+  background-color: #809076; /* wasabi */
+  color: white;
+  font-weight: bold;
 }
 .table tbody tr:hover {
-    background-color: rgba(233, 197, 121, 0.25);
-    transition: 0.3s;
+  background-color: rgba(233, 197, 121, 0.25); /* marzipan semitransparente */
+  transition: 0.3s;
 }
 
-/* === CARDS GENERALES === */
 .card.fondo-transparente {
-    background-color: rgba(241, 222, 168, 0.4);
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    backdrop-filter: blur(6px);
+  background-color: rgba(241, 222, 168, 0.4); /* buttermilk semitransparente */
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(6px);
 }
 
-/* === ENCABEZADOS ESPECIALES === */
-/* Nueva Tarea → Golden Brown */
+/* Nueva Tarea */
 .card-header.nueva-tarea {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
-    font-weight: bold;
+  background-color: #9f6920; /* golden-brown */
+  color: white;
+  font-weight: bold;
 }
 
 /* Lista de Tareas */
 .card-header.lista-tareas {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
-    font-weight: bold;
+  background-color: #9f6920; /* golden-brown */
+  color: white;
+  font-weight: bold;
+}
+
+.collapse.show {
+  display: block;
+  animation: expandir 0.3s ease-out forwards;
+}
+
+@keyframes expandir {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

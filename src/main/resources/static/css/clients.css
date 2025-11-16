@@ -1,119 +1,163 @@
-/* === PALETA DE COLORES === */
-:root {
-    --golden-brown: #9F6920;   /* Dorado principal */
-    --rob-roy: #DAA755;        /* Dorado medio */
-    --marzipan: #E9C579;       /* Dorado suave */
-    --buttermilk: #F1DEA8;     /* Dorado claro */
-    --white: #ffffff;          /* Blanco */
-    --black: #15181e;          /* Fondo oscuro */
-}
-
-/* === ESTILOS GENERALES === */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: -webkit-linear-gradient(90deg, #111a19, #2b4139);
-    background: linear-gradient(90deg, #111a19, #2b4139);
-    color: var(--white);
-    margin: 0;
-    padding: 0;
+    background-color: #000000;
+    color: #fdfdf5f1;
+    font-family: "Poppins", sans-serif;
 }
 
-/* === BOTONES DORADOS === */
-.btn,
-button,
-input[type="submit"],
-input[type="button"] {
-    background-color: var(--golden-brown) !important;
-    color: var(--white) !important;
-    border: none !important;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
+.container {
+    background-color: #fdfdf5f1;
+    padding: 2rem;
+    border-radius: 12px;
+}
+.header-section {
+    display: flex;
+    align-items: center;       
+    justify-content: center;   
+    gap: 20px;                 
+    text-align: left;         
 }
 
-.btn:hover,
-button:hover,
-input[type="submit"]:hover,
-input[type="button"]:hover {
-    background-color: var(--rob-roy) !important;
-    color: var(--white) !important;
-    transform: translateY(-2px);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-/* Botón deshabilitado */
-.btn:disabled,
-button:disabled,
-input[type="submit"]:disabled,
-input[type="button"]:disabled {
-    background-color: var(--marzipan) !important;
-    color: var(--buttermilk) !important;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-.header-section h1 {
+.header-section .text-section h1 {
     color: var(--buttermilk);
     font-weight: bold;
-    text-align: center;
-    margin-top: 10px;
-}
-.header-section p {
-    color: var(--buttermilk);  /* También dorado claro */
-    font-size: 1.1rem;
-    margin-top: 5px;
-    text-align: center;
+    margin: 0;
 }
 
-/* === ENCABEZADOS CON FONDO DORADO === */
-.card-header {
-    background-color: #9F6920 !important; /* DORADO */
-    color: #ffffff !important;           /* Texto blanco */
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-}
-.bg-light,
-.bg-dark {
-    background-color: #9F6920 !important; /* DORADO */
-    color: #ffffff !important;
-}
-/* Encabezados de tarjetas (Editar Cliente, Nuevo Cliente, Lista de Clientes) */
-.card-header {
-    background-color: #9F6920 !important; /* DORADO */
-    color: #ffffff !important;            /* Texto blanco */
-    font-weight: bold;
-    text-align: center;
-    text-transform: uppercase;
+.header-section .text-section p {
+    color: var(--marzipan);
+    margin: 0;
 }
 
-/* Encabezado de la tabla de clientes */
-.table thead th {
-    background-color: #9F6920 !important; /* DORADO */
-    color: #ffffff !important;
-    font-weight: bold;
+.header-section h1 {
+    font-size: 2rem;
+    color: #213431;
+    padding: 1rem;
     text-align: center;
-}
-/* Encabezado de tabla en blanco */
-.table thead th {
-    background-color: #ffffff !important; /* Fondo blanco */
-    color: #000000 !important;            /* Letras negras para contraste */
-    font-weight: bold;
-    text-align: center;
-}
-
-
-
-/* === TABLAS === */
-.table {
-    background: var(--white);
     border-radius: 10px;
+}
+
+.header-section p {
+    margin-top: 0.5rem;
+    color: #213431;
+    font-weight: 500;
+}
+
+.btn-gold,
+.btn-outline-primary.btn-planifest,
+.btn-outline-secondary.btn-planifest {
+    background-color: #F1DEAB;
+    color: #000;
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.btn-gold:hover,
+.btn-outline-primary.btn-planifest:hover,
+.btn-outline-secondary.btn-planifest:hover {
+    background-color: #daa755;
+    color: #000;
+}
+
+.btn-success {
+    background-color: #daa755;
+    color: #000;
+    border: none;
+}
+
+.btn-success:hover {
+    background-color: #f1deab;
+    color: #000;
+}
+
+
+.card {
+    border: none;
+    border-radius: 12px;
     overflow: hidden;
 }
 
-.table tbody tr:hover {
-    background-color: var(--buttermilk);
+.card-header.custom-header {
+    background-color: #213431;
+    color: #F1DEAB;
+    padding: 1rem;
+}
+
+.card-body {
+    background-color: #fffef5;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.form-control:focus {
+    border-color: #daa755;
+    box-shadow: 0 0 5px #daa75580;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.custom-thead {
+    background-color: #213431;
+    color: #F1DEAB;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #fffef5;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #f7f3e7;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+/* Botones de acción en tabla */
+.table .btn-outline-primary {
+    border: 1px solid #000;
+    color: #000;
+}
+
+.table .btn-outline-primary:hover {
+    background-color: #F1DEAB;
+    color: #000;
+}
+
+.table .btn-outline-danger {
+    border: 1px solid #7a1f1f;
+    color: #7a1f1f;
+}
+
+.table .btn-outline-danger:hover {
+    background-color: #7a1f1f;
+    color: #fff;
+}
+
+.alert-success {
+    background-color: #daa755;
+    color: #000;
+    border: none;
+}
+
+.alert-danger {
+    background-color: #7a1f1f;
+    color: #fff;
+    border: none;
+}
+
+
+#formularioCliente.collapse.show {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
