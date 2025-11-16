@@ -57,8 +57,8 @@ html, body {
 
 .sidebar a:hover,
 .sidebar a.active {
-  background-color: #daa755;
-  color: #ffffff;
+  background-color: #e5d18a;
+  color: #000000;
   font-weight: 600;
 }
 
@@ -78,7 +78,7 @@ html, body {
 
 .logout-button:hover {
   background-color: #daa755;
-  color: #ffffff;
+  color: #000000;
 }
 
 .sidebar .logo img {

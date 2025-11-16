@@ -1,130 +1,86 @@
-/* === PALETA DE COLORES === */
+/* === PALETA PLANIFEST === */
 :root {
-    --golden-brown: #9F6920;   /* Dorado principal */
-    --rob-roy: #DAA755;        /* Secundario dorado */
-    --marzipan: #E9C579;       /* Suave */
-    --buttermilk: #F1DEA8;     /* Ligero */
-    --wasabi: #809076;         /* Verde oliva */
-    --emerald: #058774;        /* Verde esmeralda */
-    --emerald-dark: #034e49;   /* Verde oscuro */
-    --text-dark: #2b1d14;      /* Texto oscuro */
-    --text-light: #ffffff;     /* Texto claro */
+    --verde-oscuro: #0F2E2F;
+    --verde-medio: #395B50;
+    --beige: #F3EEDB;
+    --crema: #F1F2E8;
+    --dorado: #D8A04C;
+    --texto: #1B1B1B;
 }
 
-/* === FONDO GENERAL === */
+/* === ESTILOS GENERALES === */
 body {
-    background: -webkit-linear-gradient(90deg, #111a19,#2b4139);                   
-    background: linear-gradient(90deg, #111a19,#2b4139);
-    min-height: 100vh;
-    margin: 0;
-    color: var(--text-dark);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--crema);
+    color: var(--texto);
+    font-family: 'Segoe UI', sans-serif;
 }
 
-/* === ENCABEZADOS GENERALES === */
-h1, h2, h3, .header-section h1 {
-    color: var(--buttermilk);
-    font-weight: bold;
-    text-align: center;
+
+/* === CARDS DE ESTADÍSTICA === */
+.card-summary {
+    background: var(--beige);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0px 6px 18px rgba(0,0,0,0.08);
+    transition: .3s ease;
 }
-.header-section p {
-    color: var(--marzipan);
+
+.card-summary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 10px 24px rgba(0,0,0,0.12);
+}
+
+/* Iconos dentro de tarjetas */
+.card-summary i {
+    color: var(--dorado);
+    font-size: 28px;
+}
+
+/* Numeración grande */
+.card-summary h2 {
+    color: var(--verde-oscuro);
+    font-weight: 800;
+}
+
+/* === HEADER DEL PANEL === */
+.header-panel {
+    background: var(--verde-oscuro);
+    color: white;
+    padding: 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 /* === BOTONES === */
-.btn,
-.btn-primary,
-.btn-success,
-.btn-outline-primary,
-.btn-outline-secondary {
-    background-color: var(--golden-brown) !important;
-    border-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
-    font-weight: bold;
-    transition: 0.3s;
+.btn {
+    background: var(--dorado);
+    border-color: var(--dorado);
+    font-weight: 600;
+    border-radius: 8px;
+    transition: .25s ease;
 }
+
 .btn:hover {
-    background-color: #b97b29 !important; /* tono más claro del dorado */
-    border-color: #b97b29 !important;
-    transform: scale(1.05);
+    background: var(--verde-medio);
+    border-color: var(--verde-medio);
+    color: white;
 }
-.btn-outline-secondary {
-    border: 2px solid var(--golden-brown);
-    color: var(--golden-brown) !important;
-    background: transparent !important;
-}
-.btn-outline-secondary:hover {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
-}
+
 
 /* === TABLAS === */
 .table {
-    background-color: var(--text-light);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-.table thead th {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
-    text-align: center;
-    font-weight: 600;
-    border-color: var(--emerald);
-}
-.table tbody td {
-    vertical-align: middle;
-    text-align: center;
-}
-.table tbody tr:hover {
-    background-color: rgba(233, 197, 121, 0.25); /* dorado suave hover */
-    transition: 0.3s;
-}
-
-/* === CARDS === */
-.card.fondo-transparente {
-    background-color: rgba(241, 222, 168, 0.4);
+    background: white;
     border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    backdrop-filter: blur(6px);
-}
-.card-header {
-    background-color: var(--golden-brown) !important;
-    color: var(--text-light) !important;
-    font-weight: bold;
-    text-align: center;
+    overflow: hidden;
+    border: 1px solid var(--beige);
 }
 
-/* === BADGES DE ESTADO === */
-.badge.bg-warning {
-    background-color: var(--rob-roy) !important;
-    color: var(--text-dark) !important;
-}
-.badge.bg-success {
-    background-color: var(--emerald) !important;
-    color: var(--text-light) !important;
-}
-.badge.bg-info {
-    background-color: var(--marzipan) !important;
-    color: var(--text-dark) !important;
-}
-.form-label {
-    color: var(--text-light) !important; /* Blanco de tu paleta */
-    font-weight: 500;
+.table thead {
+    background: var(--verde-oscuro);
+    color: var(--beige);
 }
 
-/* === ALERTAS === */
-.alert-success {
-    background-color: var(--emerald);
-    color: var(--text-light);
-    font-weight: 500;
-    border: 1px solid var(--emerald);
-    border-radius: 6px;
-}
-
-/* === OTROS TEXTOS === */
-.text-muted {
-    font-style: normal;
-    font-weight: 700;
-    color: var(--emerald) !important;
+.table tbody tr:hover {
+    background: var(--crema);
 }
