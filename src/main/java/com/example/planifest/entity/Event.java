@@ -9,6 +9,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.example.planifest.entity.restoreDeleted.SoftDeletable;
 import com.example.planifest.enums.EventStatus;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -35,7 +36,7 @@ import lombok.Setter;
 @Table(name = "events")
 @SQLDelete(sql = "UPDATE events SET deleted = true WHERE event_id = ?")
 @Where(clause = "deleted = false")
-public class Event {
+public class Event implements SoftDeletable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,6 +70,18 @@ public class Event {
     private EventStatus status;
 
     private boolean deleted = false; // soft Delete
+
+    /* Metodos para restauracion */
+
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     // Relación con Cliente
     @ManyToOne

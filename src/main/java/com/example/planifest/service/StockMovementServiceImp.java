@@ -94,10 +94,11 @@ public class StockMovementServiceImp implements Idao<StockMovement, Long> {
 
     @Override
     public void deleteById(Long id) {
-        StockMovement stockMovement = stockMovementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("El movimiento de stock a eliminar no se ha encontrado"));
-        stockMovement.setDeleted(true);
-        stockMovementRepository.save(stockMovement);
+        if (stockMovementRepository.existsById(id)) {
+            stockMovementRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("No se puede eliminar la tarea porque no existe.");
+        }
     }
 
     private void stockMovementInfoRequired(StockMovement stockMovement) {

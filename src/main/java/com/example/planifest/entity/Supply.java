@@ -3,6 +3,10 @@ package com.example.planifest.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import com.example.planifest.entity.restoreDeleted.SoftDeletable;
 import com.example.planifest.enums.SupplyStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,7 +26,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "suplies")
-public class Supply {
+@SQLDelete(sql = "UPDATE tasks SET deleted = true WHERE task_id = ?")
+@Where(clause = "deleted = false")
+public class Supply implements SoftDeletable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +65,17 @@ public class Supply {
 
     /* Soft delete */
     private boolean deleted = false;
+
+    /* Metodo para restaurar */
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     @OneToMany(mappedBy = "supply")
     private List<EventSupply> eventSupplies = new ArrayList<>();

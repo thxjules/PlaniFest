@@ -7,8 +7,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.example.planifest.Exceptions.SupplyDeletionException;
-import com.example.planifest.entity.Event;
 import com.example.planifest.entity.Supply;
 import com.example.planifest.repository.SupplyRepository;
 import com.example.planifest.service.dao.Idao;
@@ -63,12 +61,11 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
 
     @Override
     public void deleteById(Long id) {
-        Supply supply = supplyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No se puede eliminar el recurso porque no existe."));
-
-        // Marcar como eliminado (soft delete)
-        supply.setDeleted(true);
-        supplyRepository.save(supply);
+        if (supplyRepository.existsById(id)) {
+            supplyRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("No se puede eliminar la tarea porque no existe.");
+        }
     }
 
     private void supplyInfoRequired(Supply supply) {

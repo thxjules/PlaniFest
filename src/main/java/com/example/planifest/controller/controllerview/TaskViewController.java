@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,9 +35,9 @@ public class TaskViewController {
     private final TaskImportService taskImportService;
 
     public TaskViewController(TaskServiceImp taskService,
-                              UserServiceImp userService,
-                              EventServiceImp eventService,
-                              TaskImportService taskImportService) {
+            UserServiceImp userService,
+            EventServiceImp eventService,
+            TaskImportService taskImportService) {
         this.taskService = taskService;
         this.userService = userService;
         this.eventService = eventService;
@@ -73,11 +72,11 @@ public class TaskViewController {
     // CARGAR FORMULARIO CON UNA TAREA PARA EDITAR
     @GetMapping(params = "id")
     public String editarTarea(@RequestParam Long id,
-                              @RequestParam(required = false) String estado,
-                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaTarea,
-                              @RequestParam(required = false) String nombre,
-                              @RequestParam(required = false) Long usuarioId,
-                              Model model) {
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaTarea,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Long usuarioId,
+            Model model) {
 
         Task tarea = taskService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tarea no encontrada con ID: " + id));
@@ -142,34 +141,34 @@ public class TaskViewController {
         }
         return "redirect:/tasks-view";
 
-
     }
 
-   @PostMapping("/import-tasks")
-public String importarTareas(@RequestParam("file") MultipartFile file, RedirectAttributes redirect) {
-    if (file.isEmpty()) {
-        redirect.addFlashAttribute("errorMessage", "Archivo vacío");
-        return "redirect:/tasks-view";
-    }
-
-    try {
-        Map<String, List<String>> resultado = taskImportService.importarArchivo(file);
-        List<String> duplicadas = resultado.get("duplicadas");
-        List<String> errores = resultado.get("errores");
-
-        if (!errores.isEmpty()) {
-            redirect.addFlashAttribute("errorMessage",
-                    "Se encontraron errores en la importación: " + String.join(", ", errores));
-        } else if (!duplicadas.isEmpty()) {
-            redirect.addFlashAttribute("warningMessage",
-                    "Archivo importado con duplicados: " + String.join(", ", duplicadas));
-        } else {
-            redirect.addFlashAttribute("successMessage", "Archivo importado correctamente.");
+    @PostMapping("/import-tasks")
+    public String importarTareas(@RequestParam("file") MultipartFile file, RedirectAttributes redirect) {
+        if (file.isEmpty()) {
+            redirect.addFlashAttribute("errorMessage", "Archivo vacío");
+            return "redirect:/tasks-view";
         }
 
-    } catch (Exception e) {
-        redirect.addFlashAttribute("errorMessage", "Error al importar archivo: " + e.getMessage());
-    }
+        try {
+            Map<String, List<String>> resultado = taskImportService.importarArchivo(file);
+            List<String> duplicadas = resultado.get("duplicadas");
+            List<String> errores = resultado.get("errores");
 
-    return "redirect:/tasks-view";
-}}
+            if (!errores.isEmpty()) {
+                redirect.addFlashAttribute("errorMessage",
+                        "Se encontraron errores en la importación: " + String.join(", ", errores));
+            } else if (!duplicadas.isEmpty()) {
+                redirect.addFlashAttribute("warningMessage",
+                        "Archivo importado con duplicados: " + String.join(", ", duplicadas));
+            } else {
+                redirect.addFlashAttribute("successMessage", "Archivo importado correctamente.");
+            }
+
+        } catch (Exception e) {
+            redirect.addFlashAttribute("errorMessage", "Error al importar archivo: " + e.getMessage());
+        }
+
+        return "redirect:/tasks-view";
+    }
+}

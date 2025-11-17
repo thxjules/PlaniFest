@@ -6,6 +6,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.example.planifest.entity.restoreDeleted.SoftDeletable;
 import com.example.planifest.enums.TaskStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -29,7 +30,7 @@ import lombok.Setter;
 @Table(name = "tasks")
 @SQLDelete(sql = "UPDATE tasks SET deleted = true WHERE task_id = ?")
 @Where(clause = "deleted = false")
-public class Task {
+public class Task implements SoftDeletable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_seq")
@@ -52,6 +53,18 @@ public class Task {
     private TaskStatus status;
 
     private boolean deleted = false; // soft Delete
+
+    /* Metodos para restaurar */
+
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     // Relationship
     @ManyToOne

@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.example.planifest.entity.restoreDeleted.SoftDeletable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -24,7 +25,7 @@ import lombok.Setter;
 @Table(name = "services")
 @SQLDelete(sql = "UPDATE services SET deleted = true WHERE service_id = ?")
 @Where(clause = "deleted = false")
-public class PlaniService {
+public class PlaniService implements SoftDeletable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +42,18 @@ public class PlaniService {
     private String type;
 
     private boolean deleted = false; // soft Delete
+
+    /* Metodos para restaurar */
+
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     // Relación ManyToMany con eventos
     @ManyToMany(mappedBy = "planiServices")

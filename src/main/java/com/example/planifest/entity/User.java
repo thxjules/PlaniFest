@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.example.planifest.entity.restoreDeleted.SoftDeletable;
 import com.example.planifest.enums.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -28,7 +29,7 @@ import lombok.Setter;
 @Table(name = "users")
 @SQLDelete(sql = "UPDATE users SET deleted = true WHERE user_id = ?")
 @Where(clause = "deleted = false")
-public class User {
+public class User implements SoftDeletable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +54,18 @@ public class User {
 
     private boolean deleted = false; // soft Delete
 
+    /* Restauracion */
+
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+    
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<Task> tasks;

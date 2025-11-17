@@ -2,6 +2,7 @@ package com.example.planifest.entity;
 
 import java.time.LocalDate;
 
+import com.example.planifest.entity.restoreDeleted.SoftDeletable;
 import com.example.planifest.enums.StockStatus;
 
 import jakarta.persistence.Column;
@@ -22,7 +23,7 @@ import lombok.Setter;
 @Setter
 @Table(name = "stock_movements")
 
-public class StockMovement {
+public class StockMovement implements SoftDeletable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +45,17 @@ public class StockMovement {
 
     // Soft delete
     private boolean deleted = false;
+
+    /* Metodos para restaurar */
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     // Relationships
     @ManyToOne
