@@ -29,13 +29,13 @@ public class EventServiceImp implements Idao<Event, Long> {
     private final SupplyRepository supplyRepository;
     private final EventSupplyRepository eventSupplyRepository;
     private final ClientRepository clientRepository;
-    private final PlaniServiceRepository planiServiceRepository; // 👈 Nuevo
+    private final PlaniServiceRepository planiServiceRepository; 
 
     public EventServiceImp(EventRepository eventRepository,
             SupplyRepository supplyRepository,
             EventSupplyRepository eventSupplyRepository,
             ClientRepository clientRepository,
-            PlaniServiceRepository planiServiceRepository) { // 👈 Nuevo
+            PlaniServiceRepository planiServiceRepository) { 
         this.eventRepository = eventRepository;
         this.supplyRepository = supplyRepository;
         this.eventSupplyRepository = eventSupplyRepository;
@@ -250,7 +250,7 @@ public class EventServiceImp implements Idao<Event, Long> {
         eventSupplyRepository.save(es);
         }
 
-        event.getPlaniServices().clear(); // 👈 Limpia las relaciones ManyToMany
+        event.getPlaniServices().clear(); 
 
         eventRepository.save(event);
     }

@@ -36,10 +36,13 @@
         <a th:href="@{/stock-view}" th:classappend="${activePage == 'stock'} ? 'active'">
           <i class="bx bx-transfer"></i> Movimientos de stock
         </a>
+
         <div class="reporte">
-          <a th:href="@{/admin/stock/report}" class="slidebar">
-            📄 Descargar reporte PDF
-          </a>
+          <div class="text-center mt-4">
+            <button id="downloadPdfBtn" class="logout-button">
+              <h6>📄Descargar reporte PDF</h6>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -117,6 +120,30 @@
         }]
       },
       options: { responsive: true }
+    });
+
+    
+    document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/admin/stock/report');
+
+        if (!response.ok) {
+          throw new Error('No se pudo generar el PDF');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'reporte.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+      } catch (err) {
+        alert(err.message);
+      }
     });
   </script>
 </body>

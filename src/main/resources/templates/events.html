@@ -46,6 +46,9 @@
                 data-bs-target="#formularioEvento" aria-expanded="false" aria-controls="formularioEvento">
                 <span th:text="${event.id != null} ? 'Editar evento' : 'Nuevo evento'">Nuevo evento</span>
             </button>
+             <a th:href="@{/trash/{entity}(entity='Event')}" class="btn btn-warning">Ver Papelera</a>
+
+
         </div>
 
         <!-- FORMULARIO EVENTO -->

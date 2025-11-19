@@ -82,9 +82,9 @@
           class="bx bx-transfer"></i> Servicios</a>
 
       <div class="text-center mt-4">
-        <a th:href="@{/admin/report}" class="slidebar">
-          📄 Descargar reporte PDF
-        </a>
+        <button id="downloadPdfBtn" class="logout-button">
+        <h4>📄Descargar reporte PDF</h4>
+        </button>
       </div>
 
       <form method="post" th:action="@{/logout}" class="mt-4 text-center">
@@ -93,7 +93,7 @@
       </form>
     </div>
     <div class="logo text-center mt-3">
-       <img th:src="@{/images/1.png}" alt="Logo Planifest" height="210px" width="210px">
+      <img th:src="@{/images/1.png}" alt="Logo Planifest" height="210px" width="210px">
     </div>
   </div>
 
@@ -204,8 +204,8 @@
         options: { plugins: { legend: { position: "bottom" } } }
       });
     });
-  </script>
-  <script>
+
+
     document.addEventListener("DOMContentLoaded", function () {
       const alert = document.querySelector(".alert-success");
       if (alert) {
@@ -215,6 +215,31 @@
         }, 5000); // desaparece en 5 segundos
       }
     });
+
+
+    document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/admin/report');
+
+        if (!response.ok) {
+          throw new Error('No se pudo generar el PDF');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'reporte.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
   </script>
 </body>
 

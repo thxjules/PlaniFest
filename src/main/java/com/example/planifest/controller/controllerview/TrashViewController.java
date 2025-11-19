@@ -46,7 +46,7 @@ public class TrashViewController {
 
             case "user": items = trashService.listDeleted(User.class); break;
 
-            // Aquí puedes agregar más entidades
+          
             default: items = List.of();
         }
         model.addAttribute("entityType", entity);

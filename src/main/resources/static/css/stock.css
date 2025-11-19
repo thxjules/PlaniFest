@@ -48,15 +48,25 @@ body {
 
 
 .logout-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  margin-top: 2rem;
+  border-radius: 10px;
   background-color: #F1DEAB;
-  color: #000000;
+  color: #000;
   font-weight: 600;
+  text-decoration: none;
   justify-content: center;
-  border: none;
 }
 
-.sidebar a:hover,
 .logout-button:hover {
+  background-color: #c79545;
+  color: #000000;
+}
+
+.sidebar a:hover{
   background-color: #F1DEAB;
   color: #000000;
 }
