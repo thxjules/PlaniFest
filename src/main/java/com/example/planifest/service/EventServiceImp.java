@@ -1,5 +1,6 @@
 package com.example.planifest.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -284,7 +285,11 @@ public class EventServiceImp implements Idao<Event, Long> {
             throw new RuntimeException("El estado del evento es obligatorio.");
         if (event.getClient() == null || event.getClient().getId() == null)
             throw new RuntimeException("Debe tener un cliente válido asignado.");
-    }
+        if (event.getDate().isBefore(LocalDate.now())) {
+    throw new IllegalArgumentException("No se permiten fechas pasadas.");
+}
+}
+    
 
     private boolean isBlank(String str) {
         return str == null || str.isBlank();

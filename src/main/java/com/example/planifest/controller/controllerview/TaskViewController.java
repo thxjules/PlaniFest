@@ -20,7 +20,6 @@ import com.example.planifest.entity.Event;
 import com.example.planifest.entity.Task;
 import com.example.planifest.entity.User;
 import com.example.planifest.service.EventServiceImp;
-
 import com.example.planifest.service.TaskImportService;
 import com.example.planifest.service.TaskServiceImp;
 import com.example.planifest.service.UserServiceImp;
@@ -125,6 +124,7 @@ public class TaskViewController {
 
         } catch (RuntimeException ex) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al guardar la tarea: " + ex.getMessage());
+            
         }
 
         return "redirect:/tasks-view";

@@ -78,6 +78,7 @@ public class TaskServiceImp implements Idao<Task, Long> {
         if (task.getStatus() == null) {
             throw new RuntimeException("El estado de la tarea no puede estar vacío.");
         }
+       
     }
 
     // ----------------- FILTROS -----------------
