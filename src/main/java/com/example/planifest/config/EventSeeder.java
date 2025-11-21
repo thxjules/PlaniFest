@@ -70,7 +70,7 @@ public class EventSeeder implements CommandLineRunner {
             Event event1 = new Event();
             event1.setEventName("Evento de Música");
             event1.setDescription("Concierto de rock en vivo");
-            event1.setDate(LocalDate.of(2025, 1, 20));
+            event1.setDate(LocalDate.of(2025, 12, 20));
             event1.setStartTime(LocalTime.of(18, 0));
             event1.setEndTime(LocalTime.of(23, 0));
             event1.setGuestCount(150);
@@ -85,7 +85,7 @@ eventSupplyRepository.save(new EventSupply(event1, supplies.get(1), 7)); // 100 
             Event event2 = new Event();
             event2.setEventName("Bodas de Plata");
             event2.setDescription("Aniversario de 20 años de casados");
-            event2.setDate(LocalDate.of(2025, 9, 20));
+            event2.setDate(LocalDate.of(2026, 2, 20));
             event2.setStartTime(LocalTime.of(17, 0));
             event2.setEndTime(LocalTime.of(23, 0));
             event2.setGuestCount(80);
@@ -100,7 +100,7 @@ eventSupplyRepository.save(new EventSupply(event1, supplies.get(1), 7)); // 100 
             Event event3 = new Event();
             event3.setEventName("Fiesta 15 años");
             event3.setDescription("Fiesta de 15 años de Camila Torreón");
-            event3.setDate(LocalDate.of(2025, 9, 12));
+            event3.setDate(LocalDate.of(2026, 1, 15));
             event3.setStartTime(LocalTime.of(19, 0));
             event3.setEndTime(LocalTime.of(23, 30));
             event3.setGuestCount(200);
@@ -114,7 +114,7 @@ eventSupplyRepository.save(new EventSupply(event1, supplies.get(1), 7)); // 100 
             Event event4 = new Event();
             event4.setEventName("Feria Gastronómica");
             event4.setDescription("Muestra de comida internacional");
-            event4.setDate(LocalDate.of(2025, 6, 20));
+            event4.setDate(LocalDate.of(2026, 3, 20));
             event4.setStartTime(LocalTime.of(12, 0));
             event4.setEndTime(LocalTime.of(20, 0));
             event4.setGuestCount(300);

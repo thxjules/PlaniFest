@@ -25,8 +25,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "suplies")
-@SQLDelete(sql = "UPDATE tasks SET deleted = true WHERE task_id = ?")
+@Table(name = "supplies")
+@SQLDelete(sql = "UPDATE supplies SET deleted = true WHERE supply_id = ?")
 @Where(clause = "deleted = false")
 public class Supply implements SoftDeletable {
 

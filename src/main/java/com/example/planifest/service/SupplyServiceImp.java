@@ -73,6 +73,10 @@ public class SupplyServiceImp implements Idao<Supply, Long> {
             throw new RuntimeException("El recurso no se puede crear si no se le ingresa un nombre");
         }
 
+        if(supply.getName().matches(".*\\d.*")){
+            throw new RuntimeException("El nombre del suministro no debe poseer numeros");
+        }
+
         if (supply.getSupplyType() == null || supply.getSupplyType().isBlank()) {
             throw new RuntimeException("El recurso no se puede crear si no se le asigna a algún tipo que pertenezca");
         }

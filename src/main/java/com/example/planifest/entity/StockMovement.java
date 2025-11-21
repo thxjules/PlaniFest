@@ -2,6 +2,9 @@ package com.example.planifest.entity;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.example.planifest.entity.restoreDeleted.SoftDeletable;
 import com.example.planifest.enums.StockStatus;
 
@@ -22,7 +25,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "stock_movements")
-
+@SQLDelete(sql = "UPDATE stock_movements SET deleted = true WHERE stock_movement_id = ?")
+@Where(clause = "deleted = false")
 public class StockMovement implements SoftDeletable {
 
     @Id
