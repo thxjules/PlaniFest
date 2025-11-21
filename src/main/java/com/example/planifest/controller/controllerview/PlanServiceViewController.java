@@ -62,9 +62,15 @@ public class PlanServiceViewController {
     }
 
     @PostMapping("/delete/{serviceId}")
-    public String eliminarServicio(@PathVariable Long serviceId) {
-        planiServiceImp.deleteById(serviceId);
-        return "redirect:/planservices";
-    }
+public String eliminarServicio(@PathVariable Long serviceId,
+                               RedirectAttributes redirectAttributes) {
+
+    planiServiceImp.deleteById(serviceId);
+
+    redirectAttributes.addFlashAttribute("successMessage",
+            "El servicio fue eliminado correctamente.");
+
+    return "redirect:/planservices";
+}
 
 }
