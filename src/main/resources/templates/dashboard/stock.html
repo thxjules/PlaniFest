@@ -30,6 +30,9 @@
     <div class="sidebar" id="sidebar">
       <div>
         <h2>Inventario</h2>
+           <a th:href="@{/admin/profile}" th:classappend="${activePage == 'profile'} ? 'active'">
+        <i class="bx bx-user"></i> Mi Perfil
+    </a>
         <a th:href="@{/supplies-view}" th:classappend="${activePage == 'supplies'} ? 'active'">
           <i class="bx bx-package"></i> Suministros
         </a>

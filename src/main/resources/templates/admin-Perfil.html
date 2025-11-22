@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil del Administrador</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fdf8f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 50%;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: white;
+            background-color: #84b200;
+            padding: 8px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: .2s;
+        }
+
+        .btn-back:hover {
+            background-color: #6d8f00;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0097b2;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .btn-save {
+            background-color: #0097b2;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn-save:hover {
+            background-color: #007a8e;
+        }
+
+        .success {
+            background: #84b200;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .error {
+            background: #d9534f;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Botón para regresar -->
+    <a th:href="${role == 'STOCK_ADMIN'} ? @{/dashboard/stock} : @{/dashboard/admin}" 
+   class="btn-back">← Volver</a>
+
+    <!-- Mensaje de éxito -->
+    <div th:if="${param.success}" class="success">
+        ¡Perfil actualizado correctamente!
+    </div>
+
+    <!-- Mensaje de error -->
+    <div th:if="${errorMessage}" class="error" th:text="${errorMessage}"></div>
+
+    <h2>Mi Perfil</h2>
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span th:text="${success}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+
+    <!-- Formulario con CSRF -->
+    <form th:action="@{/admin/profile/update}" th:object="${user}" method="post" th:csrf="true">
+
+        <label>Nombre de Usuario:</label>
+        <input type="text" th:field="*{username}" required />
+
+        <label>Correo Electrónico:</label>
+        <input type="email" th:field="*{email}" required />
+
+        <label>Teléfono:</label>
+        <input type="text" th:field="*{phoneNumber}" />
+
+        <label>Nueva Contraseña (opcional):</label>
+        <input type="password" name="newPassword" placeholder="Dejar vacío para no cambiar" />
+
+        <div class="btn-container">
+            <button type="submit" class="btn-save">Guardar Cambios</button>
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

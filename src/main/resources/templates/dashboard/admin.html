@@ -68,6 +68,11 @@
       <div class="brand px-2 mb-3">
         <h2 class="fw-bold">Administrador</h2>
       </div>
+       <div class="profile-btn-container">
+    <a href="/admin/profile" class="profile-btn">
+        <i class="bx bx-user"></i>Mi Perfil
+    </a>
+</div>
       <a th:href="@{/employees-view}" th:classappend="${activePage == 'employees'} ? 'active'"><i
           class="bx bx-user"></i> Empleados</a>
       <a th:href="@{/clients-view}" th:classappend="${activePage == 'clients'} ? 'active'"><i class="bx bx-user"></i>
@@ -100,6 +105,7 @@
   <!-- Contenido principal -->
   <div class="main">
     <h1>Panel de Administración</h1>
+   
     <div class="alert alert-success mt-3" role="alert" style="color:#111419; border:none; font-weight:600;">
       ¡Bienvenido Administrador! Nos alegra verte de nuevo en Planifest.
     </div>

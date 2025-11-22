@@ -71,5 +71,17 @@ public class EmployeeViewController {
 
         return "redirect:/employees-view";
     }
+  @PostMapping("/eliminar/{id}")
+public String eliminarEmpleado(@PathVariable Long id,
+                               RedirectAttributes redirectAttributes) {
+    try {
+        userService.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Empleado eliminado correctamente.");
+    } catch (RuntimeException e) {
+        redirectAttributes.addFlashAttribute("error", "No se pudo eliminar: " + e.getMessage());
+    }
+
+    return "redirect:/employees-view";
+}
    
 }

@@ -163,5 +163,34 @@ public class UserServiceImp implements Idao<User, Long> {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + email));
     }
+    private void validateUpdate(User user, User original) {
 
+    if (user.getEmail() == null || user.getEmail().isBlank()) {
+        throw new RuntimeException("El correo no puede estar vacío.");
+    }
+
+    // si cambia email verificar duplicado
+    if (!user.getEmail().equals(original.getEmail())
+            && userRepository.findByEmail(user.getEmail()).isPresent()) {
+        throw new RuntimeException("Ese correo ya está en uso.");
+    }
+
+    if (user.getUsername() == null || user.getUsername().isBlank()) {
+        throw new RuntimeException("El nombre no puede estar vacío.");
+    }
+    if (user.getUsername().length() < 3) {
+        throw new RuntimeException("El nombre debe tener al menos 3 caracteres.");
+    }
+
+    if (user.getPhoneNumber() == null || user.getPhoneNumber().isBlank()) {
+        throw new RuntimeException("El teléfono no puede estar vacío.");
+    }
+    if (!user.getPhoneNumber().matches("^[0-9]{10}$")) {
+        throw new RuntimeException("El teléfono debe tener 10 dígitos.");
+    }
+    
 }
+}
+
+
+  
