@@ -1,5 +1,5 @@
 body {
-    background-color: #ffff; /* color suave en lugar de gradiente */
+    background-color: #fdfdf5f1 ; /* color suave en lugar de gradiente */
     min-height: 100vh;
     color: #142b20; /* texto oscuro */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -35,6 +35,30 @@ p.text-muted {
 .btn:hover {
     background-color: #b97b29 !important;
     border-color: #b97b29 !important;
+    transform: scale(1.05);
+}
+form .btn-primary {
+    background-color: blue !important;
+    border-color: #10666d !important;
+    color: white !important;
+}
+
+form .btn-primary:hover {
+    background-color: #0c4e52 !important;
+    border-color: #0c4e52 !important;
+    transform: scale(1.05);
+}
+
+/* === BOTÓN LIMPIAR (Verde suave) === */
+form .btn-secondary {
+    background-color: #809076 !important;
+    border-color: #809076 !important;
+    color: white !important;
+}
+
+form .btn-secondary:hover {
+    background-color: #63735d !important;
+    border-color: #63735d !important;
     transform: scale(1.05);
 }
 

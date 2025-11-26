@@ -1,5 +1,5 @@
 body {
-    background-color: #000000;
+    background-color: #fdfdf5f1 !important;
     color: #fdfdf5f1;
     font-family: "Poppins", sans-serif;
 }
@@ -79,7 +79,7 @@ body {
 
 .card-header.custom-header {
     background-color: #213431;
-    color: #F1DEAB;
+    color: #daa75580;
     padding: 1rem;
 }
 
@@ -121,22 +121,24 @@ body {
 
 /* Botones de acción en tabla */
 .table .btn-outline-primary {
-    border: 1px solid #000;
-    color: #000;
+    background-color:#daa755;
+    border: 1px solid #daa755;
+    color: #fffef5;
 }
 
 .table .btn-outline-primary:hover {
-    background-color: #F1DEAB;
-    color: #000;
+    background-color: #daa755;
+    color:  #fffef5;;
 }
 
 .table .btn-outline-danger {
-    border: 1px solid #7a1f1f;
-    color: #7a1f1f;
+    background-color:#daa755;
+    border: 1px solid #daa755;
+    color: #fffef5;
 }
 
 .table .btn-outline-danger:hover {
-    background-color: #7a1f1f;
+    background-color: #daa755;
     color: #fff;
 }
 

@@ -42,7 +42,7 @@
                 Nueva tarea
             </button>
         </div>
-  
+
 
         <!-- IMPORTAR TAREAS (CSV/Excel) -->
         <form th:action="@{/tasks-view/import-tasks}" method="post" enctype="multipart/form-data" class="mb-4">
@@ -192,13 +192,14 @@
                                 <td th:text="${#temporals.format(t.event.date, 'dd/MM/yyyy')}"></td>
                                 <td th:text="${#temporals.format(t.date, 'dd/MM/yyyy')}"></td>
                                 <td class="text-center">
-                                    <a th:href="@{/tasks-view(id=${t.id})}" class="btn btn-sm btn-outline-primary me-1">Editar</a>
-                                    <a th:href="@{/tasks-view/delete/{id}(id=${t.id})}"
-                                        class="btn btn-sm btn-outline-danger"
-                                        th:onclick="|return confirm('¿Deseas eliminar la tarea ${task.name}?')|">
+                                    <a th:href="@{/tasks-view(id=${t.id})}"
+                                        class="btn btn-sm btn-outline-primary me-1">Editar</a>
+                                    <button type="button" class="btn btn-sm btn-eliminar" th:data-id="${t.id}"
+                                        th:data-nombre="${t.name}">
                                         Eliminar
-                                    </a>
-                                </td>
+                                    </button>
+
+
                             </tr>
                             <tr th:if="${tareas.size() == 0}">
                                 <td colspan="8" class="text-center text-muted">No hay tareas registradas.</td>
@@ -217,7 +218,7 @@
             document.querySelector('select[name="estado"]').selectedIndex = 0;
             document.querySelector('input[name="fechaTarea"]').value = '';
             document.querySelector('select[name="usuarioId"]').selectedIndex = 0;
-             window.location.href = "/tasks-view";
+            window.location.href = "/tasks-view";
         }
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -231,6 +232,41 @@
             }
         });
     </script>
+    ...
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            document.querySelectorAll(".btn-eliminar").forEach(btn => {
+
+                btn.addEventListener("click", () => {
+
+                    const taskId = btn.getAttribute("data-id");
+                    const taskName = btn.getAttribute("data-nombre");
+
+                    Swal.fire({
+                        title: `¿Eliminar la tarea "${taskName}"?`,
+                        text: "Esta acción no se puede deshacer.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Sí, eliminar",
+                        cancelButtonText: "Cancelar"
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            window.location.href = `/tasks-view/delete/${taskId}`;
+                        }
+                    });
+
+                });
+
+            });
+
+        });
+    </script>
+
 
 </body>
 

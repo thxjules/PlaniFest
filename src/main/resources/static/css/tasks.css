@@ -1,8 +1,8 @@
 body {
-  background-color: #fdfdf5f1;
+  background-color: #fdfdf5f1 !important;
+    color: #fdfdf5f1;
   min-height: 100vh;
   margin: 0;
-  color: #142b1e;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -43,11 +43,42 @@ body {
   background-color: #b97b29;
   border-color: #b97b29;
   transform: scale(1.05);
+  color: white;
 }
+.btn-eliminar {
+  background-color: #daa755 !important;
+  border-color: #7a4d17 !important;
+  color: white !important;          /* ← TEXTO EN BLANCO */
+}
+
+.btn-eliminar:hover {
+  background-color: #daa755 !important;
+  border-color: #9f6920 !important;
+  color: white !important;          /* ← TEXTO EN BLANCO TAMBIÉN AL HOVER */
+}
+/* Estilo para EDITAR basado en tu paleta */
+.btn-outline-primary {
+  background-color:  #daa755  !important;   /* marzipan suave */
+  border-color: #9f6920 !important;
+  color:  white !important;              /* texto oscuro inicial */
+  font-weight: bold;
+  transition: 0.3s;
+  border-radius: 8px;
+  padding: 6px 12px;
+}
+
+/* Hover igual al botón eliminar */
+.btn-outline-primary:hover {
+  background-color: #daa755  !important;   /* dorado hover */
+  border-color: #9f6920 !important;
+  color: white !important;                /* texto blanco al hover */
+  transform: scale(1.05);
+}
+
 
 .badge.bg-warning {
   background-color: #daa755; /* rob-roy */
-  color: #2b1d14;
+  color: white;
 }
 .badge.bg-success {
   background-color: #809076; /* wasabi */

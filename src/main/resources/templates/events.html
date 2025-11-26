@@ -46,7 +46,7 @@
                 data-bs-target="#formularioEvento" aria-expanded="false" aria-controls="formularioEvento">
                 <span th:text="${event.id != null} ? 'Editar evento' : 'Nuevo evento'">Nuevo evento</span>
             </button>
-             <a th:href="@{/trash/{entity}(entity='Event')}" class="btn btn-warning">Ver Papelera</a>
+            <a th:href="@{/trash/{entity}(entity='Event')}" class="btn btn-warning">Ver Papelera</a>
 
 
         </div>
@@ -228,8 +228,12 @@
                                 <td class="text-center">
                                     <a th:href="@{/events-view(id=${e.id})}"
                                         class="btn btn-sm btn-edit action-btn">Editar</a>
-                                    <a th:href="@{/events-view/delete/{id}(id=${e.id})}"
-                                        class="btn btn-sm btn-delete action-btn">Eliminar</a>
+                                    <button type="button" class="btn btn-danger btn-sm btn-eliminar"
+                                        th:data-id="${e.id}">
+                                        Eliminar
+                                    </button>
+
+
                                 </td>
                             </tr>
                             <tr th:if="${eventos.size() == 0}">
@@ -302,6 +306,34 @@
             }
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    let id = this.getAttribute("data-id");
+
+                    Swal.fire({
+                        title: "¿Eliminar evento?",
+                        text: "Esta acción no se puede deshacer.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Sí, eliminar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = `/events-view/delete/${id}`;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+
 
 </body>
 
