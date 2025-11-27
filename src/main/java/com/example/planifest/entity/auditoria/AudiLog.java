@@ -1,4 +1,4 @@
-package com.example.planifest.entity;
+package com.example.planifest.entity.auditoria;
 
 import java.time.LocalDateTime;
 

@@ -2,10 +2,12 @@ package com.example.planifest.entity;
 
 import java.util.List;
 
+import com.example.planifest.entity.auditoria.AuditListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,6 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@EntityListeners(AuditListener.class)
 @Getter
 @Setter
 @Table(name = "positions")

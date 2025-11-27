@@ -5,11 +5,13 @@ import java.time.LocalDate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.example.planifest.entity.auditoria.AuditListener;
 import com.example.planifest.entity.restoreDeleted.SoftDeletable;
 import com.example.planifest.enums.StockStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@EntityListeners(AuditListener.class)
 @Getter
 @Setter
 @Table(name = "stock_movements")

@@ -94,7 +94,6 @@ public class EventServiceImp implements Idao<Event, Long> {
             }
         }
 
-        // 👇 Manejo de servicios asociados
         if (serviceIds != null && !serviceIds.isEmpty()) {
             List<PlaniService> servicios = planiServiceRepository.findAllById(serviceIds);
             event.setPlaniServices(servicios);
@@ -144,7 +143,6 @@ public class EventServiceImp implements Idao<Event, Long> {
             event.setPlaniServices(serviciosActualizados);
         }
 
-        // 🔸 Luego manejar suministros igual que antes
         List<EventSupply> existingList = eventSupplyRepository.findByEventId(event.getId());
         Map<Long, EventSupply> existingById = existingList.stream()
                 .filter(es -> es.getId() != null)
