@@ -1,63 +1,170 @@
+/* ------------------------------------ */
+/* ESTILOS PRINCIPALES */
+/* ------------------------------------ */
 body {
-    background-color: #fdfdf5f1; 
+    background-color: #fdfdf5f1 !important; 
     min-height: 100vh;
     margin: 0;
-    color: #072821; 
+    color: #072821; /* verde oscuro */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.header-section h1 {
-    color: #F1DEA8; /* buttermilk */
-    font-weight: bold;
-}
-.header-section p {
-    color: #E9C579; /* marzipan */
-}
-.header-section h1 {
-    color: #0a422b; 
-    font-weight: bold;
-}
-.header-section p {
-    color: #0a422b; 
-}
+/* ------------------------------------ */
+/* HEADER */
+/* ------------------------------------ */
 .header-section {
     display: flex;
     align-items: center; 
     justify-content: center; 
     gap: 20px; 
-    text-align: left; 
+    text-align: left;
 }
 
+.header-section h1 {
+    color: #0a422b; /* verde oscuro */
+    font-weight: bold;
+    font-size: 2.3rem;
+    margin: 0;
+}
+
+.header-section p {
+    color: #0a422b; /* verde oscuro */
+    margin: 0;
+}
+
+/* Logo */
+.header-section .logo img {
+    max-height: 100px;
+    width: auto;
+}
+/* ------------------------------------ */
+/* TABLAS */
+/* ------------------------------------ */
+.table thead {
+    background-color: #9F6920 !important; /* wasabi, como habíamos definido */
+    color: white !important;              /* color del texto de encabezado */
+    font-weight: bold;
+}
+.table tbody tr:nth-child(even) {
+    background-color: rgba(233, 197, 121, 0.1);
+}
+.card-header{
+    background-color: #9F6920 !important; /* golden-brown */
+    color: white !important;
+    font-weight: bold;}
+
+
+
+.table tbody tr:hover {
+    background-color: rgba(233, 197, 121, 0.25);
+    transition: 0.3s;
+}
+
+.table th, .table td {
+    vertical-align: middle !important;
+    padding: 0.75rem;
+}
+
+/* Centrar y estilizar los botones dentro de la tabla */
+.col-botones {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+/* ------------------------------------ */
+/* ------------------------------------ */
+/* BOTONES GENERALES */
+/* ------------------------------------ */
 .btn,
 .btn-primary,
 .btn-success,
 .btn-outline-primary,
 .btn-outline-secondary {
-    background-color: #9F6920; /* golden-brown */
-    border-color: #9F6920;
-    color: white;
+    background-color: #9F6920 !important; /* golden-brown */
+    border-color: #9F6920 !important;
+    color: white !important;
     font-weight: bold;
     transition: 0.3s;
 }
-.btn:hover {
-    background-color: #b97b29; /* tono más claro */
-    border-color: #b97b29;
+
+.btn:hover,
+.btn-primary:hover,
+.btn-success:hover,
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover {
+    background-color: #b97b29 !important; /* tono más claro */
+    border-color: #b97b29 !important;
     transform: scale(1.05);
 }
 
-.badge.bg-warning {
-    background-color: #DAA755; /* rob-roy */
-    color: #2b1d14;
-}
-.badge.bg-success {
-    background-color: #809076; /* wasabi */
-    color: white;
-}
-.badge.bg-info {
-    background-color: #E9C579; /* marzipan */
-    color: #2b1d14;
+/* ------------------------------------ */
+/* BOTÓN EDITAR */
+/* ------------------------------------ */
+.btn-editar {
+    background-color: #10666d !important; /* azul personalizado */
+    border-color: #10666d !important;
+    color: white !important;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-weight: bold;
 }
 
+.btn-editar:hover {
+    background-color: #0d4c53 !important; /* azul más oscuro */
+    transform: scale(1.05);
+}
+
+/* ------------------------------------ */
+/* BOTÓN ELIMINAR */
+/* ------------------------------------ */
+.btn-eliminar {
+    background-color: #9F6920 !important; /* golden-brown */
+    border-color: #9F6920 !important;
+    color: white !important;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-weight: bold;
+}
+
+.btn-eliminar:hover {
+    background-color: #daa755 !important; /* rob-roy */
+    transform: scale(1.05);
+}
+
+/* ------------------------------------ */
+/* BOTONES FILTRAR Y LIMPIAR */
+/* ------------------------------------ */
+.btn-filtrar {
+    background-color: #10666d !important; /* azul */
+    border-color: #10666d !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.btn-filtrar:hover {
+    background-color: #0d4c53 !important;
+}
+
+.btn-limpiar {
+    background-color: #9F6920 !important; /* golden-brown */
+    border-color: #9F6920 !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.btn-limpiar:hover {
+    background-color: #daa755 !important; /* rob-roy */
+.card-header-listado {
+    background-color: #9F6920 !important; /* golden-brown */
+    color: white !important;
+    font-weight: bold;
+}
+}
+
+/* ------------------------------------ */
+/* FILTROS */
+/* ------------------------------------ */
 .filtro-botones {
     display: flex;
     gap: 0.5rem;
@@ -75,30 +182,3 @@ body {
     }
 }
 
-.table thead {
-    background-color: #809076; /* wasabi */
-    color: white;
-    font-weight: bold;
-}
-.table tbody tr:hover {
-    background-color: rgba(233, 197, 121, 0.25);
-    transition: 0.3s;
-}
-
-.card.fondo-transparente {
-    background-color: rgba(241, 222, 168, 0.4);
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    backdrop-filter: blur(6px);
-}
-
-.card-header.nuevo-movimiento {
-    background-color: #9F6920; /* golden-brown */
-    color: white;
-    font-weight: bold;
-}
-.card-header.lista-movimiento {
-    background-color: #9F6920; /* golden-brown */
-    color: white;
-    font-weight: bold;
-}

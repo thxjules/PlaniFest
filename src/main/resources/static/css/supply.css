@@ -1,79 +1,136 @@
+/* ------------------------------------ */
+/* ESTILOS PRINCIPALES */
+/* ------------------------------------ */
 body {
-    background-color: #fdfdf5f1; 
+    background-color: #fdfdf5f1 !important;
     min-height: 100vh;
     margin: 0;
-    color: #0c3a37; /* texto oscuro */
+    color: #0c3a37;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.header-section h1 {
-    color: #F1DEA8; /* buttermilk */
-    font-weight: bold;
-}
-.header-section p {
-    color: #E9C579; /* marzipan */
-}
-.header-section h1 {
-  color: #114442;
-  font-weight: bold;
-  margin: 0;
-}
-.header-section p {
-  color: #114442;
-  margin: 0;
-}
+/* ------------------------------------ */
+/* HEADER */
+/* ------------------------------------ */
 .header-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
 }
+
 .header-section .logo img {
-  max-height: 100px;
-  width: auto;
+    max-height: 100px;
+    width: auto;
 }
-.btn,
-.btn-primary,
-.btn-success,
-.btn-outline-primary,
-.btn-outline-secondary {
-    background-color: #9F6920; /* golden-brown */
-    border-color: #9F6920;
-    color: white;
+
+.header-section h1 {
+    color: #114442;
+    font-weight: bold;
+    margin: 0;
+    font-size: 2.3rem;
+}
+
+.header-section p {
+    color: #114442;
+    margin: 0;
+}
+
+/* ------------------------------------ */
+/* BOTONES GENERALES */
+/* ------------------------------------ */
+.btn {
     font-weight: bold;
     transition: 0.3s;
 }
+
+/* Color principal */
+.btn-primary, .btn-success, .btn-outline-secondary {
+    background-color: #9F6920 !important;
+    border-color: #9F6920 !important;
+    color: white !important;
+}
+
 .btn:hover {
-    background-color: #b97b29; /* tono más claro */
-    border-color: #b97b29;
+    background-color: #b97b29 !important;
+    border-color: #b97b29 !important;
     transform: scale(1.05);
 }
 
-.badge.bg-warning {
-    background-color: #DAA755; /* rob-roy */
-    color: #2b1d14;
+/* ------------------------------------ */
+/* BOTÓN EDITAR */
+/* ------------------------------------ */
+.btn-editar {
+    background-color: #b97b29 !important;
+    border-color: #9F6920 !important;
+    color: white !important;
+    border-radius: 8px;
+    padding: 6px 14px;
 }
-.badge.bg-success {
-    background-color: #809076; /* wasabi */
-    color: white;
+
+.btn-editar:hover {
+    background-color: #daa755 !important;
+    border-color: #9f6920 !important;
+    transform: scale(1.05);
 }
-.badge.bg-info {
-    background-color: #E9C579; /* marzipan */
-    color: #2b1d14;
+
+/* ------------------------------------ */
+/* BOTÓN ELIMINAR */
+/* ------------------------------------ */
+.btn-eliminar {
+    background-color: #b97b29 !important;
+    border-color: #9F6920 !important;
+    color: white !important;
+    border-radius: 8px;
+    padding: 6px 14px;
+}
+
+.btn-eliminar:hover {
+    background-color: #daa755 !important;
+    border-color: #9f6920 !important;
+    transform: scale(1.05);
+}
+
+/* ------------------------------------ */
+/* TABLAS */
+/* ------------------------------------ */
+.contenedor-tabla {
+    margin-top: 2rem;
+}
+
+.table {
+    text-align: center;
+    vertical-align: middle;
 }
 
 .table thead {
-    background-color: #809076; /* wasabi */
+    background-color: #809076;
     color: white;
     font-weight: bold;
 }
+
 .table tbody tr:hover {
     background-color: rgba(233, 197, 121, 0.25);
     transition: 0.3s;
 }
 
+.table th, .table td {
+    vertical-align: middle !important;
+    padding: 0.75rem;
+}
+
+/* Ajuste para centrar verticalmente los botones */
+.col-botones {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+/* ------------------------------------ */
+/* CARDS */
+/* ------------------------------------ */
 .card.fondo-transparente {
     background-color: rgba(241, 222, 168, 0.4);
     border-radius: 12px;
@@ -81,14 +138,55 @@ body {
     backdrop-filter: blur(6px);
 }
 
-.card-header.nuevo-suministro {
-    background-color: #9F6920; /* golden-brown */
+.card-header.nuevo-suministro,
+.card-header.lista-suministros {
+    background-color: #9F6920;
     color: white;
     font-weight: bold;
 }
 
-.card-header.lista-suministros {
-    background-color: #9F6920; /* golden-brown */
+/* ------------------------------------ */
+/* FILTROS */
+/* ------------------------------------ */
+.filtro-botones {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filtro-botones .btn {
+    width: 100%;
+    text-align: center;
+}
+
+.btn-planifest {
+    padding: 0.45rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+}
+
+
+/* ------------------------------------ */
+/* BADGES */
+/* ------------------------------------ */
+.badge.bg-warning {
+    background-color: #DAA755;
+    color: #2b1d14;
+}
+
+.badge.bg-success {
+    background-color: #809076;
     color: white;
-    font-weight: bold;
+}
+
+.badge.bg-info {
+    background-color: #E9C579;
+    color: #2b1d14;
+}
+.col-botones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* Centra horizontal */
+    justify-content: center; 
+    gap: 6px;              /* Separación uniforme */
 }
