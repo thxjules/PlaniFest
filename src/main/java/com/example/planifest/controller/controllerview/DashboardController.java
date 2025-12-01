@@ -147,6 +147,6 @@ public class DashboardController {
 
         model.addAttribute("activePage", "stock");
 
-        return "/dashboard/stock";
+        return "dashboard/stock";
     }
 }
