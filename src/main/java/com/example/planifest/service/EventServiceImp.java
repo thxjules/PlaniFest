@@ -234,19 +234,19 @@ public class EventServiceImp implements Idao<Event, Long> {
 
         event.setDeleted(true);
 
-        List<EventSupply> supplies = eventSupplyRepository.findByEventId(id);
+        List<EventSupply> supplies = eventSupplyRepository.findByEventIdWithSupply(id);
 
         for (EventSupply es : supplies) {
-            Supply supply = es.getSupply();
+            if(!es.isDeleted()){
+                Supply supply = es.getSupply();
 
-            //Devolucion al Stock actual
-            supply.setCurrentStock(supply.getCurrentStock() + es.getQuantitySupply());
-            supplyRepository.save(supply);
-        
+                supply.setCurrentStock(supply.getCurrentStock() + es.getQuantitySupply());
 
-        //Valida la eliminacion de la relacion
-        es.setDeleted(true);
-        eventSupplyRepository.save(es);
+                supplyRepository.saveAndFlush(supply);
+
+                es.setDeleted(true);
+                eventSupplyRepository.save(es);
+            }
         }
 
         event.getPlaniServices().clear(); 

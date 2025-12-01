@@ -9,6 +9,7 @@ import com.example.planifest.entity.auditoria.AuditListener;
 import com.example.planifest.entity.restoreDeleted.SoftDeletable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -58,7 +59,7 @@ public class Client implements SoftDeletable {
         this.deleted = deleted;
     }
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Event> events;
 }

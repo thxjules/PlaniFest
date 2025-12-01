@@ -68,7 +68,7 @@
                 <td th:text="${item.deletedAt != null ? #dates.format(item.deletedAt, 'dd/MM/yyyy') : '-'}">01/01/2025</td>
 
                 <td>
-                    <form th:action="@{/trash/{entity}/{id}/restore(entity=${entityType}, id=${item.id})}" method="post">
+                    <form th:action="@{'/trash/' + ${entityType} + '/' + ${item.id} + '/restore'}" method="post">
                         <button type="submit" class="btn btn-restore btn-sm">Restaurar</button>
                     </form>
                 </td>
