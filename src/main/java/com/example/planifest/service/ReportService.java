@@ -1,10 +1,10 @@
 package com.example.planifest.service;
 import java.io.ByteArrayOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.Base64;
 import java.util.Map;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -20,10 +20,13 @@ public class ReportService {
     public ReportService(SpringTemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
-    public String encodeImageToBase64(String path) throws Exception {
-    byte[] imageBytes = Files.readAllBytes(Paths.get(path));
+    public String encodeImageToBase64(String classpathLocation) throws Exception {
+        ClassPathResource resource = new ClassPathResource(classpathLocation);
+        try(InputStream is = resource.getInputStream()){
+        byte[] imageBytes = is.readAllBytes();
     return Base64.getEncoder().encodeToString(imageBytes);
-}
+        }
+    }
     public byte[] generatePdf(String templateName, Map<String, Object> variables) throws DocumentException {
         Context context = new Context();
         context.setVariables(variables);
@@ -33,6 +36,8 @@ public class ReportService {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             ITextRenderer renderer = new ITextRenderer();
             renderer.setDocumentFromString(htmlContent);
+
+             renderer.getSharedContext().setBaseURL("classpath:/static/");
             renderer.layout();
             renderer.createPDF(outputStream);
             return outputStream.toByteArray();
