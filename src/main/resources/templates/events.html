@@ -98,13 +98,16 @@
                             <!-- Ubicación y mapa -->
                             <div class="col-md-6">
                                 <label class="form-label">Ubicación</label>
-                                <input type="text" th:field="*{location}" class="form-control" required />
+                                <input id="location" type="text" th:field="*{location}" class="form-control" required />
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Mapa de ubicación</label>
                                 <div id="mapContainer" style="width:100%; height:300px; border:1px solid #ccc;">
-                                    <iframe id="mapFrame" th:src="${mapUrl}" width="100%" height="100%"
-                                        style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                                    <iframe id="mapFrame"
+                                        th:src="${mapUrl != null ? mapUrl : 'https://www.google.com/maps/embed/v1/place?key=TU_API_KEY&q=Colombia'}"
+                                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+                                    </iframe>
+
                                 </div>
                             </div>
 
@@ -262,7 +265,7 @@
                 <input type="number" name="eventSupplies[INDEX].quantitySupply" class="form-control" min="1" required>
             </div>
             <div class="col-md-2 d-flex align-items-end">
-                <button type="button" class="btn btn-danger removeSupplyBtn">🗑</button>
+                <button type="button" class="btn btn-danger removeSupplyBtn"></button>
             </div>
         </div>
     </template>
@@ -296,16 +299,25 @@
             attachRemoveHandlers();
         });
 
-        // Actualizar mapa dinámicamente
-        const locationInput = document.querySelector('input[th\\:field="*{location}"]');
-        const mapFrame = document.getElementById('mapFrame');
-        locationInput.addEventListener('input', () => {
-            const address = locationInput.value.trim();
-            if (address.length > 3) {
-                mapFrame.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyCgZPwudO2MG358I1CqrzctaVrIfclADcQ&q=${encodeURIComponent(address)}`;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const locationInput = document.getElementById('location');
+            const mapFrame = document.getElementById('mapFrame');
+
+            if (!locationInput || !mapFrame) {
+                console.warn("El input de ubicación o el mapFrame no existen en el DOM.");
+                return;
             }
+
+            locationInput.addEventListener('input', () => {
+                const address = locationInput.value.trim();
+                if (address.length > 3) {
+                    mapFrame.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyCgZPwudO2MG358I1CqrzctaVrIfclADcQ&q=${encodeURIComponent(address)}`;
+                }
+            });
         });
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
