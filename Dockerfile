@@ -2,12 +2,11 @@
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
-COPY pom.xml .
-COPY mvnw .
+COPY pom.xml . 
+COPY mvnw . 
 COPY .mvn .mvn
 
 RUN chmod +x mvnw
-
 RUN ./mvnw dependency:go-offline -B
 
 COPY src src
@@ -19,7 +18,8 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
+# Usar el puerto asignado por Render
 ENV PORT=8080
-EXPOSE 8080
+EXPOSE ${PORT}
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "java -Dserver.port=$PORT -jar app.jar"]
