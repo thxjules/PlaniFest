@@ -74,7 +74,7 @@ public class AdminReportController {
 
         // Logo
         String logoAdmin = reportService.encodeImageToBase64(
-        "src/main/resources/static/images/planifestblanco.png"
+        "src/main/resources/static/images/planifestBlanco.png"
         );
         data.put("logoBase64", logoAdmin);
 
