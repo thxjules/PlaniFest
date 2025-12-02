@@ -41,8 +41,8 @@ public class StockReportController {
         Map<String, Object> data = new HashMap<>();
         data.put("supplies", supplies);
 
-        String logoStock = reportService.encodeImageToBase64("src/main/resources/static/images/planifestBlanco.png");
-        data.put("logoBase64", logoStock);
+        String logoAdmin = reportService.encodeImageToBase64FromClasspath("static/images/planifestBlanco.png");
+
 
         Map<String, Integer> stockPorTipo = supplyService.obtenerStockAgrupadoPorTipo();
 

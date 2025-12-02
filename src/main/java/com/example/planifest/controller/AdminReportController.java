@@ -73,10 +73,7 @@ public class AdminReportController {
         data.put("recomendaciones", reportAIService.generarRecomendaciones(emp, eve, tar, ins));
 
         // Logo
-        String logoAdmin = reportService.encodeImageToBase64(
-        "images/planifestBlanco.png"
-        );
-        data.put("logoBase64", logoAdmin);
+       String logoAdmin = reportService.encodeImageToBase64FromClasspath("static/images/planifestBlanco.png");
 
 
         // Gráficos
