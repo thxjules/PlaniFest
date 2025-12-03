@@ -1,104 +1,77 @@
-body {
-  background-size:contain;
-  background-attachment: fixed;
-  overflow-x: hidden;
+/* ============================= */
+/* RESPONSIVE                   */
+/* ============================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 230px;
+  }
+  .main {
+    padding-left: 1rem;
+  }
 }
 
+/* Móviles */
+@media (max-width: 768px) {
 
-/* Contenedor principal */
-.dashboard-wrapper {
-  display: flex;
-  min-height: 100vh;
+  /* Oculta el sidebar por defecto */
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    height: 100%;
+    width: 260px;
+    z-index: 999;
+    transition: left 0.3s ease;
+  }
+
+  /* Sidebar cuando está abierto */
+  .sidebar.open {
+    left: 0;
+  }
+
+  .dashboard-wrapper {
+    flex-direction: column;
+  }
+
+  .main {
+    margin-left: 0 !important;
+    padding: 1.2rem;
+  }
+
+  /* Botón hamburguesa */
+  #menuToggle {
+    display: block;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background-color: #213431;
+    color: #F1DEAB;
+    padding: 10px 12px;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    z-index: 1000;
+    cursor: pointer;
+  }
+
+  .main h1 {
+    font-size: 1.6rem;
+  }
 }
 
-/* Sidebar */
-.sidebar {
-  width: 270px;
-  background-color: #213431;
-  color: #F1DEAB;
-  padding: 2rem 1rem;
-  display: flex;
-  text-align: center;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .main h1 {
+    font-size: 1.4rem;
+  }
+
+  .logout-button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .sidebar {
+    width: 220px;
+  }
 }
-
-.sidebar .logo img {
-  max-width: 250px;
-  height: auto;
-  display: block;
-  margin: 2rem auto 0;
-}
-
-.sidebar a,
-.logout-button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
-  margin: 10px auto;
-  border-radius: 10px;
-  color: #F1DEAB;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background 0.2s ease;
-  width: 100%;
-}
-
-
-.logout-button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
-  margin-top: 2rem;
-  border-radius: 10px;
-  background-color: #F1DEAB;
-  color: #000;
-  font-weight: 600;
-  text-decoration: none;
-  justify-content: center;
-}
-
-.logout-button:hover {
-  background-color: #c79545;
-  color: #000000;
-}
-
-.sidebar a:hover{
-  background-color: #F1DEAB;
-  color: #000000;
-}
-.main {
-  padding: 2rem;
-  background-color:#fdfdf5f1;
-  min-width: 0;
-}
-
-.main h1 {
-  font-size: 2rem;
-  color: #F1DEAB;
-  background: #213431;
-  padding: 1rem;
-  text-align: center;
-  border-radius: 10px;
-}
-
-/* Botón personalizado */
-.btn-gold {
-  border: none;
-  color: rgb(0, 0, 0);
-  padding: 0.5rem 1rem;
-  font-weight: bold;
-  border-radius: 5px;
-  text-decoration: none;
-}
-
-.btn-gold:hover {
-  background-color: #b58c4f;
-  color: rgb(0, 0, 0);
-}
-
-
-
