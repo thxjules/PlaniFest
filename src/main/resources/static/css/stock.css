@@ -1,9 +1,8 @@
 body {
-  background-size:contain;
+  background-size: contain;
   background-attachment: fixed;
   overflow-x: hidden;
 }
-
 
 /* Contenedor principal */
 .dashboard-wrapper {
@@ -46,7 +45,6 @@ body {
   width: 100%;
 }
 
-
 .logout-button {
   display: flex;
   align-items: center;
@@ -66,13 +64,14 @@ body {
   color: #000000;
 }
 
-.sidebar a:hover{
+.sidebar a:hover {
   background-color: #F1DEAB;
   color: #000000;
 }
+
 .main {
   padding: 2rem;
-  background-color:#fdfdf5f1;
+  background-color: #fdfdf5f1;
   min-width: 0;
 }
 
@@ -99,6 +98,3 @@ body {
   background-color: #b58c4f;
   color: rgb(0, 0, 0);
 }
-
-
-
