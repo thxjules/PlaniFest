@@ -1,77 +1,165 @@
-/* ============================= */
-/* RESPONSIVE                   */
-/* ============================= */
-
-/* Tablets */
-@media (max-width: 992px) {
-  .sidebar {
-    width: 230px;
-  }
-  .main {
-    padding-left: 1rem;
-  }
+body { 
+  background-size: contain;
+  background-attachment: fixed;
+  overflow-x: hidden;
 }
 
-/* Móviles */
-@media (max-width: 768px) {
+/* Contenedor principal */
+.dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
 
-  /* Oculta el sidebar por defecto */
-  .sidebar {
-    position: fixed;
-    left: -280px;
-    top: 0;
-    height: 100%;
-    width: 260px;
-    z-index: 999;
-    transition: left 0.3s ease;
-  }
 
-  /* Sidebar cuando está abierto */
-  .sidebar.open {
-    left: 0;
-  }
+/* ------------------------------- */
+/* SIDEBAR */
+/* ------------------------------- */
 
+.sidebar {
+  width: 270px;
+  background-color: #213431;
+  color: #F1DEAB;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .logo img {
+  max-width: 200px;
+  display: block;
+  margin: 1rem auto 2rem;
+}
+
+/* Enlaces del sidebar */
+.sidebar a,
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  margin: 8px auto;
+  border-radius: 10px;
+  color: #F1DEAB;
+  font-weight: 500;
+  text-decoration: none;
+  transition: 0.2s ease-in-out;
+  width: 100%;
+}
+
+/* Hover */
+.sidebar a:hover {
+  background-color: #F1DEAB;
+  color: #000;
+}
+
+/* Botón salir */
+.logout-button {
+  background-color: #F1DEAB;
+  color: #000;
+  font-weight: 700;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.logout-button:hover {
+  background-color: #cfae66;
+  color: #000;
+}
+
+
+/* ------------------------------- */
+/* MAIN CONTENT */
+/* ------------------------------- */
+
+.main {
+  flex: 1;
+  padding: 2rem;
+  background-color: #fdfdf5f1;
+}
+
+.main h1 {
+  font-size: 2rem;
+  color: #213431;
+  background: #F1DEAB;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+
+/* ------------------------------- */
+/* BOTÓN PERSONALIZADO */
+/* ------------------------------- */
+
+.btn-gold {
+  background: #F1DEAB;
+  border: none;
+  color: #000;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-gold:hover {
+  background-color: #cfae66;
+  color: #000;
+}
+
+
+/* ------------------------------- */
+/* RESPONSIVE */
+/* ------------------------------- */
+
+@media (max-width: 900px) {
   .dashboard-wrapper {
     flex-direction: column;
   }
 
+  .sidebar {
+    width: 100%;
+    padding: 1rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .sidebar .logo img {
+    max-width: 150px;
+    margin: 0 auto;
+  }
+
+  .sidebar a,
+  .logout-button {
+    width: auto;
+    padding: 10px;
+  }
+
   .main {
-    margin-left: 0 !important;
-    padding: 1.2rem;
-  }
-
-  /* Botón hamburguesa */
-  #menuToggle {
-    display: block;
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    background-color: #213431;
-    color: #F1DEAB;
-    padding: 10px 12px;
-    font-size: 1.5rem;
-    border-radius: 8px;
-    z-index: 1000;
-    cursor: pointer;
-  }
-
-  .main h1 {
-    font-size: 1.6rem;
+    padding: 1rem;
   }
 }
 
-/* Móviles pequeños */
-@media (max-width: 480px) {
-  .main h1 {
-    font-size: 1.4rem;
-  }
-
-  .logout-button {
-    font-size: 0.9rem;
-    padding: 8px;
-  }
+@media (max-width: 600px) {
 
   .sidebar {
-    width: 220px;
+    padding: 0.5rem;
+  }
+
+  .sidebar a,
+  .logout-button {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  .main h1 {
+    font-size: 1.5rem;
+    padding: 0.7rem;
   }
 }
