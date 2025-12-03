@@ -1,124 +1,158 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Panel de Inventario</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <title>Panel de Inventario - Planifest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Librerías JS necesarias -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-    <!-- BOTÓN PARA ABRIR MENU EN MÓVIL -->
-    <button id="menuToggle" class="menu-toggle">
-        ☰
-    </button>
+  <!-- BOTÓN RESPONSIVE PARA ABRIR/CERRAR SIDEBAR -->
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+    <i class="bx bx-menu"></i>
+  </button>
 
-    <div class="dashboard-wrapper">
+  <div class="dashboard-wrapper">
 
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="sidebar">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div>
+        <h2>Inventario</h2>
 
-            <h2>Inventario</h2>
+        <a th:href="@{/admin/profile}" th:classappend="${activePage == 'profile'} ? 'active'">
+          <i class="bx bx-user"></i> Mi Perfil
+        </a>
 
-            <nav>
-                <a th:href="@{/admin/profile}" th:classappend="${activePage == 'profile'} ? 'active'">
-                    Mi Perfil
-                </a>
+        <a th:href="@{/supplies-view}" th:classappend="${activePage == 'supplies'} ? 'active'">
+          <i class="bx bx-package"></i> Suministros
+        </a>
 
-                <a th:href="@{/supplies-view}" th:classappend="${activePage == 'supplies'} ? 'active'">
-                    Suministros
-                </a>
+        <a th:href="@{/stock-view}" th:classappend="${activePage == 'stock'} ? 'active'">
+          <i class="bx bx-transfer"></i> Movimientos de stock
+        </a>
 
-                <a th:href="@{/stock-view}" th:classappend="${activePage == 'stock'} ? 'active'">
-                    Movimientos de stock
-                </a>
-            </nav>
+        <div class="reporte">
+          <div class="text-center">
+            <button id="downloadPdfBtn" class="logout-button" type="button">
+              <h6>📄 Descargar reporte PDF</h6>
+            </button>
+          </div>
+        </div>
+      </div>
 
-            <div class="report-block">
-                <button id="downloadPdfBtn" type="button">
-                    Descargar reporte PDF
-                </button>
-            </div>
+      <form id="logout-form" th:action="@{/logout}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit" class="logout-button">
+          <i class="bx bx-log-out"></i> Cerrar Sesión
+        </button>
+      </form>
 
-            <form th:action="@{/logout}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" class="logout-button">Cerrar Sesión</button>
-            </form>
-
-            <div class="logo">
-                <img th:src="@{/images/1.png}" alt="Logo Planifest">
-            </div>
-
-        </aside>
-
-        <!-- CONTENIDO PRINCIPAL -->
-        <main id="main" class="main">
-
-            <h1>Panel de Inventario</h1>
-
-            <div class="cards">
-                <div class="card">
-                    <h5>Total de suministros</h5>
-                    <p th:text="${totalSupplies}">0</p>
-                </div>
-
-                <div class="card">
-                    <h5>Stock bajo</h5>
-                    <p th:text="${lowStockCount}">0</p>
-                </div>
-            </div>
-
-            <div class="chart-section">
-                <h5>Movimientos de stock</h5>
-                <canvas id="movementChart"></canvas>
-            </div>
-
-        </main>
+      <div class="logo text-center">
+        <img th:src="@{/images/1.png}" alt="Logo Planifest" height="210" width="210">
+      </div>
     </div>
 
+    <!-- Main -->
+    <main class="main" id="main">
+      <h1>Panel de Inventario</h1>
 
-    <!-- SCRIPT -->
-    <script>
-        const sidebar = document.getElementById("sidebar");
-        const menuToggle = document.getElementById("menuToggle");
+      <div class="row mt-4">
+        <section class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow p-3">
+            <h5>Total de suministros</h5>
+            <p class="fs-4" th:text="${totalSupplies}">0</p>
+          </div>
+        </section>
 
-        menuToggle.addEventListener("click", () => {
-            sidebar.classList.toggle("open");
-        });
+        <section class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow p-3">
+            <h5>Stock bajo</h5>
+            <p class="fs-4 text-danger" th:text="${lowStockCount}">0</p>
+          </div>
+        </section>
+      </div>
 
-        // Gráfico
-        const ctx = document.getElementById('movementChart');
-        if (ctx) {
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
-                    datasets: [
-                        { label: 'Entradas', data: [10, 20, 15, 25] },
-                        { label: 'Salidas', data: [5, 15, 10, 20] }
-                    ]
-                },
-                options: {
-                    responsive: true
-                }
-            });
+      <section class="col-md-12 mb-4">
+        <div class="card shadow p-3">
+          <h5>Movimientos de stock</h5>
+          <canvas id="movementChart" aria-label="Gráfico de movimientos de stock" role="img"></canvas>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Toggle sidebar (visual behavior controlled por CSS externo)
+    const sidebar = document.getElementById("sidebar");
+    const menuToggle = document.getElementById("menuToggle");
+    if (menuToggle) {
+      menuToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+    }
+
+    // Gráfico (Chart.js)
+    const colors = {
+      emerald: '#284139',
+      wasabi: '#809076',
+      khaki: '#F8D794',
+      earth: '#B86830',
+      noir: '#111A19'
+    };
+
+    const ctx = document.getElementById('movementChart');
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+          datasets: [{
+            label: 'Entradas',
+            data: [10, 20, 15, 25],
+            borderColor: colors.khaki,
+            backgroundColor: colors.khaki,
+            fill: false
+          }, {
+            label: 'Salidas',
+            data: [5, 15, 10, 20],
+            borderColor: colors.earth,
+            backgroundColor: colors.earth,
+            fill: false
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    }
+
+    // Descargar PDF
+    const downloadBtn = document.getElementById('downloadPdfBtn');
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', async () => {
+        try {
+          const response = await fetch('/admin/stock/report');
+          if (!response.ok) throw new Error('No se pudo generar el PDF');
+
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reporte.pdf';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+        } catch (err) {
+          alert(err.message);
         }
-
-        // Botón PDF
-        const downloadBtn = document.getElementById('downloadPdfBtn');
-        downloadBtn.addEventListener('click', async () => {
-            const response = await fetch('/admin/stock/report');
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'reporte.pdf';
-            a.click();
-        });
-    </script>
+      });
+    }
+  </script>
 
 </body>
 </html>
