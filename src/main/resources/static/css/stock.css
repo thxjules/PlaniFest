@@ -98,3 +98,56 @@ body {
   background-color: #b58c4f;
   color: rgb(0, 0, 0);
 }
+/* ========================= */
+/* RESPONSIVE PARA MÓVILES   */
+/* ========================= */
+@media (max-width: 768px) {
+
+  /* El contenedor ya NO será horizontal */
+  .dashboard-wrapper {
+    flex-direction: column;
+  }
+
+  /* Sidebar se vuelve menú superior */
+  .sidebar {
+    width: 100%;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .sidebar .logo img {
+    max-width: 180px;
+  }
+
+  /* Botones más compactos */
+  .sidebar a,
+  .logout-button {
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  /* Ajustar contenido */
+  .main {
+    padding: 1rem;
+  }
+
+  .main h1 {
+    font-size: 1.6rem;
+  }
+}
+
+/* MÓVILES PEQUEÑOS (TELÉFONOS 360px o menos) */
+@media (max-width: 480px) {
+
+  .sidebar {
+    padding: 1rem;
+  }
+
+  .sidebar a {
+    font-size: 0.9rem;
+  }
+
+  .main h1 {
+    font-size: 1.4rem;
+  }
+}
