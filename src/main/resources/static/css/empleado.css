@@ -1,27 +1,37 @@
+/* ================== ESTILOS BASE ================== */
+
 body {
   background-size: contain;
   background-color: #032a20;
 }
 
-.logout-button {
-  background-color: #daa755;
-  color: #e49d9d;
-  font-weight: 600;
-  justify-content: center;
+.dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
   width: 100%;
-  border: none;
 }
 
-.sidebar a:hover,
-.logout-button:hover {
-  background-color: #daa755;
-  color: #032a20;
+.sidebar {
+  width: 260px;
+  background-color: #213431;
+  color: #fff;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  transition: all 0.3s ease;
+  z-index: 999;
 }
 
 .main {
+  margin-left: 260px;
   padding: 2rem;
-  background-color:#fdfdf5f1;
+  background-color: #fdfdf5f1;
   min-width: 0;
+  width: 100%;
 }
 
 .main h1 {
@@ -32,30 +42,87 @@ body {
   text-align: center;
   border-radius: 10px;
   font-family: "Poppins", sans-serif;
-
 }
+
+/* ================== BOTONES ================== */
 
 .logout-button {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  padding: 10px 15px;
+  padding: 12px;
   margin-top: 2rem;
   border-radius: 10px;
   background-color: #F1DEAB;
   color: #000;
   font-weight: 600;
-  text-decoration: none;
-  justify-content: center;
+  border: none;
+  width: 100%;
+  cursor: pointer;
 }
 
 .logout-button:hover {
   background-color: #daa755;
-  color: #000000;
+  color: #032a20;
 }
 
 .btn-gold {
   background-color: #F1DEAB;
   color: #000;
   border: none;
+}
+
+/* ================== RESPONSIVE ================== */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 220px;
+  }
+
+  .main {
+    margin-left: 220px;
+  }
+}
+
+/* Celulares */
+@media (max-width: 768px) {
+  .sidebar {
+    left: -260px; /* Oculta sidebar */
+  }
+
+  .sidebar.open {
+    left: 0; /* Aparece con toggle */
+  }
+
+  .main {
+    margin-left: 0;
+    padding: 1.2rem;
+  }
+
+  .main h1 {
+    font-size: 1.6rem;
+    padding: 0.8rem;
+  }
+
+  .table-responsive {
+    font-size: 0.85rem;
+  }
+}
+
+/* Celulares muy pequeños */
+@media (max-width: 480px) {
+  .main h1 {
+    font-size: 1.4rem;
+  }
+
+  .btn-gold,
+  .btn-secondary {
+    font-size: 0.85rem;
+  }
+
+  .sidebar {
+    width: 200px;
+  }
 }
