@@ -184,8 +184,7 @@ canvas {
     max-width: 100%;
   }
 }
-
-/* Botón hamburguesa */
+/* --- BOTÓN HAMBURGUESA --- */
 .menu-toggle {
   display: none;
   position: fixed;
@@ -201,24 +200,72 @@ canvas {
   cursor: pointer;
 }
 
-/* Sidebar oculto en móvil */
+/* --- ESTADO NORMAL (PANTALLA GRANDE) --- */
+@media (min-width: 769px) {
+  .menu-toggle {
+    display: none !important;
+  }
+
+  .sidebar {
+    left: 0 !important;
+  }
+
+  .main {
+    margin-left: 270px;
+    width: calc(100% - 270px);
+  }
+
+  .sidebar .logo {
+    margin-top: auto;
+    text-align: center;
+  }
+}
+
+/* --- MÓVIL / TABLET --- */
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
   }
 
   .sidebar {
-    left: -270px;              /* << oculto inicialmente */
-    transition: left 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: -270px;          /* oculto */
+    width: 270px;
+    height: 100vh;
+    transition: left 0.3s ease-in-out;
+    z-index: 1500;
+    display: flex;
+    flex-direction: column;
   }
 
   .sidebar.active {
-    left: 0;                   /* << se muestra al presionar */
+    left: 0;
+  }
+
+  .sidebar .logo {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .main {
-    margin-left: 0;
-    width: 100%;
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-top: 70px;      /* evita que el menú tape el título */
+  }
+
+  /* KPI ajustadas */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
   }
 }
 
+/* Extra pequeño (teléfonos) */
+@media (max-width: 480px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
