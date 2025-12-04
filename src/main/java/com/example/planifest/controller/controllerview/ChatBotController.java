@@ -1,14 +1,35 @@
 package com.example.planifest.controller.controllerview;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequestMapping("/chatbot")
 public class ChatBotController {
 
-    @GetMapping("/chat")
+    @GetMapping
     public String showChat() {
-        // Spring busca automáticamente: src/main/resources/templates/chat.html
-        return "chat";
+        return "chat"; // carga chat.html
+    }
+
+    @PostMapping("/message")
+    @ResponseBody
+    public Map<String, String> chatResponse(@RequestBody Map<String, String> body) {
+
+        String userText = body.get("message");
+
+        String botReply = "Procesé tu mensaje: " + userText;
+
+        Map<String, String> res = new HashMap<>();
+        res.put("reply", botReply);
+
+        return res;
     }
 }
