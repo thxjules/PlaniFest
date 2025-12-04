@@ -62,6 +62,9 @@
 </head>
 
 <body>
+  <button class="menu-toggle">
+    <i class="bx bx-menu"></i>
+  </button>
   <!-- Sidebar -->
   <div class="sidebar">
     <div>
@@ -93,7 +96,7 @@
       </form>
     </div>
     <div class="logo text-center mt-3">
-       <img th:src="@{/images/1.png}" alt="Logo Planifest" height="210px" width="210px">
+      <img th:src="@{/images/1.png}" alt="Logo Planifest" height="210px" width="210px">
     </div>
   </div>
 
@@ -216,6 +219,15 @@
       }
     });
   </script>
+  <script>
+    const toggleBtn = document.querySelector(".menu-toggle");
+    const sidebar = document.querySelector(".sidebar");
+
+    toggleBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+    });
+  </script>
+
 </body>
 
 </html>
