@@ -99,3 +99,41 @@ body {
   background-color: #b58c4f;
   color: rgb(0, 0, 0);
 }
+
+/* Botón hamburguesa */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 2000;
+  background: #213431;
+  border: none;
+  color: #F1DEAB;
+  font-size: 2rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Sidebar oculto en móvil */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .sidebar {
+    left: -270px;              /* << oculto inicialmente */
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.active {
+    left: 0;                   /* << se muestra al presionar */
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
