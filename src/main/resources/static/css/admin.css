@@ -1,5 +1,6 @@
+
 body {
-  background-size: contain;
+  background-size:contain;
   background-attachment: fixed;
   color: #F1DEAB;
   overflow-x: hidden;
@@ -26,7 +27,6 @@ html, body {
   left: 0;
   height: 100vh;
   z-index: 1000;
-  transition: all 0.3s ease;
 }
 
 .sidebar h2 {
@@ -35,6 +35,7 @@ html, body {
   margin-bottom: 2rem;
   text-align: center;
   color: #F1DEAB;
+
 }
 
 .text-muted {
@@ -92,9 +93,8 @@ html, body {
   width: calc(100% - 270px);
   padding: 2rem;
   background-color: #fdfdf5f1;
-  color: #F1DEAB;
+  color: #F1DEAB; 
   min-width: 0;
-  transition: margin 0.3s ease, width 0.3s ease;
 }
 
 .main h1 {
@@ -106,7 +106,7 @@ html, body {
   border-radius: 10px;
 }
 
-/* Tarjetas */
+/* Tarjetas del dashboard */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -134,62 +134,36 @@ html, body {
   color: #123757;
 }
 
-/* Tablet */
+/* Responsivo */
 @media (max-width: 768px) {
   .sidebar {
-    width: 220px;
+    width: 200px;
   }
-
   .main {
-    margin-left: 220px;
-    width: calc(100% - 220px);
+    margin-left: 200px;
+    width: calc(100% - 200px);
     padding: 1rem;
   }
 }
 
-
 @media (max-width: 576px) {
+  .dashboard-wrapper {
+    flex-direction: column;
+  }
 
-  /* Sidebar → Navbar */
   .sidebar {
-    position: fixed;
-    bottom: 0;
-    top: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
     width: 100%;
     height: auto;
-    padding: 0.8rem 1rem;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
-  }
-
-  .sidebar h2,
-  .sidebar .logo,
-  .logout-button {
-    display: none;
-  }
-
-  .sidebar a {
-    margin: 0;
-    padding: 10px;
-    flex-direction: column;
-    gap: 5px;
-    font-size: 0.8rem;
+    padding: 1rem;
+    position: relative;
   }
 
   .main {
-    margin: 0;
+    margin-left: 0;
     width: 100%;
-    padding: 1rem;
-    margin-bottom: 70px; /* espacio para el navbar */
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .button {
-    background-color: #000000;
+    margin-top: 1rem;
   }
 }
