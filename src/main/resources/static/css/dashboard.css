@@ -5,9 +5,8 @@
   font-family: "Poppins", sans-serif;
 }
 
-body{
-    background-color: #fdfdf5f1;
-
+body {
+  background-color: #fdfdf5f1;
 }
 
 .dashboard-wrapper {
@@ -27,6 +26,7 @@ body{
   margin-bottom: 1.5rem;
 }
 
+/* Botones */
 .btn-gold {
   background-color: #f0c36d;
   color: #000;
@@ -38,12 +38,29 @@ body{
   color: #000;
 }
 
+.chart-container {
+  width: 100%;
+  max-width: 700px;   /* ← El límite para que no se vean enormes */
+  margin: 0 auto;
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+
 @media (max-width: 768px) {
   .sidebar {
     width: 200px;
   }
+
   .main {
     padding: 1rem;
+  }
+
+  .chart-container {
+    max-width: 500px;
   }
 }
 
@@ -63,5 +80,9 @@ body{
 
   .main {
     margin-top: 1rem;
+  }
+
+  .chart-container {
+    max-width: 100%;
   }
 }
