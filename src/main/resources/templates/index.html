@@ -4,156 +4,98 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PlaniFest</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-  <link rel="icon"  th:href="@{/images/planifest.png}" type="image/png">
+  <link rel="icon" th:href="@{/images/planifest.png}" type="image/png"/>
+
   <style>
     body {
       background-color: #000;
       color: #d2b48c;
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
     }
-    
+
+    /* Reset links */
     a {
       text-decoration: none;
       color: inherit;
     }
-    
     a:hover {
       color: #b8860b;
     }
-    
-    h1, h2, h3, h4, h5 {
-      font-weight: bold;
-    }
-    
-    .bg-dark-custom {
-      background-color: #1c1c1c; 
-    }
-    
-    /* Hero / Slider */
+
+    /* Hero/Slider */
     .carousel-item {
       height: 90vh;
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
-      position: relative;
     }
-    
+
     .carousel-caption {
       bottom: 25%;
     }
-    
+
     .carousel-caption h1 {
       font-size: 3rem;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+      text-shadow: 0 0 10px rgba(0,0,0,0.7);
     }
-    
-    /* Sección de características */
+
+    /* Feature boxes */
     .feature-box {
-      transition: all 0.3s ease-in-out;
+      transition: 0.3s;
       background: #1c1c1c;
       color: #d2b48c;
       border-radius: 10px;
       padding: 20px;
       height: 100%;
     }
-    
     .feature-box:hover {
       transform: translateY(-10px);
-      box-shadow: 0 10px 20px rgba(210, 180, 140, 0.2);
+      box-shadow: 0 10px 20px rgba(210,180,140,0.2);
     }
-    
-    .icon-section i {
-      font-size: 3rem;
-      color: #d2b48c;
-      transition: transform 0.3s;
-    }
-    
-    .icon-section:hover i {
-      transform: rotate(15deg);
-    }
-    
-    /* Sección Menú */
-    .menu-item {
-      background: #1c1c1c;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
-      transition: all 0.3s ease-in-out;
-    }
-    
-    .menu-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(210, 180, 140, 0.1);
-    }
-    
-    /* Sección Galería */
-    .gallery-item {
-      position: relative;
-      overflow: hidden;
-      border-radius: 10px;
-    }
-    
+
+    /* Gallery */
     .gallery-item img {
       width: 100%;
-      transition: transform 0.4s;
+      border-radius: 10px;
+      transition: 0.4s;
+      object-fit: cover;
+      aspect-ratio: 1/1;
     }
-    
     .gallery-item:hover img {
       transform: scale(1.1);
     }
-    
-    /* Sección Noticias/Eventos */
+
+    /* Event cards */
     .event-card {
       background: #1c1c1c;
       border-radius: 10px;
       padding: 20px;
-      margin-bottom: 20px;
-      transition: all 0.3s ease-in-out;
+      transition: 0.3s;
+      height: 100%;
     }
-    
     .event-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(210, 180, 140, 0.1);
+      box-shadow: 0 5px 15px rgba(210,180,140,0.1);
     }
-    
-    /* Sección Testimonios */
-    .testimonial {
-      background: #1c1c1c;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 10px;
-      text-align: center;
-    }
-    
+
+    /* Testimonios */
     .testimonial img {
       width: 80px;
       height: 80px;
-      border-radius: 50%;
       object-fit: cover;
-      margin-bottom: 15px;
+      border-radius: 50%;
     }
-    
-    /* Sección Contacto */
-    .contact-form label {
-      color: #c6996f;
-      font-weight: bold;
-    }
-    
+
+    /* Contacto */
     .contact-form .form-control {
       background-color: #000;
-      color: #c6996f;
       border: 1px solid #c6996f;
+      color: #c6996f;
     }
-    
-    .contact-form .form-control:focus {
-      box-shadow: 0 0 5px #15a472;
-    }
-    
-    /* Botones personalizados */
+
     .btn-custom {
       background-color: #c6996f;
       color: white;
@@ -161,28 +103,73 @@
       padding: 12px 30px;
       transition: 0.3s;
     }
-    
     .btn-custom:hover {
       background-color: #5d4037;
-      color: white;
     }
-    
-    /* Footer */
+
     footer {
       background-color: #1c1c1c;
-      color: #d2b48c;
+    }
+
+    /* ---------------------------- */
+    /*   RESPONSIVE IMPROVEMENTS   */
+    /* ---------------------------- */
+
+    @media (max-width: 768px) {
+      .carousel-item {
+        height: 60vh; /* más bajo en móviles */
+      }
+
+      .carousel-caption {
+        bottom: 15%;
+      }
+
+      .carousel-caption h1 {
+        font-size: 2.2rem;
+      }
+
+      .carousel-caption p {
+        font-size: 1rem;
+      }
+
+      .btn-custom,
+      .btn-outline-light {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+
+      /* Secciones más compactas */
+      section {
+        padding: 2rem 0 !important;
+      }
+
+      /* Testimonios: 1 por fila */
+      #testimonios .col-md-4 {
+        margin-bottom: 20px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .carousel-caption h1 {
+        font-size: 1.8rem;
+      }
+      .carousel-caption p {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Hero / Slider -->
   <div id="hero" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
-      <button type="button" data-bs-target="#hero" data-bs-slide-to="0" class="active" aria-current="true"></button>
+      <button type="button" data-bs-target="#hero" data-bs-slide-to="0" class="active"></button>
       <button type="button" data-bs-target="#hero" data-bs-slide-to="1"></button>
       <button type="button" data-bs-target="#hero" data-bs-slide-to="2"></button>
     </div>
+
     <div class="carousel-inner">
       <div class="carousel-item active" th:style="|background-image: url('@{/images/home/1.png}');|">
         <div class="carousel-caption">
@@ -192,19 +179,22 @@
           <a th:href="@{/registro}" class="btn btn-outline-light btn-lg ms-3">Registrarse</a>
         </div>
       </div>
+
       <div class="carousel-item" th:style="|background-image: url('@{/images/home/3.png}');|">
         <div class="carousel-caption">
           <h1>PLANIFICA TUS EVENTOS</h1>
           <p class="lead">La herramienta perfecta para tus eventos</p>
         </div>
       </div>
+
       <div class="carousel-item" th:style="|background-image: url('@{/images/home/2.png}');|">
         <div class="carousel-caption">
-          <h1>GESTIONA TUS EMPLEADOS</h1>
-          <p class="lead">Asigna empleados a tus eventos</p>
+          <h1>GESTIONA TU EQUIPO</h1>
+          <p class="lead">Organiza y asigna empleados con facilidad</p>
         </div>
       </div>
     </div>
+
     <button class="carousel-control-prev" type="button" data-bs-target="#hero" data-bs-slide="prev">
       <span class="carousel-control-prev-icon"></span>
     </button>
@@ -213,29 +203,31 @@
     </button>
   </div>
 
-  <!-- Sección de características -->
+  <!-- Características -->
   <section id="caracteristicas" class="container py-5 text-center">
     <h2 class="mb-4">¿Por qué elegir PlaniFest?</h2>
     <div class="row g-4">
       <div class="col-md-4">
         <div class="feature-box">
-          <div class="icon-section mb-3"><i class="bi bi-people"></i></div>
+          <i class="bi bi-people mb-3 fs-1"></i>
           <h4>Organiza tu equipo</h4>
-          <p>Facilita la gestión de tareas y optimiza la eficiencia de tu negocio.</p>
+          <p>Gestiona tareas y optimiza la eficiencia de tu negocio.</p>
         </div>
       </div>
+
       <div class="col-md-4">
         <div class="feature-box">
-          <div class="icon-section mb-3"><i class="bi bi-calendar-event"></i></div>
+          <i class="bi bi-calendar-event mb-3 fs-1"></i>
           <h4>Planifica eventos</h4>
-          <p>Diseña experiencias únicas y gestiona cada detalle de manera efectiva.</p>
+          <p>Crea experiencias únicas y controla cada detalle.</p>
         </div>
       </div>
+
       <div class="col-md-4">
         <div class="feature-box">
-          <div class="icon-section mb-3"><i class="bi bi-box-seam"></i></div>
-          <h4>Control de inventario</h4>
-          <p>Asegura que siempre tengas los insumos necesarios para tus eventos.</p>
+          <i class="bi bi-box-seam mb-3 fs-1"></i>
+          <h4>Inventario inteligente</h4>
+          <p>Asegura insumos suficientes para tus eventos.</p>
         </div>
       </div>
     </div>
@@ -243,76 +235,51 @@
 
   <!-- Galería -->
   <section id="galeria" class="container py-5">
-    <h2 class="text-center mb-5">Eventos Con PlaniFest</h2>
+    <h2 class="text-center mb-5">Eventos con PlaniFest</h2>
     <div class="row g-4">
-      <div class="col-md-4">
-        <div class="gallery-item">
-          <img th:src="@{/images/home/evento1.jpg}" alt="Evento 1" />
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="gallery-item">
-          <img th:src="@{/images/home/evento2.jpg}" alt="Evento 2" />
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="gallery-item">
-          <img th:src="@{/images/home/evento3.jpg}" alt="Evento 3" />
-        </div>
-      </div>
+      <div class="col-md-4"><div class="gallery-item"><img th:src="@{/images/home/evento1.jpg}" alt=""></div></div>
+      <div class="col-md-4"><div class="gallery-item"><img th:src="@{/images/home/evento2.jpg}" alt=""></div></div>
+      <div class="col-md-4"><div class="gallery-item"><img th:src="@{/images/home/evento3.jpg}" alt=""></div></div>
     </div>
   </section>
 
-  <!-- Noticias/Eventos -->
+  <!-- Actualizaciones -->
   <section id="eventos" class="py-5 bg-dark-custom">
     <div class="container">
       <h2 class="text-center mb-5">Últimas Actualizaciones</h2>
       <div class="row g-4">
-        <div class="col-md-4">
-          <div class="event-card">
-            <h4>Planifica tus tareas de forma más sencilla</h4>
-            <p>Disponible a partir del 17 de Septiembre 2025</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="event-card">
-            <h4>Nuevos subroles para tus empleados</h4>
-            <p>Disponible a partir del 1 de Octubre 2025</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="event-card">
-            <h4>Agrega insumos a tus eventos eficientemente</h4>
-            <p>Disponible a partir del 14 de Febrero 2026</p>
-          </div>
-        </div>
+        <div class="col-md-4"><div class="event-card"><h4>Planificación simplificada</h4><p>Disponible 17 Sept 2025</p></div></div>
+        <div class="col-md-4"><div class="event-card"><h4>Nuevos subroles</h4><p>Disponible 1 Oct 2025</p></div></div>
+        <div class="col-md-4"><div class="event-card"><h4>Gestión de insumos</h4><p>Disponible 14 Feb 2026</p></div></div>
       </div>
     </div>
   </section>
 
   <!-- Testimonios -->
   <section id="testimonios" class="container py-5">
-    <h2 class="text-center mb-5">Lo Que Dicen Nuestros Clientes</h2>
+    <h2 class="text-center mb-5">Lo que dicen nuestros clientes</h2>
     <div class="row">
       <div class="col-md-4">
-        <div class="testimonial">
-          <img th:src="@{/images/home/Sara.jpg}" alt="Sara" />
-          <p class="mt-3">“La plataforma de Planifest nos facilitó la organización de eventos.”</p>
-          <h5 class="fw-bold">- Bivian Cruz</h5>
+        <div class="testimonial text-center p-3 bg-dark-custom rounded">
+          <img th:src="@{/images/home/Sara.jpg}">
+          <p class="mt-3">“Planifest hizo la organización más fácil que nunca.”</p>
+          <h5>- Bivian Cruz</h5>
         </div>
       </div>
+
       <div class="col-md-4">
-        <div class="testimonial">
-          <img th:src="@{/images/home/yef.jpg}" alt="Yeferson" />
-          <p class="mt-3">“El control de inventario es impresionante, nos ahorra tiempo y dinero.”</p>
-          <h5 class="fw-bold">- Sebastián Barragán</h5>
+        <div class="testimonial text-center p-3 bg-dark-custom rounded">
+          <img th:src="@{/images/home/yef.jpg}">
+          <p class="mt-3">“El inventario inteligente nos ahorra tiempo y dinero.”</p>
+          <h5>- Sebastián Barragán</h5>
         </div>
       </div>
+
       <div class="col-md-4">
-        <div class="testimonial">
-          <img th:src="@{/images/home/biv.jpg}" alt="Bivian" />
-          <p class="mt-3">“Nunca había sido tan fácil planificar y promocionar nuestros menús.”</p>
-          <h5 class="fw-bold">- Julieth Gómez</h5>
+        <div class="testimonial text-center p-3 bg-dark-custom rounded">
+          <img th:src="@{/images/home/biv.jpg}">
+          <p class="mt-3">“Planificar menús nunca fue tan sencillo.”</p>
+          <h5>- Julieth Gómez</h5>
         </div>
       </div>
     </div>
@@ -324,36 +291,33 @@
       <h2 class="text-center mb-5">¿Tienes dudas? Contáctanos</h2>
       <div class="row">
         <div class="col-md-6 mb-4">
-          <h4 class="fw-bold">Información de Contacto</h4>
+          <h4>Información de contacto</h4>
           <p><i class="bi bi-telephone-fill"></i> +57 313 3702490</p>
           <p><i class="bi bi-envelope-fill"></i> info@PLaniFest.com</p>
           <p><i class="bi bi-geo-alt-fill"></i> Av ciudad de cali #45</p>
-          <p class="mt-3">Horario de Atención: Lunes a Viernes de 9:00 am a 6:00 pm</p>
+          <p class="mt-3">Horario: Lunes a Viernes, 9am–6pm</p>
         </div>
+
         <div class="col-md-6">
           <form class="contact-form">
-            <div class="mb-3">
-              <label for="nombre" class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="nombre" placeholder="Tu nombre" />
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Correo Electrónico</label>
-              <input type="email" class="form-control" id="email" placeholder="Tu correo electrónico" />
-            </div>
-            <div class="mb-3">
-              <label for="mensaje" class="form-label">Mensaje</label>
-              <textarea class="form-control" id="mensaje" rows="4" placeholder="Escribe tu mensaje"></textarea>
-            </div>
-            <button type="submit" class="btn btn-custom">Enviar</button>
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control mb-3">
+
+            <label class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control mb-3">
+
+            <label class="form-label">Mensaje</label>
+            <textarea class="form-control mb-3" rows="4"></textarea>
+
+            <button class="btn btn-custom">Enviar</button>
           </form>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="py-4 text-center">
-    <p class="mb-0">&copy; 2025 PLaniFest. Todos los derechos reservados.</p>
+    <p class="mb-0">&copy; 2025 PlaniFest. Todos los derechos reservados.</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
