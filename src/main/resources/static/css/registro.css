@@ -8,23 +8,45 @@ body {
     url(../images/login/login.jpg) center/cover no-repeat;
   color: #d2b48c;
   font-family: "Cormorant Garamond", serif;
+  padding: 20px;
 }
 
+/* CONTENEDOR PRINCIPAL */
 .register-container {
   max-width: 600px;
   width: 100%;
-  padding: 40px;
+  padding: 40px 30px;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(210, 180, 140, 0.3);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
 }
 
+/* LOGO ARRIBA */
+.logo-wrapper {
+  width: 140px;
+  display: flex;
+  justify-content: center;
+}
+
+.logo-wrapper img {
+  width: 100%;
+  height: auto;
+}
+
+/* TITULO */
 h2 {
   font-weight: 700;
-  font-size: 2.2rem;
+  font-size: 2rem;
   color: #d2b48c;
+  text-align: center;
 }
 
+/* INPUTS */
 .form-control {
   background-color: #000;
   color: #d2b48c;
@@ -37,18 +59,22 @@ h2 {
   color: #fff;
 }
 
+/* BOTÓN */
 .btn-custom {
   background-color: #c6996f;
   color: white;
   border-radius: 30px;
   border: none;
-  padding: 10px;
+  padding: 12px;
+  width: 100%;
 }
 
 .btn-custom:hover {
-  background-color: #5d4037;
+  background-color: #d2b48c;
+  color: #000;
 }
 
+/* LINKS */
 a {
   color: #d2b48c;
   text-decoration: none;
@@ -57,3 +83,4 @@ a {
 a:hover {
   color: #b8860b;
 }
+
