@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatBot Planifest</title>
-
+    <style>
+        #chat {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        #inputMsg {
+            width: 70%;
+            padding: 0.5rem;
+        }
+        button {
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
 <body>
     <h2>Chat con Planifest Bot 🤖</h2>
 
@@ -13,28 +29,35 @@
     <input id="inputMsg" type="text" placeholder="Escribe un mensaje">
     <button onclick="sendMessage()">Enviar</button>
 
-   <script>
-function sendMessage() {
-    const input = document.getElementById("inputMsg");
-    const msg = input.value;
-    if (!msg) return;
+    <script>
+        function sendMessage() {
+            const input = document.getElementById("inputMsg");
+            const msg = input.value.trim();
+            if (!msg) return;
 
-    fetch("/chatbot/message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg })
-    })
-    .then(res => res.json())
-    .then(data => {
-        const chatDiv = document.getElementById("chat");
-        chatDiv.innerHTML += "<p><b>Tú:</b> " + msg + "</p>" +
-                             "<p><b>Bot:</b> " + data.reply + "</p>";
-        input.value = "";
-        chatDiv.scrollTop = chatDiv.scrollHeight;
-    })
-    .catch(err => console.error("Error:", err));
-}
-</script>
+            fetch("/chatbot/message", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: msg })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Error en la respuesta del servidor");
+                return res.json();
+            })
+            .then(data => {
+                const chatDiv = document.getElementById("chat");
+                chatDiv.innerHTML += `<p><b>Tú:</b> ${msg}</p>
+                                      <p><b>Bot:</b> ${data.reply}</p>`;
+                input.value = "";
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            })
+            .catch(err => console.error("Error:", err));
+        }
 
+        // Enviar mensaje con Enter
+        document.getElementById("inputMsg").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") sendMessage();
+        });
+    </script>
 </body>
 </html>
