@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot Planifest</title>
+
+<body>
+    <h2>Chat con Planifest Bot 🤖</h2>
+
+    <div id="chat"></div>
+
+    <input id="inputMsg" type="text" placeholder="Escribe un mensaje">
+    <button onclick="sendMessage()">Enviar</button>
+
+    <script>
+        function sendMessage() {
+            const msg = document.getElementById("inputMsg").value;
+
+            fetch("/bot/message", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: msg })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("chat").innerHTML +=
+                    "<p><b>Tú:</b> " + msg + "</p>" +
+                    "<p><b>Bot:</b> " + data.reply + "</p>";
+            });
+        }
+    </script>
+</body>
+</html>
