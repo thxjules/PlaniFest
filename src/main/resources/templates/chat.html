@@ -13,22 +13,28 @@
     <input id="inputMsg" type="text" placeholder="Escribe un mensaje">
     <button onclick="sendMessage()">Enviar</button>
 
-    <script>
-        function sendMessage() {
-            const msg = document.getElementById("inputMsg").value;
+   <script>
+function sendMessage() {
+    const input = document.getElementById("inputMsg");
+    const msg = input.value;
+    if (!msg) return;
 
-            fetch("/bot/message", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: msg })
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById("chat").innerHTML +=
-                    "<p><b>Tú:</b> " + msg + "</p>" +
-                    "<p><b>Bot:</b> " + data.reply + "</p>";
-            });
-        }
-    </script>
+    fetch("/chatbot/message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const chatDiv = document.getElementById("chat");
+        chatDiv.innerHTML += "<p><b>Tú:</b> " + msg + "</p>" +
+                             "<p><b>Bot:</b> " + data.reply + "</p>";
+        input.value = "";
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+    })
+    .catch(err => console.error("Error:", err));
+}
+</script>
+
 </body>
 </html>

@@ -16,7 +16,7 @@ public class ChatBotController {
 
     @GetMapping
     public String showChat() {
-        return "chat"; // carga chat.html
+        return "chat";
     }
 
     @PostMapping("/message")
@@ -24,12 +24,10 @@ public class ChatBotController {
     public Map<String, String> chatResponse(@RequestBody Map<String, String> body) {
 
         String userText = body.get("message");
-
-        String botReply = "Procesé tu mensaje: " + userText;
+        String reply = "Procesé tu mensaje: " + userText;
 
         Map<String, String> res = new HashMap<>();
-        res.put("reply", botReply);
-
+        res.put("reply", reply);
         return res;
     }
 }
