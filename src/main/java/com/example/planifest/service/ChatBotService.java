@@ -1,6 +1,5 @@
 package com.example.planifest.service;
 
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,8 +25,6 @@ public class ChatBotService {
             return "Dime qué quieres hacer: crear, editar, borrar o ver algo.";
         }
 
-        // Respuesta por defecto
         return "No entendí tu mensaje, pero lo voy aprendiendo. Prueba con 'hola' o 'ayuda'.";
     }
-
 }

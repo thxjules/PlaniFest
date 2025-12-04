@@ -15,7 +15,7 @@ import com.example.planifest.service.ChatBotService;
 
 @Controller
 @RequestMapping("/chatbot")
-@CrossOrigin(origins = "*") // Solo para desarrollo, permite que fetch funcione
+@CrossOrigin(origins = "*") // Solo para desarrollo
 public class ChatBotController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class ChatBotController {
 
     @GetMapping
     public String showChat() {
-        return "chat"; // Thymeleaf buscará chat.html en templates
+        return "chat"; // Thymeleaf buscará chat.html
     }
 
     @PostMapping("/message")

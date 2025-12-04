@@ -16,15 +16,19 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  
+
 </head>
 
 <body>
- <style>
+  <style>
     canvas {
       max-height: 180px;
     }
   </style>
+  
+   <button class="menu-toggle">
+    <i class="bx bx-menu"></i>
+  </button>
 
   <div class="dashboard-wrapper">
 
@@ -32,9 +36,9 @@
     <div class="sidebar" id="sidebar">
       <div>
         <h2>Inventario</h2>
-           <a th:href="@{/admin/profile}" th:classappend="${activePage == 'profile'} ? 'active'">
-        <i class="bx bx-user"></i> Mi Perfil
-    </a>
+        <a th:href="@{/admin/profile}" th:classappend="${activePage == 'profile'} ? 'active'">
+          <i class="bx bx-user"></i> Mi Perfil
+        </a>
         <a th:href="@{/supplies-view}" th:classappend="${activePage == 'supplies'} ? 'active'">
           <i class="bx bx-package"></i> Suministros
         </a>
@@ -127,7 +131,7 @@
       options: { responsive: true }
     });
 
-    
+
     document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
       try {
         const response = await fetch('/admin/stock/report');
@@ -151,7 +155,15 @@
       }
     });
   </script>
- 
+  <script>
+    const toggleBtn = document.querySelector(".menu-toggle");
+    const sidebar = document.querySelector(".sidebar");
+
+    toggleBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+    });
+  </script>
+
 
 </body>
 

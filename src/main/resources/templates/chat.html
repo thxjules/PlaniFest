@@ -5,27 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatBot Planifest</title>
     <style>
-        #chat {
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        #inputMsg {
-            width: 70%;
-            padding: 0.5rem;
-        }
-        button {
-            padding: 0.5rem 1rem;
-        }
+        body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 2rem; }
+        #chat { max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; background: #fff; border-radius: 8px; }
+        .message { margin: 0.5rem 0; padding: 0.5rem 1rem; border-radius: 15px; max-width: 70%; }
+        .user { background: #d1e7ff; align-self: flex-end; margin-left: auto; }
+        .bot { background: #f1f0f0; align-self: flex-start; margin-right: auto; }
+        #inputMsg { width: 70%; padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc; }
+        button { padding: 0.5rem 1rem; border-radius: 5px; border: none; background: #007bff; color: #fff; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .chat-container { display: flex; flex-direction: column; gap: 0.5rem; }
     </style>
 </head>
 <body>
     <h2>Chat con Planifest Bot 🤖</h2>
-
-    <div id="chat"></div>
-
+    <div id="chat" class="chat-container"></div>
     <input id="inputMsg" type="text" placeholder="Escribe un mensaje">
     <button onclick="sendMessage()">Enviar</button>
 
@@ -46,8 +39,17 @@
             })
             .then(data => {
                 const chatDiv = document.getElementById("chat");
-                chatDiv.innerHTML += `<p><b>Tú:</b> ${msg}</p>
-                                      <p><b>Bot:</b> ${data.reply}</p>`;
+
+                const userMsg = document.createElement("div");
+                userMsg.className = "message user";
+                userMsg.textContent = msg;
+                chatDiv.appendChild(userMsg);
+
+                const botMsg = document.createElement("div");
+                botMsg.className = "message bot";
+                botMsg.textContent = data.reply;
+                chatDiv.appendChild(botMsg);
+
                 input.value = "";
                 chatDiv.scrollTop = chatDiv.scrollHeight;
             })
