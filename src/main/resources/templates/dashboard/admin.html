@@ -6,13 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel de Administración - Planifest</title>
 
+  <!-- Fuentes y Boxicons -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
+  <!-- CSS -->
   <link rel="stylesheet" th:href="@{/css/dashboard.css}">
   <link rel="stylesheet" th:href="@{/css/admin.css}">
   <link rel="icon" th:href="@{/images/planifest.png}" type="image/png">
 
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -31,23 +34,18 @@
       <a th:href="@{/employees-view}" th:classappend="${activePage == 'employees'} ? 'active'">
         <i class="bx bx-user"></i> Empleados
       </a>
-
       <a th:href="@{/clients-view}" th:classappend="${activePage == 'clients'} ? 'active'">
         <i class="bx bx-user"></i> Clientes
       </a>
-
       <a th:href="@{/events-view}" th:classappend="${activePage == 'events'} ? 'active'">
         <i class="bx bx-calendar"></i> Eventos
       </a>
-
       <a th:href="@{/tasks-view}" th:classappend="${activePage == 'tasks'} ? 'active'">
         <i class="bx bx-task"></i> Tareas
       </a>
-
       <a th:href="@{/supply-admin}" th:classappend="${activePage == 'supplies'} ? 'active'">
         <i class="bx bx-box"></i> Suministros
       </a>
-
       <a th:href="@{/planservices}" th:classappend="${activePage == 'services'} ? 'active'">
         <i class="bx bx-transfer"></i> Servicios
       </a>
@@ -76,88 +74,77 @@
     <div class="alert alert-success mt-3" style="color:#111419; border:none; font-weight:600;">
       ¡Bienvenido Administrador! Nos alegra verte de nuevo en Planifest.
     </div>
+
+    <!-- CHATBOT -->
     <div id="chatbot-widget">
-    <div id="chatbot-btn">
-        <img src="/images/chat-icon.png" alt="ChatBot">
-    </div>
-    <div id="chatbox">
+      <div id="chatbot-btn">
+        <img th:src="@{/images/ia.png}" alt="Logo Planifest">
+      </div>
+      <div id="chatbox">
         <div id="chat-header">
-            <span>Chat Planifest</span>
-            <button id="close-chat">✖</button>
+          <span>Sienna - Chat Planifest</span>
+          <button id="close-chat">✖</button>
         </div>
         <div id="messages"></div>
         <div id="chat-input">
-            <input type="text" id="userInput" placeholder="Escribe un mensaje...">
-            <button id="sendBtn">Enviar</button>
+          <input type="text" id="userInput" placeholder="Escribe un mensaje...">
+          <button id="sendBtn">Enviar</button>
         </div>
+      </div>
     </div>
-</div>
 
     <!-- KPIS -->
     <div class="kpi-grid">
-      <div class="kpi-card"><i class="bx bx-task"></i><h2>20</h2><p>Tareas</p></div>
-      <div class="kpi-card"><i class="bx bx-user"></i><h2>10</h2><p>Empleados</p></div>
-      <div class="kpi-card"><i class="bx bx-calendar"></i><h2>5</h2><p>Eventos</p></div>
-      <div class="kpi-card"><i class="bx bx-box"></i><h2>15</h2><p>Suministros</p></div>
+      <div class="kpi-card"><i class="bx bx-task"></i>
+        <h2>20</h2>
+        <p>Tareas</p>
+      </div>
+      <div class="kpi-card"><i class="bx bx-user"></i>
+        <h2>10</h2>
+        <p>Empleados</p>
+      </div>
+      <div class="kpi-card"><i class="bx bx-calendar"></i>
+        <h2>5</h2>
+        <p>Eventos</p>
+      </div>
+      <div class="kpi-card"><i class="bx bx-box"></i>
+        <h2>15</h2>
+        <p>Suministros</p>
+      </div>
     </div>
 
+    <!-- GRIDS -->
     <div class="grid mt-5">
-      <div class="card"><h3>Tareas</h3><canvas id="tasksChart"></canvas></div>
-      <div class="card"><h3>Empleados</h3><canvas id="employeesChart"></canvas></div>
-      <div class="card"><h3>Eventos</h3><canvas id="eventsChart"></canvas></div>
-      <div class="card"><h3>Suministros</h3><canvas id="suppliesChart"></canvas></div>
+      <div class="card">
+        <h3>Tareas</h3><canvas id="tasksChart"></canvas>
+      </div>
+      <div class="card">
+        <h3>Empleados</h3><canvas id="employeesChart"></canvas>
+      </div>
+      <div class="card">
+        <h3>Eventos</h3><canvas id="eventsChart"></canvas>
+      </div>
+      <div class="card">
+        <h3>Suministros</h3><canvas id="suppliesChart"></canvas>
+      </div>
     </div>
   </div>
 
-
-
-  <!-- JS: CHARTS -->
+  <!-- JS: Charts -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      new Chart(tasksChart, {
-        type: "bar",
-        data: {
-          labels: ["Pendientes", "Completadas"],
-          datasets: [{data: [7, 13], backgroundColor:["#f8d794", "#b86830"]}]
-        }
-      });
-
-      new Chart(employeesChart, {
-        type: "bar",
-        data: {
-          labels: ["Empleados", "Admins"],
-          datasets: [{data:[10,2], backgroundColor: ["#284139","#809076"]}]
-        }
-      });
-
-      new Chart(eventsChart, {
-        type: "line",
-        data: {
-          labels: ["Pendientes","Completados"],
-          datasets:[{data:[2,3], borderColor:"#b86830", fill:false, tension:0.3}]
-        }
-      });
-
-      new Chart(suppliesChart, {
-        type:"pie",
-        data:{
-          labels:["Disponibles","Agotados"],
-          datasets:[{data:[10,5], backgroundColor:["#284139","#f1dea8"]}]
-        }
-      });
+      new Chart(tasksChart, { type: "bar", data: { labels: ["Pendientes", "Completadas"], datasets: [{ data: [7, 13], backgroundColor: ["#f8d794", "#b86830"] }] } });
+      new Chart(employeesChart, { type: "bar", data: { labels: ["Empleados", "Admins"], datasets: [{ data: [10, 2], backgroundColor: ["#284139", "#809076"] }] } });
+      new Chart(eventsChart, { type: "line", data: { labels: ["Pendientes", "Completados"], datasets: [{ data: [2, 3], borderColor: "#b86830", fill: false, tension: 0.3 }] } });
+      new Chart(suppliesChart, { type: "pie", data: { labels: ["Disponibles", "Agotados"], datasets: [{ data: [10, 5], backgroundColor: ["#284139", "#f1dea8"] }] } });
     });
   </script>
 
   <!-- ALERTA DESAPARECE -->
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", () => {
       const alert = document.querySelector(".alert-success");
-      if (alert) {
-        setTimeout(() => {
-          alert.style.transition = "opacity 1s";
-          alert.style.opacity = "0";
-        }, 5000);
-      }
+      if (alert) setTimeout(() => alert.style.transition = "opacity 1s", alert.style.opacity = "0", 5000);
     });
   </script>
 
@@ -165,69 +152,150 @@
   <script>
     const toggleBtn = document.querySelector(".menu-toggle");
     const sidebar = document.querySelector(".sidebar");
-
-    toggleBtn.addEventListener("click", () => {
-      sidebar.classList.toggle("active");
-    });
+    toggleBtn.addEventListener("click", () => sidebar.classList.toggle("active"));
   </script>
 
   <!-- CHATBOT -->
-<script>
-const chatBtn = document.getElementById("chatbot-btn");
-const chatBox = document.getElementById("chatbox");
-const closeBtn = document.getElementById("close-chat");
-const sendBtn = document.getElementById("sendBtn");
+  <script>
+    const chatBtn = document.getElementById("chatbot-btn");
+    const chatBox = document.getElementById("chatbox");
+    const closeBtn = document.getElementById("close-chat");
+    const sendBtn = document.getElementById("sendBtn");
+    const userInput = document.getElementById("userInput");
+    const messages = document.getElementById("messages");
 
-chatBtn.addEventListener("click", () => {
-    chatBox.classList.add("show");
-});
+    // Comandos rápidos sugeridos
+    const quickCommands = [
+      { text: "Ver tareas", message: "Muéstrame mis tareas" },
+      { text: "Ver eventos", message: "Muéstrame mis eventos" },
+      { text: "Crear evento", message: "Quiero crear un evento" },
+      { text: "Ayuda", message: "Necesito ayuda" }
+    ];
 
-closeBtn.addEventListener("click", () => {
-    chatBox.classList.remove("show");
-});
-
-sendBtn.addEventListener("click", sendMessage);
-document.getElementById("userInput").addEventListener("keypress", function(e) {
-    if(e.key === "Enter") sendMessage();
-});
-
-async function sendMessage() {
-    const input = document.getElementById("userInput");
-    const text = input.value.trim();
-    if (!text) return;
-
-    appendMessage(text, "user");
-    input.value = "";
-
-    try {
-        const response = await fetch("/chatbot/message", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: text })
+    // Abrir chat
+    chatBtn.addEventListener("click", () => {
+      chatBox.classList.add("show");
+      if (!chatBox.dataset.initialized) {
+        appendMessageTyping("¡Hola! Soy Sienna, tu asistente en Planifest. ¿En qué puedo ayudarte hoy?", "bot", () => {
+          appendQuickButtons(quickCommands);
         });
+        chatBox.dataset.initialized = "true";
+      }
+    });
+
+    // Cerrar chat
+    closeBtn.addEventListener("click", () => chatBox.classList.remove("show"));
+
+    // Enviar mensaje con Enter o botón
+    sendBtn.addEventListener("click", sendMessage);
+    userInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+
+    // Enviar mensaje al backend
+    async function sendMessage() {
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      appendMessage(text, "user");
+      userInput.value = "";
+
+      // Ocultar botones rápidos al enviar nueva consulta
+      removeQuickButtons();
+
+      try {
+        showTyping();
+        const response = await fetch("/chatbot/message", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+        hideTyping();
 
         if (!response.ok) throw new Error("Error del servidor");
 
         const data = await response.json();
-        appendMessage(data.reply, "bot");
+        appendMessageTyping(data.reply, "bot", () => {
+          // Sugerir botones contextuales según la respuesta
+          appendQuickButtons(quickCommands);
+        });
 
-    } catch (err) {
+      } catch (err) {
         console.error(err);
         appendMessage("Error en el servidor.", "bot");
+        hideTyping();
+      }
     }
-}
 
-function appendMessage(text, type) {
-    const messages = document.getElementById("messages");
-    const div = document.createElement("div");
-    div.textContent = text;
-    div.className = `msg ${type}`;
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-}
-</script>
+    // Función de mensaje normal
+    function appendMessage(text, type) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      div.className = `msg ${type}`;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
 
+    // Función de mensaje con tipeo animado
+    function appendMessageTyping(text, type, callback) {
+      const div = document.createElement("div");
+      div.className = `msg ${type}`;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
 
+      let i = 0;
+      const interval = setInterval(() => {
+        div.textContent += text.charAt(i);
+        i++;
+        messages.scrollTop = messages.scrollHeight;
+        if (i >= text.length) {
+          clearInterval(interval);
+          if (callback) callback();
+        }
+      }, 15);
+    }
+
+    // Mostrar indicador de tipeo
+    function showTyping() {
+      const div = document.createElement("div");
+      div.id = "typing-indicator";
+      div.className = "msg bot";
+      div.textContent = "Sienna está escribiendo...";
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Ocultar indicador de tipeo
+    function hideTyping() {
+      const indicator = document.getElementById("typing-indicator");
+      if (indicator) indicator.remove();
+    }
+
+    // Agregar botones rápidos
+    function appendQuickButtons(buttons) {
+      const container = document.createElement("div");
+      container.className = "msg bot quick-buttons";
+
+      buttons.forEach(btn => {
+        const button = document.createElement("button");
+        button.textContent = btn.text;
+        button.onclick = () => {
+          userInput.value = btn.message;
+          sendMessage();
+        };
+        container.appendChild(button);
+      });
+
+      messages.appendChild(container);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Remover botones rápidos al enviar nueva consulta
+    function removeQuickButtons() {
+      const quickButtons = document.querySelectorAll(".quick-buttons");
+      quickButtons.forEach(btn => btn.remove());
+    }
+
+  </script>
 
 </body>
+
 </html>
