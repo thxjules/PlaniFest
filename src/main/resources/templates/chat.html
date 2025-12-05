@@ -1,65 +1,99 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatBot Planifest</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatBot – Planifest</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 2rem; }
-        #chat { max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; background: #fff; border-radius: 8px; }
-        .message { margin: 0.5rem 0; padding: 0.5rem 1rem; border-radius: 15px; max-width: 70%; }
-        .user { background: #d1e7ff; align-self: flex-end; margin-left: auto; }
-        .bot { background: #f1f0f0; align-self: flex-start; margin-right: auto; }
-        #inputMsg { width: 70%; padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc; }
-        button { padding: 0.5rem 1rem; border-radius: 5px; border: none; background: #007bff; color: #fff; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .chat-container { display: flex; flex-direction: column; gap: 0.5rem; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #fdf8f0;
+            margin: 0;
+            padding: 0;
+        }
+        #chat-container {
+            width: 400px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        #messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .msg {
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 6px;
+        }
+        .user {
+            background: #d1f0ff;
+            text-align: right;
+        }
+        .bot {
+            background: #e7e7e7;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
-    <h2>Chat con Planifest Bot 🤖</h2>
-    <div id="chat" class="chat-container"></div>
-    <input id="inputMsg" type="text" placeholder="Escribe un mensaje">
-    <button onclick="sendMessage()">Enviar</button>
 
-    <script>
-        function sendMessage() {
-            const input = document.getElementById("inputMsg");
-            const msg = input.value.trim();
-            if (!msg) return;
+    <div id="chat-container">
+        <h2>Chat Planifest</h2>
 
-            fetch("/chatbot/message", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: msg })
-            })
-            .then(res => {
-                if (!res.ok) throw new Error("Error en la respuesta del servidor");
-                return res.json();
-            })
-            .then(data => {
-                const chatDiv = document.getElementById("chat");
+        <div id="messages"></div>
 
-                const userMsg = document.createElement("div");
-                userMsg.className = "message user";
-                userMsg.textContent = msg;
-                chatDiv.appendChild(userMsg);
+        <input type="text" id="userInput" placeholder="Escribe un mensaje..." style="width: 75%; padding: 8px;">
+        <button onclick="sendMessage()" style="padding: 8px;">Enviar</button>
+    </div>
 
-                const botMsg = document.createElement("div");
-                botMsg.className = "message bot";
-                botMsg.textContent = data.reply;
-                chatDiv.appendChild(botMsg);
+<script>
+async function sendMessage() {
+    const input = document.getElementById("userInput");
+    const userText = input.value.trim();
 
-                input.value = "";
-                chatDiv.scrollTop = chatDiv.scrollHeight;
-            })
-            .catch(err => console.error("Error:", err));
+    if (userText === "") return;
+
+    appendMessage(userText, "user");
+    input.value = "";
+
+    try {
+        const response = await fetch("/chatbot/message", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userText })
+        });
+
+        if (!response.ok) {
+            throw new Error("Respuesta no válida del servidor");
         }
 
-        // Enviar mensaje con Enter
-        document.getElementById("inputMsg").addEventListener("keypress", function(e) {
-            if (e.key === "Enter") sendMessage();
-        });
-    </script>
+        const data = await response.json();
+        appendMessage(data.reply, "bot");
+
+    } catch (error) {
+        console.error("Error:", error);
+        appendMessage("Error en el servidor.", "bot");
+    }
+}
+
+function appendMessage(text, type) {
+    const messageBox = document.getElementById("messages");
+    const div = document.createElement("div");
+
+    div.className = "msg " + type;
+    div.textContent = text;
+
+    messageBox.appendChild(div);
+    messageBox.scrollTop = messageBox.scrollHeight;
+}
+</script>
+
 </body>
 </html>

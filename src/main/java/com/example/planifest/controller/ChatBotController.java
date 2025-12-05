@@ -1,8 +1,7 @@
-package com.example.planifest.controller.controllerview;
+package com.example.planifest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,22 +14,20 @@ import com.example.planifest.service.ChatBotService;
 
 @Controller
 @RequestMapping("/chatbot")
-@CrossOrigin(origins = "*") // Solo para desarrollo
 public class ChatBotController {
 
     @Autowired
     private ChatBotService chatBotService;
 
     @GetMapping
-    public String showChat() {
-        return "chat"; // Thymeleaf buscará chat.html
+    public String loadChatPage() {
+        return "chat";
     }
 
     @PostMapping("/message")
     @ResponseBody
     public ChatResponse chatResponse(@RequestBody ChatMessage body) {
-        String userText = body.getMessage();
-        String reply = chatBotService.respond(userText);
+        String reply = chatBotService.respond(body.getMessage());
         return new ChatResponse(reply);
     }
 }
