@@ -76,6 +76,26 @@ html, body { width: 100%; max-width: 100%; }
   border-radius:12px;
 }
 
+.edit-profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin: 10px 0;
+    background: #284139; /* un color más oscuro que la sidebar */
+    color: #f1dea8;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.edit-profile-btn:hover {
+    background: #3a5748;
+    transform: translateX(5px);
+}
+
+
 /* KPI */
 .kpi-grid {
   display:grid;

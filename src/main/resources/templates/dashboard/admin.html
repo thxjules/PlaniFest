@@ -31,6 +31,13 @@
     <div class="top-section">
       <h2 class="fw-bold text-center">Administrador</h2>
 
+      <div class="profile-btn-container">
+        <a href="/admin/profile" class="profile-btn">
+          <i class="bx bx-edit"></i>Editar perfil
+        </a>
+      </div>
+
+
       <a th:href="@{/employees-view}" th:classappend="${activePage == 'employees'} ? 'active'">
         <i class="bx bx-user"></i> Empleados
       </a>
