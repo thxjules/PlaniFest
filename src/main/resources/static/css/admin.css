@@ -121,6 +121,132 @@ html, body {
   border-radius:8px;
   z-index:2000;
 }
+#chatbot-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+}
+
+#chatbot-btn {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+#chatbot-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+}
+
+/* Botón flotante redondo */
+#chatbot-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#chatbot-btn:hover {
+    transform: scale(1.1);
+}
+
+#chatbot-btn img {
+    width: 100%;
+    height: 100%;
+}
+
+/* ChatBox oculto inicialmente */
+#chatbox {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 320px;
+    max-height: 450px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Cuando se despliega */
+#chatbox.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Header */
+#chat-header {
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+/* Mensajes */
+#messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Inputs */
+#chat-input {
+    display: flex;
+    border-top: 1px solid #ccc;
+}
+
+#chat-input input {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    outline: none;
+}
+
+#chat-input button {
+    padding: 8px 12px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.msg {
+    margin: 5px 0;
+    padding: 8px 12px;
+    border-radius: 15px;
+    max-width: 80%;
+}
+
+.msg.user {
+    background: #d1f0ff;
+    align-self: flex-end;
+}
+
+.msg.bot {
+    background: #e7e7e7;
+    align-self: flex-start;
+}
 
 /* RESPONSIVE */
 @media (max-width:768px) {

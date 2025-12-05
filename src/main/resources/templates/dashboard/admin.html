@@ -76,6 +76,22 @@
     <div class="alert alert-success mt-3" style="color:#111419; border:none; font-weight:600;">
       ¡Bienvenido Administrador! Nos alegra verte de nuevo en Planifest.
     </div>
+    <div id="chatbot-widget">
+    <div id="chatbot-btn">
+        <img src="/images/chat-icon.png" alt="ChatBot">
+    </div>
+    <div id="chatbox">
+        <div id="chat-header">
+            <span>Chat Planifest</span>
+            <button id="close-chat">✖</button>
+        </div>
+        <div id="messages"></div>
+        <div id="chat-input">
+            <input type="text" id="userInput" placeholder="Escribe un mensaje...">
+            <button id="sendBtn">Enviar</button>
+        </div>
+    </div>
+</div>
 
     <!-- KPIS -->
     <div class="kpi-grid">
@@ -92,6 +108,8 @@
       <div class="card"><h3>Suministros</h3><canvas id="suppliesChart"></canvas></div>
     </div>
   </div>
+
+
 
   <!-- JS: CHARTS -->
   <script>
@@ -152,6 +170,64 @@
       sidebar.classList.toggle("active");
     });
   </script>
+
+  <!-- CHATBOT -->
+<script>
+const chatBtn = document.getElementById("chatbot-btn");
+const chatBox = document.getElementById("chatbox");
+const closeBtn = document.getElementById("close-chat");
+const sendBtn = document.getElementById("sendBtn");
+
+chatBtn.addEventListener("click", () => {
+    chatBox.classList.add("show");
+});
+
+closeBtn.addEventListener("click", () => {
+    chatBox.classList.remove("show");
+});
+
+sendBtn.addEventListener("click", sendMessage);
+document.getElementById("userInput").addEventListener("keypress", function(e) {
+    if(e.key === "Enter") sendMessage();
+});
+
+async function sendMessage() {
+    const input = document.getElementById("userInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    appendMessage(text, "user");
+    input.value = "";
+
+    try {
+        const response = await fetch("/chatbot/message", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text })
+        });
+
+        if (!response.ok) throw new Error("Error del servidor");
+
+        const data = await response.json();
+        appendMessage(data.reply, "bot");
+
+    } catch (err) {
+        console.error(err);
+        appendMessage("Error en el servidor.", "bot");
+    }
+}
+
+function appendMessage(text, type) {
+    const messages = document.getElementById("messages");
+    const div = document.createElement("div");
+    div.textContent = text;
+    div.className = `msg ${type}`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+}
+</script>
+
+
 
 </body>
 </html>
