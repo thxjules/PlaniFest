@@ -47,78 +47,73 @@
 
             <!-- Tabla de empleados -->
             <table class="table table-hover align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Teléfono</th>
-                        <th>Rol</th>
-                        <th>Posición</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Rol</th>
+            <th>Posición</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
 
-                <tbody>
-                    <tr th:each="empleado : ${empleados}">
-                        <td th:text="${empleado.username}"></td>
-                        <td th:text="${empleado.email}"></td>
-                        <td th:text="${empleado.phoneNumber}"></td>
-                        <td th:text="${empleado.role}"></td>
+    <tbody>
+        <tr th:each="empleado : ${empleados}">
+            <td th:text="${empleado.username}"></td>
+            <td th:text="${empleado.email}"></td>
+            <td th:text="${empleado.phoneNumber}"></td>
+            <td th:text="${empleado.role}"></td>
 
-                        <td>
-                            <div th:if="${empleado.role.name() == 'EMPLOYEE'}" class="d-flex align-items-center gap-2">
-                                <form th:action="@{/employees-view/actualizar}" method="post"
-                                    class="d-flex align-items-center gap-2">
-                                    <input type="hidden" name="id" th:value="${empleado.id}" />
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                    <select name="positionId" class="form-select form-select-sm">
-                                        <option th:each="pos : ${posiciones}" th:value="${pos.id}"
-                                            th:selected="${pos.id == empleado.position?.id}" th:text="${pos.name}">
-                                        </option>
-                                    </select>
-                                </form>
-                            </div>
-                            <div th:if="${empleado.role.name() != 'EMPLOYEE'}">
-                                <span class="text-muted fst-italic">No editable</span>
-                            </div>
-                        </td>
+            <td>
+                <div th:if="${empleado.role.name() == 'EMPLOYEE'}" class="d-flex align-items-center gap-2 flex-wrap">
+                    <form th:action="@{/employees-view/actualizar}" method="post" class="m-0 flex-grow-1">
+                        <input type="hidden" name="id" th:value="${empleado.id}" />
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <select name="positionId" class="form-select form-select-sm">
+                            <option th:each="pos : ${posiciones}" th:value="${pos.id}"
+                                    th:selected="${pos.id == empleado.position?.id}" th:text="${pos.name}">
+                            </option>
+                        </select>
+                    </form>
+                </div>
+                <div th:if="${empleado.role.name() != 'EMPLOYEE'}">
+                    <span class="text-muted fst-italic">No editable</span>
+                </div>
+            </td>
 
-                        <td>
-                            <div th:if="${empleado.role.name() == 'EMPLOYEE'}">
+            <td>
+                <div th:if="${empleado.role.name() == 'EMPLOYEE'}" class="d-flex gap-2 flex-wrap">
+                    <!-- Botón Guardar -->
+                    <form th:action="@{/employees-view/actualizar}" method="post" class="m-0 flex-grow-1">
+                        <input type="hidden" name="id" th:value="${empleado.id}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-primary btn-sm w-100">Guardar</button>
+                    </form>
 
-                                <!-- Botón Guardar -->
-                                <form th:action="@{/employees-view/actualizar}" method="post" class="d-inline-block">
-                                    <input type="hidden" name="id" th:value="${empleado.id}">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                    <button type="submit" class="btn btn-primary btn-sm"
-                                        title="Guardar cambios">Guardar</button>
-                                </form>
+                    <!-- Botón Eliminar -->
+                    <form th:action="@{/employees-view/eliminar/{id}(id=${empleado.id})}" method="post"
+                          class="m-0 flex-grow-1 eliminar-form">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="button" class="btn btn-danger btn-sm w-100 btn-eliminar">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
 
-                                <!-- Botón Eliminar con modal -->
-                                <form th:action="@{/employees-view/eliminar/{id}(id=${empleado.id})}" method="post"
-                                    class="d-inline-block eliminar-form">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                    <button type="button" class="btn btn-primary btn-sm btn-eliminar">
-                                        Eliminar
-                                    </button>
-                                </form>
+        <!-- Si no hay empleados -->
+        <tr th:if="${empleados.size() == 0}">
+            <td colspan="6" class="text-center py-4 text-muted">
+                No hay empleados registrados.
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-                            </div>
-                        </td>
-                    </tr>
 
-                    <!-- Si no hay empleados -->
-                    <tr th:if="${empleados.size() == 0}">
-                        <td colspan="6" class="text-center py-4 text-muted">
-                            No hay empleados registrados.
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
-
-        <a href="/dashboard/admin" class="btn btn-outline-secondary mt-3">Volver</a>
+      <div class="btn-volver-container">
+    <a href="/dashboard/admin" class="btn btn-outline-secondary btn-volver">Volver</a>
+</div>
     </div>
 
     
