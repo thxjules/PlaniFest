@@ -41,7 +41,7 @@ body {
 /* TABLAS */
 /* ------------------------------------ */
 .table thead {
-    background-color: #9F6920 !important; /* wasabi, como habíamos definido */
+    background-color: #10666d !important; /* wasabi, como habíamos definido */
     color: white !important;              /* color del texto de encabezado */
     font-weight: bold;
 }
@@ -49,7 +49,7 @@ body {
     background-color: rgba(233, 197, 121, 0.1);
 }
 .card-header{
-    background-color: #9F6920 !important; /* golden-brown */
+    background-color: #10666d !important; /* golden-brown */
     color: white !important;
     font-weight: bold;}
 
@@ -66,11 +66,24 @@ body {
 }
 
 /* Centrar y estilizar los botones dentro de la tabla */
-.col-botones {
+/* Hace que la celda de los botones ocupe toda la altura */
+.table td.text-center {
     display: flex;
     justify-content: center;
-    gap: 0.6rem;
+    gap: 5px;
+    flex-wrap: wrap;
 }
+
+.table td .btn {
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+    border: none !important; /* evita doble borde visual */
+}
+
 
 /* ------------------------------------ */
 /* ------------------------------------ */
@@ -81,8 +94,8 @@ body {
 .btn-success,
 .btn-outline-primary,
 .btn-outline-secondary {
-    background-color: #9F6920 !important; /* golden-brown */
-    border-color: #9F6920 !important;
+    background-color: #10666d !important; /* golden-brown */
+    border-color: #10666d !important;
     color: white !important;
     font-weight: bold;
     transition: 0.3s;
@@ -93,8 +106,8 @@ body {
 .btn-success:hover,
 .btn-outline-primary:hover,
 .btn-outline-secondary:hover {
-    background-color: #b97b29 !important; /* tono más claro */
-    border-color: #b97b29 !important;
+    background-color: #10666d !important; /* tono más claro */
+    border-color: #10666d !important;
     transform: scale(1.05);
 }
 
@@ -119,8 +132,8 @@ body {
 /* BOTÓN ELIMINAR */
 /* ------------------------------------ */
 .btn-eliminar {
-    background-color: #9F6920 !important; /* golden-brown */
-    border-color: #9F6920 !important;
+    background-color: #10666d !important; /* golden-brown */
+    border-color: #10666d !important;
     color: white !important;
     border-radius: 8px;
     padding: 6px 14px;
@@ -128,7 +141,7 @@ body {
 }
 
 .btn-eliminar:hover {
-    background-color: #daa755 !important; /* rob-roy */
+    background-color: #10666d !important; /* rob-roy */
     transform: scale(1.05);
 }
 
@@ -147,16 +160,16 @@ body {
 }
 
 .btn-limpiar {
-    background-color: #9F6920 !important; /* golden-brown */
-    border-color: #9F6920 !important;
+    background-color: #10666d !important; /* golden-brown */
+    border-color: #10666d !important;
     color: white !important;
     font-weight: bold;
 }
 
 .btn-limpiar:hover {
-    background-color: #daa755 !important; /* rob-roy */
+    background-color: #10666d !important; /* rob-roy */
 .card-header-listado {
-    background-color: #9F6920 !important; /* golden-brown */
+    background-color: #10666d !important; /* golden-brown */
     color: white !important;
     font-weight: bold;
 }

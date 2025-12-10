@@ -139,8 +139,35 @@ body {
 }
 
 .filtro-botones .btn {
-    width: 100%;
+    width: 48%;
     text-align: center;
+}
+
+.btn-filtrar {
+    background-color: #10666d !important; /* azul */
+    border-color: #10666d !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.btn-filtrar:hover {
+    background-color: #0d4c53 !important;
+}
+
+.btn-limpiar {
+    background-color: #10666d !important; /* golden-brown */
+    border-color: #10666d !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.btn-limpiar:hover {
+    background-color: #10666d !important; /* rob-roy */
+.card-header-listado {
+    background-color: #10666d !important; /* golden-brown */
+    color: white !important;
+    font-weight: bold;
+}
 }
 
 /* =====================================
