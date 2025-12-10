@@ -170,6 +170,39 @@
                 </div>
             </div>
         </div>
+         <!-- FILTROS -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header text-dark">
+            <h5 class="mb-0">Filtros</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" th:action="@{/events-view}" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label for="nombre" class="form-label">Nombre del evento</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" th:value="${param.nombre}" placeholder="Ej. Boda, Fiesta..." />
+                </div>
+                <div class="col-md-3">
+                    <label for="minGuests" class="form-label">Mínimo de invitados</label>
+                    <input type="number" class="form-control" id="minGuests" name="minGuests" th:value="${param.minGuests}" />
+                </div>
+                <div class="col-md-3">
+                    <label for="clientId" class="form-label">Cliente</label>
+                    <select class="form-select" id="clientId" name="clientId">
+                        <option value="" th:selected="${param.clientId == null}">Todos</option>
+                        <option th:each="c : ${clientes}"
+                                th:value="${c.id}"
+                                th:text="${c.name}"
+                                th:selected="${param.clientId} == ${c.id}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-grid gap-2">
+                    <button type="submit" class="btn btn-outline-primary">Aplicar filtros</button>
+                    <a th:href="@{/events-view}" class="btn btn-outline-secondary">Limpiar filtros</a>
+                </div>
+            </form>
+        </div>
+    </div>
 
         <div class="card shadow-sm border-0">
             <div class="card-header lista-eventos">
