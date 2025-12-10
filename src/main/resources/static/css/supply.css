@@ -1,17 +1,31 @@
-/* ------------------------------------ */
-/* ESTILOS PRINCIPALES */
-/* ------------------------------------ */
+/* =====================================
+   VARIABLES DE COLOR (Planifest)
+===================================== */
+:root {
+    --color-fondo: #fdf8f0;        /* Fondo general */
+    --color-primario: #10666d;     /* Azul verdoso */
+    --color-secundario: #d4a85c;   /* Dorado */
+    --color-texto: #3f2b26;        /* Marrón oscuro */
+    --color-hover: #0d5157;        /* Hover botones */
+    --color-tabla-header: #10666d; /* Cabecera tabla */
+    --color-badge-success: #10666d;
+    --color-badge-warning: #d4a85c;
+}
+
+/* =====================================
+   BODY Y FUENTES
+===================================== */
 body {
-    background-color: #fdfdf5f1 !important;
+    background-color: var(--color-fondo) !important;
     min-height: 100vh;
     margin: 0;
-    color: #0c3a37;
+    color: var(--color-texto);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ------------------------------------ */
-/* HEADER */
-/* ------------------------------------ */
+/* =====================================
+   HEADER
+===================================== */
 .header-section {
     display: flex;
     align-items: center;
@@ -26,93 +40,87 @@ body {
     width: auto;
 }
 
-.header-section h1 {
-    color: #114442;
-    font-weight: bold;
+.header-section h1, .header-section p {
+    color:  #10666d;
     margin: 0;
+}
+
+.header-section h1 {
+    font-weight: bold;
     font-size: 2.3rem;
 }
 
-.header-section p {
-    color: #114442;
-    margin: 0;
-}
-
-/* ------------------------------------ */
-/* BOTONES GENERALES */
-/* ------------------------------------ */
+/* =====================================
+   BOTÓN FILTRAR
+===================================== */
 .btn {
     font-weight: bold;
     transition: 0.3s;
+    border-radius: 8px;
 }
 
-/* Color principal */
-.btn-primary, .btn-success, .btn-outline-secondary {
-    background-color: #9F6920 !important;
-    border-color: #9F6920 !important;
+.btn-primary, 
+.btn-outline-secondary {
+    background-color: var(--color-primario) !important;
+    border-color: var(--color-primario) !important;
     color: white !important;
 }
 
 .btn:hover {
-    background-color: #b97b29 !important;
-    border-color: #b97b29 !important;
+    background-color: var(--color-hover) !important;
+    border-color: var(--color-hover) !important;
     transform: scale(1.05);
 }
 
-/* ------------------------------------ */
-/* BOTÓN EDITAR */
-/* ------------------------------------ */
-.btn-editar {
-    background-color: #b97b29 !important;
-    border-color: #9F6920 !important;
-    color: white !important;
-    border-radius: 8px;
-    padding: 6px 14px;
+.btn-planifest {
+    padding: 0.45rem 0.8rem;
+    font-size: 0.85rem;
+    width: 100%;
 }
 
-.btn-editar:hover {
-    background-color: #daa755 !important;
-    border-color: #9f6920 !important;
-    transform: scale(1.05);
+/* =====================================
+   CARDS
+===================================== */
+.card.fondo-transparente {
+    background-color: rgba(241, 222, 168, 0.4);
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
-/* ------------------------------------ */
-/* BOTÓN ELIMINAR */
-/* ------------------------------------ */
-.btn-eliminar {
-    background-color: #b97b29 !important;
-    border-color: #9F6920 !important;
-    color: white !important;
-    border-radius: 8px;
-    padding: 6px 14px;
+/* Fondo del título "Lista de Suministros" */
+.card-header.lista-suministros {
+    background-color: var(--color-primario)!important;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: center;
 }
 
-.btn-eliminar:hover {
-    background-color: #daa755 !important;
-    border-color: #9f6920 !important;
-    transform: scale(1.05);
-}
-
-/* ------------------------------------ */
-/* TABLAS */
-/* ------------------------------------ */
+/* =====================================
+   TABLAS
+===================================== */
 .contenedor-tabla {
     margin-top: 2rem;
 }
 
+
 .table {
+    width: 100%;
     text-align: center;
     vertical-align: middle;
+    border-collapse: collapse;
 }
 
 .table thead {
-    background-color: #809076;
+    background-color: var(--color-tabla-header);
     color: white;
     font-weight: bold;
 }
 
 .table tbody tr:hover {
-    background-color: rgba(233, 197, 121, 0.25);
+    background-color: rgba(212, 168, 92, 0.25);
     transition: 0.3s;
 }
 
@@ -121,33 +129,9 @@ body {
     padding: 0.75rem;
 }
 
-/* Ajuste para centrar verticalmente los botones */
-.col-botones {
-    display: flex;
-    justify-content: center;
-    gap: 0.6rem;
-}
-
-/* ------------------------------------ */
-/* CARDS */
-/* ------------------------------------ */
-.card.fondo-transparente {
-    background-color: rgba(241, 222, 168, 0.4);
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    backdrop-filter: blur(6px);
-}
-
-.card-header.nuevo-suministro,
-.card-header.lista-suministros {
-    background-color: #9F6920;
-    color: white;
-    font-weight: bold;
-}
-
-/* ------------------------------------ */
-/* FILTROS */
-/* ------------------------------------ */
+/* =====================================
+   FILTROS
+===================================== */
 .filtro-botones {
     display: flex;
     flex-direction: column;
@@ -159,34 +143,34 @@ body {
     text-align: center;
 }
 
-.btn-planifest {
-    padding: 0.45rem 0.8rem;
-    font-size: 0.85rem;
-    border-radius: 8px;
-}
-
-
-/* ------------------------------------ */
-/* BADGES */
-/* ------------------------------------ */
+/* =====================================
+   BADGES
+===================================== */
 .badge.bg-warning {
-    background-color: #DAA755;
-    color: #2b1d14;
+    background-color: var(--color-badge-warning);
+    color: var(--color-texto);
 }
 
 .badge.bg-success {
-    background-color: #809076;
+    background-color: var(--color-badge-success);
     color: white;
 }
 
 .badge.bg-info {
     background-color: #E9C579;
-    color: #2b1d14;
+    color: var(--color-texto);
 }
-.col-botones {
-    display: flex;
-    flex-direction: column;
-    align-items: center;   /* Centra horizontal */
-    justify-content: center; 
-    gap: 6px;              /* Separación uniforme */
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+@media (max-width: 768px) {
+    .filtro-botones {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Scroll horizontal en móviles */
+    }
 }

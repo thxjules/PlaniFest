@@ -1,165 +1,264 @@
+/* ===========================================
+   PALETA
+=========================================== */
+:root {
+    --color-fondo: #fdf8f0;
+    --color-primario: #10666d;     /* Azul verdoso */
+    --color-secundario: #d4a85c;   /* Dorado */
+    --color-texto: #3f2b26;
+    --color-hover: #0d5157;
+}
+
+/* ===========================================
+   GENERALES
+=========================================== */
 body {
-    background-color: #fdfdf5f1 !important;
-    color: #fdfdf5f1;
-    font-family: "Poppins", sans-serif;
+    background: var(--color-fondo) !important;
+    color: var(--color-texto);
+    font-family: "Segoe UI", sans-serif;
+    margin: 0;
 }
 
 .container {
-    background-color: #fdfdf5f1;
-    padding: 2rem;
-    border-radius: 12px;
-}
-.header-section {
-    display: flex;
-    align-items: center;       
-    justify-content: center;   
-    gap: 20px;                 
-    text-align: left;         
+    max-width: 1400px;
 }
 
-.header-section .text-section h1 {
-    color: var(--buttermilk);
-    font-weight: bold;
-    margin: 0;
-}
-
-.header-section .text-section p {
-    color: var(--marzipan);
-    margin: 0;
-}
-
+/* ===========================================
+   HEADER
+=========================================== */
 .header-section h1 {
-    font-size: 2rem;
-    color: #213431;
-    padding: 1rem;
-    text-align: center;
-    border-radius: 10px;
+    color: var(--color-primario);
+    font-weight: bold;
 }
 
 .header-section p {
-    margin-top: 0.5rem;
-    color: #213431;
-    font-weight: 500;
+    color: var(--color-secundario);
 }
 
-.btn-gold,
-.btn-outline-primary.btn-planifest,
-.btn-outline-secondary.btn-planifest {
-    background-color: #F1DEAB;
-    color: #000;
-    border: none;
-    font-weight: 600;
-    border-radius: 8px;
-}
-
-.btn-gold:hover,
-.btn-outline-primary.btn-planifest:hover,
-.btn-outline-secondary.btn-planifest:hover {
-    background-color: #daa755;
-    color: #000;
-}
-
-.btn-success {
-    background-color: #daa755;
-    color: #000;
-    border: none;
-}
-
-.btn-success:hover {
-    background-color: #f1deab;
-    color: #000;
-}
-
-
+/* ===========================================
+   CARD
+=========================================== */
 .card {
     border: none;
-    border-radius: 12px;
+    border-radius: 15px;
     overflow: hidden;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
 .card-header.custom-header {
-    background-color: #213431;
-    color: #daa75580;
-    padding: 1rem;
+    background: var(--color-primario);
+    color: white;
+    padding: 14px 18px;
+    font-weight: bold;
 }
 
 .card-body {
-    background-color: #fffef5;
+    padding: 0;
+    overflow-x: auto;
 }
 
-.form-control {
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
-
-.form-control:focus {
-    border-color: #daa755;
-    box-shadow: 0 0 5px #daa75580;
-}
-
-.table {
-    margin-bottom: 0;
-}
-
+/* ===========================================
+   TABLA
+=========================================== */
 .custom-thead {
-    background-color: #213431;
-    color: #F1DEAB;
+    background: var(--color-primario);
+    color: white;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: #fffef5;
+/* Forzar fondo blanco y bordes simples */
+.table {
+    border-collapse: collapse !important; /* evita doble línea */
+    width: 100%;
+    --bs-table-striped-bg: white !important;
 }
 
-.table-striped tbody tr:nth-of-type(even) {
-    background-color: #f7f3e7;
+.table th,
+.table td {
+    padding: 12px 10px;
+    font-size: 0.95rem;
+    background-color: white !important;
+    border: 1px solid black !important;
 }
 
-.table td,
-.table th {
-    vertical-align: middle;
+/* Eliminar gris alternado y hover */
+.table.table-striped tbody tr,
+.table tbody tr {
+    background-color: white !important;
 }
 
-/* Botones de acción en tabla */
+.table tbody tr:hover {
+    background-color: white !important;
+}
+
+/* ===========================================
+   BOTONES EN TABLA
+=========================================== */
+.table td.text-center {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.table td .btn {
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+    border: none !important; /* evita doble borde visual */
+}
+
+/* Editar */
 .table .btn-outline-primary {
-    background-color:#daa755;
-    border: 1px solid #daa755;
-    color: #fffef5;
+    background-color: var(--color-primario) !important;
+    color: white !important;
+    border: 1px solid var(--color-primario) !important;
 }
 
 .table .btn-outline-primary:hover {
-    background-color: #daa755;
-    color:  #fffef5;;
+    background-color: var(--color-hover) !important;
 }
 
+/* Eliminar */
 .table .btn-outline-danger {
-    background-color:#daa755;
-    border: 1px solid #daa755;
-    color: #fffef5;
+    background-color: #b3261e !important;
+    color: white !important;
+    border: 1px solid #b3261e !important;
 }
 
 .table .btn-outline-danger:hover {
-    background-color: #daa755;
-    color: #fff;
+    background-color: #8c1c17 !important;
 }
 
-.alert-success {
-    background-color: #daa755;
-    color: #000;
-    border: none;
+/* ===========================================
+   BOTONES GENERALES
+=========================================== */
+.btn-primary,
+.btn-success,
+.btn-buscar,
+.btn-nueva,
+.btn-outline-primary {
+    background-color: var(--color-primario) !important;
+    border-color: var(--color-primario) !important;
+    color: white !important;
 }
 
-.alert-danger {
-    background-color: #7a1f1f;
-    color: #fff;
-    border: none;
+.btn-primary:hover,
+.btn-success:hover,
+.btn-buscar:hover,
+.btn-nueva:hover,
+.btn-outline-primary:hover {
+    background-color: var(--color-hover) !important;
+}
+
+.btn-outline-secondary,
+.btn-secondary {
+    background-color: #6c757d !important;
+    color: white !important;
+    border-color: #6c757d !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-secondary:hover {
+    background-color: #565e64 !important;
+}
+
+/* ===========================================
+   FORMULARIO
+=========================================== */
+.form-control {
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #c8b8a6;
+}
+
+.form-control:focus {
+    border-color: var(--color-primario);
+    box-shadow: 0 0 4px rgba(16, 102, 109, 0.5);
+}
+.btn-success {
+    background-color: var(--color-primario) !important;
+    border-color: var(--color-primario) !important;
+    color: white !important;
 }
 
 
-#formularioCliente.collapse.show {
-    animation: fadeIn 0.4s ease-out;
-}
+/* ===========================================
+   RESPONSIVE / MINI-CARD PARA MÓVIL
+=========================================== */
+@media (max-width: 768px) {
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    .header-section {
+        text-align: center;
+        flex-direction: column;
+    }
+
+    table {
+        font-size: 0.80rem;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px;
+    }
+
+    .btn {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+
+    /* Tabla en modo mini-card */
+    .table thead {
+        display: none;
+    }
+
+    .table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid black !important;
+        border-radius: 10px;
+        padding: 10px;
+        background-color: white !important;
+    }
+
+    .table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 10px;
+        border: none !important;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .table tbody td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        flex-basis: 40%;
+        text-align: left;
+    }
+
+    .table td.text-center {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-top: 5px;
+        align-items: stretch;
+    }
+
+    .table td .btn {
+        width: 100%;
+        padding: 8px 0;
+        font-size: 0.85rem;
+    }
+
+    .card-body {
+        padding-bottom: 0;
+    }
 }

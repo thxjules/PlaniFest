@@ -1,137 +1,291 @@
-body {
-  background-color: #fdfdf5f1 !important;
-    color: #fdfdf5f1;
-  min-height: 100vh;
-  margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+/* =========================   
+   VARIABLES DE COLOR (Planifest)
+========================= */
+:root {
+    --color-fondo: #fdf8f0;      
+    --color-primario: #10666d;     
+    --color-secundario: #daa755;  
+    --color-texto: #114442;       
+    --color-hover: #b97b29;       
+    --glass-bg: rgba(241, 222, 168, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --tabla-header: #809076;      
 }
 
-.header-section h1 {
-  color: #114442;
-  font-weight: bold;
-  margin: 0;
+/* =========================
+   BODY Y FUENTES
+========================= */
+html, body {
+    height: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-fondo)!important;
+    color: var(--color-texto);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-.header-section p {
-  color: #114442;
-  margin: 0;
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb {
+    background: var(--color-primario);
+    border-radius: 5px;
 }
+
+/* =========================
+   HEADER
+========================= */
 .header-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
 }
-.header-section .logo img {
-  max-height: 100px;
-  width: auto;
+.header-section h1 { color: var(--color-primario); font-weight: bold; margin: 0; }
+.header-section p { color: var(--color-texto); margin: 0; }
+.header-section .logo img { max-height: 100px; width: auto; }
+
+/* =========================
+   CARDS (Glass)
+========================= */
+.card.fondo-transparente {
+    background-color: var(--glass-bg);
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--glass-border);
+    margin-bottom: 1.5rem;
+}
+.card-header.nueva-tarea,
+.card-header.lista-tareas,
+.card-header.nuevo-evento,
+.card-header.lista-eventos {
+    background-color: var(--color-primario);
+    color: white;
+    font-weight: bold;
 }
 
+/* =========================
+   FORMULARIO
+========================= */
+.form-label { color: var(--color-primario); font-weight: 600; }
+.form-control:focus, 
+.form-select:focus {
+    border-color: var(--color-secundario);
+    box-shadow: 0 0 0 0.25rem rgba(218, 167, 85, 0.25);
+}
+
+/* =========================
+   BOTONES UNIFICADOS
+========================= */
 .btn,
 .btn-primary,
 .btn-success,
 .btn-outline-primary,
-.btn-outline-secondary {
-  background-color: #9f6920;
-  border-color: #9f6920;
-  color: white;
-  font-weight: bold;
-  transition: 0.3s;
+.btn-outline-secondary,
+.btn-edit,
+.btn-eliminar {
+    background-color: var(--color-primario)!important;
+    border-color: var(--color-primario);
+    color: white !important;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 6px 12px;
+    transition: 0.3s;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 95px;
+    min-height: 34px;
 }
-.btn:hover {
-  background-color: #b97b29;
-  border-color: #b97b29;
-  transform: scale(1.05);
-  color: white;
+.btn:hover,
+.btn-edit:hover,
+.btn-eliminar:hover,
+.btn-outline-primary:hover {
+    background-color: var(--color-hover)!important;
+    border-color: var(--color-hover)!important;
+    transform: scale(1.05);
+    color: white;
 }
 .btn-eliminar {
-  background-color: #daa755 !important;
-  border-color: #7a4d17 !important;
-  color: white !important;          /* ← TEXTO EN BLANCO */
+    background-color: #ff6b6b !important;
+    border-color: var(--color-secundario)!important;
 }
-
 .btn-eliminar:hover {
-  background-color: #daa755 !important;
-  border-color: #9f6920 !important;
-  color: white !important;          /* ← TEXTO EN BLANCO TAMBIÉN AL HOVER */
+    background-color: var(--color-hover)!important;
+    border-color: var(--color-primario)!important;
 }
-/* Estilo para EDITAR basado en tu paleta */
-.btn-outline-primary {
-  background-color:  #daa755  !important;   /* marzipan suave */
-  border-color: #9f6920 !important;
-  color:  white !important;              /* texto oscuro inicial */
-  font-weight: bold;
-  transition: 0.3s;
-  border-radius: 8px;
-  padding: 6px 12px;
+.btn-outline-secondary,
+.btn-secondary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white !important;
 }
-
-/* Hover igual al botón eliminar */
-.btn-outline-primary:hover {
-  background-color: #daa755  !important;   /* dorado hover */
-  border-color: #9f6920 !important;
-  color: white !important;                /* texto blanco al hover */
-  transform: scale(1.05);
+.btn-outline-secondary:hover,
+.btn-secondary:hover {
+    background-color: #565e64 !important;
+    border-color: #565e64 !important;
+    color: white !important;
 }
 
+/* =========================
+   TABLAS
+========================= */
+.table {
+    width: 100%;
+    border-collapse: collapse !important;
+    margin-bottom: 0;
+    background-color: white;
+}
+.table thead { background-color: var(--tabla-header); color: white; font-weight: bold; }
+.table tbody tr { border-bottom: 1px solid #eee; }
+.table tbody tr:hover { background-color: rgba(218, 167, 85, 0.25); transition: 0.3s; }
 
-.badge.bg-warning {
-  background-color: #daa755; /* rob-roy */
-  color: white;
+/* =========================
+   CELDA ACCIONES (BOTONES)
+========================= */
+.tasks-manager td.text-center {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+    gap: 5px !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
 }
-.badge.bg-success {
-  background-color: #809076; /* wasabi */
-  color: white;
+.tasks-manager td.text-center .btn-edit,
+.tasks-manager td.text-center .btn-eliminar {
+    flex: 1 1 auto;
+    height: auto;
+    margin: 0 !important;
+    padding: 6px 10px !important;
+    font-size: 0.85rem;
+    min-height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.badge.bg-info {
-  background-color: #e9c579; /* marzipan */
-  color: #2b1d14;
-}
-
-.table thead {
-  background-color: #809076; /* wasabi */
-  color: white;
-  font-weight: bold;
-}
-.table tbody tr:hover {
-  background-color: rgba(233, 197, 121, 0.25); /* marzipan semitransparente */
-  transition: 0.3s;
-}
-
-.card.fondo-transparente {
-  background-color: rgba(241, 222, 168, 0.4); /* buttermilk semitransparente */
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(6px);
-}
-
-/* Nueva Tarea */
-.card-header.nueva-tarea {
-  background-color: #9f6920; /* golden-brown */
-  color: white;
-  font-weight: bold;
-}
-
-/* Lista de Tareas */
-.card-header.lista-tareas {
-  background-color: #9f6920; /* golden-brown */
-  color: white;
-  font-weight: bold;
+/* =========================
+   CELDA ACCIONES (BOTONES)
+========================= */
+.tasks-manager td.text-center {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+    gap: 8px !important;              /* separación clara */
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    padding: 6px 4px !important;
 }
 
+/* Botones con tamaño igual */
+.tasks-manager td.text-center .btn-edit,
+.tasks-manager td.text-center .btn-eliminar {
+    flex: 1 1 auto;
+    min-width: 110px;                 /* MISMO ancho */
+    min-height: 36px;                 /* MISMA altura */
+    font-size: 0.88rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 !important;
+}
+/* =================================
+   ACCIONES – FILA + SEPARACIÓN
+================================= */
+.tasks-manager td.text-center,
+td.text-center {  /* por si no tienes la clase tasks-manager */
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;       /* ← separación bonita */
+    flex-wrap: wrap !important; /* mantiene botones en fila sin montarse */
+    padding: 6px 4px !important;
+}
+
+/* Botones uniformes */
+td.text-center .btn-edit,
+td.text-center .btn-eliminar {
+    min-width: 110px;
+    height: 38px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/* =========================
+   COLLAPSE ANIMACIÓN
+========================= */
 .collapse.show {
-  display: block;
-  animation: expandir 0.3s ease-out forwards;
+    display: block;
+    animation: expandir 0.3s ease-out forwards;
+}
+@keyframes expandir {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes expandir {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* =========================
+   RESPONSIVE - CELDA ACCIONES VERTICAL
+========================= */
+@media (max-width: 768px) {
+
+    .tasks-manager td.text-center {
+        justify-content: center !important;
+        flex-wrap: wrap !important;   /* siguen en fila, pero ajustan */
+        gap: 6px !important;
+    }
+
+    .tasks-manager td.text-center .btn-edit,
+    .tasks-manager td.text-center .btn-eliminar {
+        flex: 1 1 130px;              /* adaptables */
+        max-width: 160px;
+        min-width: 130px;             /* más cómodos en celular */
+        height: 42px;                 /* más altos en móvil */
+        font-size: 0.9rem;
+    }
+    td.text-center {
+        gap: 12px !important;   /* separación extra en móvil */
+    }
+}
+
+/* =========================
+   RESPONSIVE TOTAL TABLA
+========================= */
+@media (max-width: 1200px) {
+    .table-responsive { overflow-x: auto; }
+}
+
+@media (max-width: 992px) {
+    .tasks-manager .table th,
+    .tasks-manager .table td {
+        padding: 0.5rem 0.3rem !important;
+        font-size: 0.85rem;
+    }
+
+    .tasks-manager .table thead th {
+        font-size: 0.8rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .tasks-manager td.text-center .btn-edit,
+    .tasks-manager td.text-center .btn-eliminar {
+        width: 100% !important;
+        min-height: 36px !important;
+        margin-bottom: 8px !important;
+    }
+    .tasks-manager td.text-center .btn-eliminar:last-child {
+        margin-bottom: 0 !important;
+    }
 }

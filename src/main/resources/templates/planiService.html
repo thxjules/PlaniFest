@@ -92,9 +92,10 @@
 
         <!-- TABLA DE SERVICIOS -->
         <div class="card shadow-sm border-0">
-            <div class="card-header bg-info text-white">
+            <div class="card-header lista-servicios">
                 <h5 class="mb-0">Lista de Servicios</h5>
             </div>
+
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
                     <thead class="table-light">
@@ -112,22 +113,18 @@
                             <td th:text="${s.description}"></td>
                             <td class="text-center">
                                 <!-- Botón Editar -->
-                                <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="modal"
+                                <button class="btn btn-table btn-edit btn-sm" type="button" data-bs-toggle="modal"
                                     data-bs-target="#editarServicioModal"
                                     th:attr="data-id=${s.serviceId}, data-nombre=${s.name}, data-tipo=${s.type}, data-descripcion=${s.description}">
                                     Editar
                                 </button>
 
                                 <!-- Botón Eliminar -->
-                                <form th:action="@{/planservices/delete/{serviceId}(serviceId=${s.serviceId})}"
-                                    method="post" class="d-inline-block eliminar-form">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-eliminar"
-                                        th:attr="data-id=${s.serviceId}">
-                                        Eliminar
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                                <button type="button" class="btn btn-table btn-delete btn-sm btn-eliminar"
+                                    th:attr="data-id=${s.serviceId}">
+                                    Eliminar
+                                </button>
+
 
                         <tr th:if="${servicios.size() == 0}">
                             <td colspan="4" class="text-center text-muted">No hay servicios registrados.</td>
@@ -197,27 +194,27 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-document.querySelectorAll('.btn-eliminar').forEach(boton => {
-    boton.addEventListener('click', function () {
+        document.querySelectorAll('.btn-eliminar').forEach(boton => {
+            boton.addEventListener('click', function () {
 
-        const form = this.closest('.eliminar-form'); // formulario asociado
+                const form = this.closest('.eliminar-form'); // formulario asociado
 
-        Swal.fire({
-            title: '¿Eliminar servicio?',
-            text: "Esta acción no se puede deshacer.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit(); // ahora sí elimina
-            }
+                Swal.fire({
+                    title: '¿Eliminar servicio?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // ahora sí elimina
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 </body>
 
 </html>

@@ -15,7 +15,6 @@
 <body>
     <div class="container py-5">
 
-        <!-- ENCABEZADO -->
         <div class="header-section mb-4 d-flex align-items-center justify-content-center">
             <div class="text-section me-3">
                 <h1 class="mb-0">Gestión de Eventos</h1>
@@ -27,7 +26,6 @@
         </div>
 
 
-        <!-- MENSAJES DE ALERTA -->
         <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
             <span th:text="${successMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -37,7 +35,6 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <!-- BOTONES ENCIMA DEL FORMULARIO -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a th:href="@{/dashboard/admin}" class="btn btn-outline-secondary btn-sm">
                 <i class="bx bx-home"></i> Volver
@@ -48,7 +45,6 @@
             </button>
         </div>
 
-        <!-- FORMULARIO EVENTO -->
         <div th:class="${event.id != null} ? 'collapse show' : 'collapse'" id="formularioEvento">
             <div class="card shadow-sm border-0 fondo-transparente mb-4">
                 <div class="card-header nuevo-evento">
@@ -59,7 +55,6 @@
                     <form th:action="@{/events-view/save}" method="post" th:object="${event}">
                         <input type="hidden" th:field="*{id}" />
                         <div class="row g-3">
-                            <!-- Datos básicos -->
                             <div class="col-md-6">
                                 <label class="form-label">Nombre</label>
                                 <input type="text" th:field="*{eventName}" class="form-control" required />
@@ -92,7 +87,6 @@
                                 <input type="number" th:field="*{guestCount}" class="form-control" required />
                             </div>
 
-                            <!-- Ubicación y mapa -->
                             <div class="col-md-6">
                                 <label class="form-label">Ubicación</label>
                                 <input id="location" type="text" th:field="*{location}" class="form-control" required />
@@ -108,7 +102,6 @@
                                 </div>
                             </div>
 
-                            <!-- Estado -->
                             <div class="col-md-6">
                                 <label class="form-label">Estado</label>
                                 <select th:field="*{status}" class="form-select" required>
@@ -119,7 +112,6 @@
                                 </select>
                             </div>
 
-                            <!-- Servicios -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Servicios (opcional)</label>
                                 <select th:field="*{planiServices}" multiple size="5" class="form-select">
@@ -130,10 +122,10 @@
                                 </select>
                             </div>
 
-                            <!-- Suministros dinámicos -->
                             <div class="col-md-12 mb-2">
-                                <button type="button" class="btn btn-outline-success" id="addSupplyBtn">➕ Nuevo
-                                    suministro</button>
+                                <button type="button" class="btn btn-outline-success" id="addSupplyBtn">
+                                    ➕ Nuevo suministro
+                                </button>
                                 <input type="hidden" id="initialSupplyCount"
                                     th:value="${event.eventSupplies != null ? event.eventSupplies.size() : 0}" />
                                 <div id="suministrosContainer">
@@ -179,7 +171,6 @@
             </div>
         </div>
 
-        <!-- TABLA DE EVENTOS -->
         <div class="card shadow-sm border-0">
             <div class="card-header lista-eventos">
                 <h5 class="mb-0">Lista de Eventos</h5>
@@ -247,7 +238,6 @@
 
     </div>
 
-    <!-- Template para nuevos suministros -->
     <template id="supplyTemplate">
         <div class="row mb-2 supply-entry">
             <div class="col-md-6">
@@ -262,12 +252,11 @@
                 <input type="number" name="eventSupplies[INDEX].quantitySupply" class="form-control" min="1" required>
             </div>
             <div class="col-md-2 d-flex align-items-end">
-                <button type="button" class="btn btn-danger removeSupplyBtn"></button>
+                <button type="button" class="btn btn-danger removeSupplyBtn">🗑</button>
             </div>
         </div>
     </template>
 
-    <!-- Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const initialCountEl = document.getElementById('initialSupplyCount');
@@ -309,7 +298,7 @@
             locationInput.addEventListener('input', () => {
                 const address = locationInput.value.trim();
                 if (address.length > 3) {
-                    mapFrame.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyCgZPwudO2MG358I1CqrzctaVrIfclADcQ&q=${encodeURIComponent(address)}`;
+                    mapFrame.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyCgZPwudO2MG358I1CqrzctaVrIfclADcQ&q=$${encodeURIComponent(address)}`;
                 }
             });
         });
@@ -341,8 +330,6 @@
             });
         });
     </script>
-
-
 
 </body>
 

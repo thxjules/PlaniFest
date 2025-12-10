@@ -1,136 +1,165 @@
+/* =========================
+   VARIABLES DE COLOR
+========================= */
+:root {
+    --color-fondo: #fdf8f0;
+    --color-primario: #10666d;        /* Azul verdoso */
+    --color-secundario: #d4a85c;      /* Dorado */
+    --color-texto: #3f2b26;
+    --color-hover: #0d5157;
+    --color-delete: #c0392b;          /* Rojo eliminar */
+}
+
+/* =========================
+   ESTILOS GENERALES
+========================= */
 body {
-    background-color: #fdfdf5f1 ; /* color suave en lugar de gradiente */
-    min-height: 100vh;
-    color: #142b20; /* texto oscuro */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-fondo);
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    color: var(--color-texto);
 }
 
-h1 {
-    color: #142b20; 
+/* Header */
+.header-section h1 {
+    color: var(--color-primario);
     font-weight: bold;
 }
-
-p.text-muted {
-    color: #142b20 !important; /* marzipan */
+/* =========================
+   CARD HEADER (bg-primary)
+========================= */
+.bg-primary {
+    background-color: var(--color-primario) !important;
+    color: #ffffff !important;
 }
 
-.logo img {
-    filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+.bg-primary:hover {
+    background-color: var(--color-hover) !important;
 }
 
-.btn,
-.btn-primary,
-.btn-success,
-.btn-outline-primary,
-.btn-outline-secondary,
-.btn-outline-danger {
-    background-color: #9F6920 !important; /* golden-brown */
-    border-color: #9F6920 !important;
+
+.card-header.lista-servicios {
+    background-color: var(--color-primario) !important;
     color: white !important;
-    font-weight: bold;
-    transition: 0.3s;
-    border-radius: 8px;
+    text-align: center;
 }
 
-.btn:hover {
-    background-color: #b97b29 !important;
-    border-color: #b97b29 !important;
-    transform: scale(1.05);
-}
-form .btn-primary {
-    background-color: blue !important;
-    border-color: #10666d !important;
-    color: white !important;
-}
-
-form .btn-primary:hover {
-    background-color: #0c4e52 !important;
-    border-color: #0c4e52 !important;
-    transform: scale(1.05);
-}
-
-/* === BOTÓN LIMPIAR (Verde suave) === */
-form .btn-secondary {
-    background-color: #809076 !important;
-    border-color: #809076 !important;
-    color: white !important;
-}
-
-form .btn-secondary:hover {
-    background-color: #63735d !important;
-    border-color: #63735d !important;
-    transform: scale(1.05);
-}
-
-/* Botón secundario gris */
-.btn-outline-secondary {
-    background-color: #809076 !important; /* wasabi */
-    border-color: #809076 !important;
-}
-
-.btn-outline-secondary:hover {
-    background-color: #9bb68c !important;
-    border-color: #9bb68c !important;
-}
-
-.card {
-    background-color: rgba(241, 222, 168, 0.4);
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    backdrop-filter: blur(6px);
-}
-
-.card-header {
-    background-color: #9F6920 !important; /* golden-brown */
-    color: white !important;
-    font-weight: bold;
-}
-
-.table thead {
-    background-color: #809076; /* wasabi */
+/* =========================
+   TABLA
+========================= */
+.table th {
+    background-color: var(--color-primario);
     color: white;
-    font-weight: bold;
 }
 
-.table tbody tr:hover {
-    background-color: rgba(233, 197, 121, 0.25);
-    transition: 0.3s;
-}
-
-.table td, .table th {
+.table td {
     vertical-align: middle;
 }
 
-/* === FORMULARIO NUEVO SERVICIO === */
-#formularioServicio .card-header {
-    background-color: #9F6920 !important;
+/* =========================
+   BOTONES GENERALES
+========================= */
+.btn-outline-primary {
+    background-color: var(--color-primario) !important;
+    border-color: var(--color-primario) !important;
+    color: #ffffff !important;
+}
+
+/* hover */
+.btn-outline-primary:hover {
+    background-color: var(--color-hover) !important;
+    border-color: var(--color-hover) !important;
+}
+
+/* mantener tamaño pequeño */
+.btn-outline-primary.btn-sm {
+    padding: .25rem .5rem;
+    font-size: .85rem;
+}
+.btn-primary {
+    background-color: var(--color-primario) !important;
+    border-color: var(--color-primario) !important;
     color: white !important;
+    font-weight: 500;
 }
 
-.modal-content {
-    background-color: rgba(241, 222, 168, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+.btn-primary:hover {
+    background-color: var(--color-hover) !important;
+    border-color: var(--color-hover) !important;
 }
 
-.modal-header {
-    background-color: #9F6920 !important;
+.btn-secondary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
     color: white !important;
-    font-weight: bold;
+    font-weight: 500;
 }
 
-.modal-footer .btn-secondary {
-    background-color: #809076 !important;
+.btn-secondary:hover {
+    background-color: #5a6268 !important;
+}
+
+/* =========================
+   BOTONES DE TABLA
+========================= */
+.btn-table {
+    padding: 6px 12px;
+    font-size: 14px;
+    min-width: 110px;
+    border-radius: 6px;
+}
+
+/* Editar */
+.btn-edit {
+    background-color: var(--color-primario);
+    color: white;
     border: none;
 }
 
-.modal-footer .btn-secondary:hover {
-    background-color: #9bb68c !important;
+.btn-edit:hover {
+    background-color: var(--color-hover);
+    color: white;
 }
 
-.form-control {
-    border-radius: 6px;
-    border: 1px solid #DAA755; 
-    background-color: #ffffffe6
+/* Eliminar */
+.btn-delete {
+    background-color: var(--color-delete);
+    color: white;
+    border: none;
+}
+
+.btn-delete:hover {
+    background-color: #962d22;
+    color: white;
+}
+
+/* Separación entre botones (siempre) */
+td .btn-table {
+    margin: 4px 0;
+}
+
+/* =========================
+   RESPONSIVE CELULAR
+========================= */
+@media (max-width: 768px) {
+
+    /* La celda de botones se ordena vertical */
+    td.text-center {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+        gap: 8px; /* separación limpia entre botones */
+    }
+
+    /* Botones ocupan todo el ancho en móvil */
+    td .btn-table {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* Evita que la tabla se rompa */
+    table td,
+    table th {
+        white-space: normal !important;
+    }
 }

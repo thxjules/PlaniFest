@@ -1,22 +1,50 @@
-/* === PALETA PLANIFEST === */
+/* =====================================================
+   PALETA PLANIFEST
+===================================================== */
 :root {
     --verde-oscuro: #0F2E2F;
     --verde-medio: #395B50;
+    --color-primario: #10666d;
     --beige: #F3EEDB;
     --crema: #F1F2E8;
     --dorado: #D8A04C;
     --texto: #1B1B1B;
+
+    /* Color corporativo para botones principales */
+    --verde-corporativo: #10666d;
 }
 
-/* === ESTILOS GENERALES === */
+/* =====================================================
+   ESTILOS GENERALES
+===================================================== */
 body {
-    background: var(--crema);
+    background:  #fdf8f0 !important;
     color: var(--texto);
     font-family: 'Segoe UI', sans-serif;
 }
+/* Título principal de la vista Empleados */
+h1.fw-bold {
+    color: #10666d !important;   /* Verde azulado Planifest */
+}
+/* Forzar color del encabezado de tabla */
+table.table thead.table-dark {
+    background-color: #10666d !important;
+}
+
+table.table thead.table-dark th {
+    background-color: #10666d !important;
+    color: white !important;
+}
 
 
-/* === CARDS DE ESTADÍSTICA === */
+
+
+
+
+
+/* =====================================================
+   CARDS DE ESTADÍSTICA
+===================================================== */
 .card-summary {
     background: var(--beige);
     border-radius: 14px;
@@ -30,19 +58,21 @@ body {
     box-shadow: 0px 10px 24px rgba(0,0,0,0.12);
 }
 
-/* Iconos dentro de tarjetas */
 .card-summary i {
     color: var(--dorado);
     font-size: 28px;
 }
 
-/* Numeración grande */
 .card-summary h2 {
     color: var(--verde-oscuro);
     font-weight: 800;
 }
 
-/* === HEADER DEL PANEL === */
+
+
+/* =====================================================
+   HEADER DEL PANEL
+===================================================== */
 .header-panel {
     background: var(--verde-oscuro);
     color: white;
@@ -52,7 +82,11 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* === BOTONES === */
+
+
+/* =====================================================
+   BOTONES (ESTILO GLOBAL)
+===================================================== */
 .btn {
     background: var(--dorado);
     border-color: var(--dorado);
@@ -68,7 +102,40 @@ body {
 }
 
 
-/* === TABLAS === */
+
+/* =====================================================
+   BOTONES ESPECÍFICOS (NO TOCAR HTML)
+===================================================== */
+
+/* Botón GUARDAR → verde #10666d */
+.btn-primary {
+    background-color: var(--verde-corporativo) !important;
+    border-color: var(--verde-corporativo) !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background-color: #0f555a !important;
+    border-color: #0f555a !important;
+}
+
+/* Botón ELIMINAR → rojo */
+.btn-danger {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: white !important;
+}
+
+.btn-danger:hover {
+    background-color: #bb2d3b !important;
+    border-color: #bb2d3b !important;
+}
+
+
+
+/* =====================================================
+   TABLAS
+===================================================== */
 .table {
     background: white;
     border-radius: 12px;
@@ -76,11 +143,91 @@ body {
     border: 1px solid var(--beige);
 }
 
-.table thead {
-    background: var(--verde-oscuro);
-    color: var(--beige);
-}
-
 .table tbody tr:hover {
     background: var(--crema);
+}
+
+
+/* =====================================================
+   BOTÓN VOLVER
+===================================================== */
+.btn-volver-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-volver {
+    border: 2px solid var(--verde-oscuro)!important;
+    color: var(--verde-oscuro);
+    font-weight: 600;
+}
+
+/* =========================
+    BOTÓN VOLVER (GRIS)
+========================= */
+.btn-volver {
+    background-color: #6c757d !important;   /* Gris */
+    border-color: #6c757d !important;
+    color: white !important;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 8px 18px;
+    transition: .25s ease;
+}
+
+.btn-volver:hover {
+    background-color: #565e64 !important;   /* Gris más oscuro */
+    border-color: #565e64 !important;
+    color: white !important;
+}
+
+/* =========================
+      RESPONSIVE GENERAL
+========================= */
+@media (max-width: 768px) {
+
+    /* Tabla más respirable */
+    .table {
+        font-size: 14px;
+    }
+
+    .table thead {
+        font-size: 14px;
+    }
+
+    .table td,
+    .table th {
+        white-space: normal !important;
+        text-align: center;
+    }
+
+    /* Acciones en columna: botones uno bajo otro, pero alineados y del mismo ancho */
+    td .d-flex {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    td .btn {
+        width: 100% !important;
+    }
+
+    /* Filtro centrado en móvil */
+    .row.mb-4 .col-md-4 {
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Botón Volver centrado y ancho completo si hace falta */
+    .btn-volver-container {
+        text-align: center;
+    }
+
+    .btn-volver {
+        width: 100%;
+        max-width: 250px;
+    }
 }
