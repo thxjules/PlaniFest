@@ -95,6 +95,22 @@
     </div>
   </div>
   </div>
+   <div id="chatbot-widget">
+      <div id="chatbot-btn">
+        <img th:src="@{/images/ia.png}" alt="Logo Planifest">
+      </div>
+      <div id="chatbox">
+        <div id="chat-header">
+          <span>Sienna - Chat Planifest</span>
+          <button id="close-chat">✖</button>
+        </div>
+        <div id="messages"></div>
+        <div id="chat-input">
+          <input type="text" id="userInput" placeholder="Escribe un mensaje...">
+          <button id="sendBtn">Enviar</button>
+        </div>
+      </div>
+    </div>
 
   <!-- Scripts gráficos -->
   <script>
@@ -162,6 +178,145 @@
     toggleBtn.addEventListener("click", () => {
       sidebar.classList.toggle("active");
     });
+  </script>
+  <!-- CHATBOT -->
+  <script>
+    const chatBtn = document.getElementById("chatbot-btn");
+    const chatBox = document.getElementById("chatbox");
+    const closeBtn = document.getElementById("close-chat");
+    const sendBtn = document.getElementById("sendBtn");
+    const userInput = document.getElementById("userInput");
+    const messages = document.getElementById("messages");
+
+    // Comandos rápidos sugeridos
+    const quickCommands = [
+      { text: "Ver suministros", message: "Muéstrame mis suministros" },
+      { text: "Ver Movimientos", message: "Muéstrame mis movimientos de stock" },
+      { text: "Ayuda", message: "Necesito ayuda" }
+    ];
+
+    // Abrir chat
+    chatBtn.addEventListener("click", () => {
+      chatBox.classList.add("show");
+      if (!chatBox.dataset.initialized) {
+        appendMessageTyping("¡Hola! Soy Sienna, tu asistente en Planifest. ¿En qué puedo ayudarte hoy?", "bot", () => {
+          appendQuickButtons(quickCommands);
+        });
+        chatBox.dataset.initialized = "true";
+      }
+    });
+
+    // Cerrar chat
+    closeBtn.addEventListener("click", () => chatBox.classList.remove("show"));
+
+    // Enviar mensaje con Enter o botón
+    sendBtn.addEventListener("click", sendMessage);
+    userInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+
+    // Enviar mensaje al backend
+    async function sendMessage() {
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      appendMessage(text, "user");
+      userInput.value = "";
+
+      // Ocultar botones rápidos al enviar nueva consulta
+      removeQuickButtons();
+
+      try {
+        showTyping();
+        const response = await fetch("/chatbot/message", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+        hideTyping();
+
+        if (!response.ok) throw new Error("Error del servidor");
+
+        const data = await response.json();
+        appendMessageTyping(data.reply, "bot", () => {
+          // Sugerir botones contextuales según la respuesta
+          appendQuickButtons(quickCommands);
+        });
+
+      } catch (err) {
+        console.error(err);
+        appendMessage("Error en el servidor.", "bot");
+        hideTyping();
+      }
+    }
+
+    // Función de mensaje normal
+    function appendMessage(text, type) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      div.className = `msg ${type}`;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Función de mensaje con tipeo animado
+    function appendMessageTyping(text, type, callback) {
+      const div = document.createElement("div");
+      div.className = `msg ${type}`;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+
+      let i = 0;
+      const interval = setInterval(() => {
+        div.textContent += text.charAt(i);
+        i++;
+        messages.scrollTop = messages.scrollHeight;
+        if (i >= text.length) {
+          clearInterval(interval);
+          if (callback) callback();
+        }
+      }, 15);
+    }
+
+    // Mostrar indicador de tipeo
+    function showTyping() {
+      const div = document.createElement("div");
+      div.id = "typing-indicator";
+      div.className = "msg bot";
+      div.textContent = "Sienna está escribiendo...";
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Ocultar indicador de tipeo
+    function hideTyping() {
+      const indicator = document.getElementById("typing-indicator");
+      if (indicator) indicator.remove();
+    }
+
+    // Agregar botones rápidos
+    function appendQuickButtons(buttons) {
+      const container = document.createElement("div");
+      container.className = "msg bot quick-buttons";
+
+      buttons.forEach(btn => {
+        const button = document.createElement("button");
+        button.textContent = btn.text;
+        button.onclick = () => {
+          userInput.value = btn.message;
+          sendMessage();
+        };
+        container.appendChild(button);
+      });
+
+      messages.appendChild(container);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Remover botones rápidos al enviar nueva consulta
+    function removeQuickButtons() {
+      const quickButtons = document.querySelectorAll(".quick-buttons");
+      quickButtons.forEach(btn => btn.remove());
+    }
+
   </script>
 
 

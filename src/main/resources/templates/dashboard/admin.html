@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel de Administración - Planifest</title>
 
-  <!-- Fuentes y Boxicons -->
+  <!-- Fuentes -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
@@ -33,26 +33,30 @@
 
       <div class="profile-btn-container">
         <a href="/admin/profile" class="profile-btn">
-          <i class="bx bx-edit"></i>Editar perfil
+          <i class="bx bx-edit"></i> Editar perfil
         </a>
       </div>
-
 
       <a th:href="@{/employees-view}" th:classappend="${activePage == 'employees'} ? 'active'">
         <i class="bx bx-user"></i> Empleados
       </a>
+
       <a th:href="@{/clients-view}" th:classappend="${activePage == 'clients'} ? 'active'">
         <i class="bx bx-user"></i> Clientes
       </a>
+
       <a th:href="@{/events-view}" th:classappend="${activePage == 'events'} ? 'active'">
         <i class="bx bx-calendar"></i> Eventos
       </a>
+
       <a th:href="@{/tasks-view}" th:classappend="${activePage == 'tasks'} ? 'active'">
         <i class="bx bx-task"></i> Tareas
       </a>
+
       <a th:href="@{/supply-admin}" th:classappend="${activePage == 'supplies'} ? 'active'">
         <i class="bx bx-box"></i> Suministros
       </a>
+
       <a th:href="@{/planservices}" th:classappend="${activePage == 'services'} ? 'active'">
         <i class="bx bx-transfer"></i> Servicios
       </a>
@@ -87,12 +91,15 @@
       <div id="chatbot-btn">
         <img th:src="@{/images/ia.png}" alt="Logo Planifest">
       </div>
+
       <div id="chatbox">
         <div id="chat-header">
           <span>Sienna - Chat Planifest</span>
           <button id="close-chat">✖</button>
         </div>
+
         <div id="messages"></div>
+
         <div id="chat-input">
           <input type="text" id="userInput" placeholder="Escribe un mensaje...">
           <button id="sendBtn">Enviar</button>
@@ -100,209 +107,371 @@
       </div>
     </div>
 
-    <!-- KPIS -->
+    <!-- ===================== -->
+    <!--        KPI CARDS      -->
+    <!-- ===================== -->
     <div class="kpi-grid">
-      <div class="kpi-card"><i class="bx bx-task"></i>
-        <h2>20</h2>
+      <div class="kpi-card">
+        <i class="bx bx-task"></i>
+        <h2 th:text="${totalTareas}">0</h2>
         <p>Tareas</p>
       </div>
-      <div class="kpi-card"><i class="bx bx-user"></i>
-        <h2>10</h2>
+
+      <div class="kpi-card">
+        <i class="bx bx-user"></i>
+        <h2 th:text="${totalEmpleados}">0</h2>
         <p>Empleados</p>
       </div>
-      <div class="kpi-card"><i class="bx bx-calendar"></i>
-        <h2>5</h2>
+
+      <div class="kpi-card">
+        <i class="bx bx-calendar"></i>
+        <h2 th:text="${totalEventos}">0</h2>
         <p>Eventos</p>
       </div>
-      <div class="kpi-card"><i class="bx bx-box"></i>
-        <h2>15</h2>
+
+      <div class="kpi-card">
+        <i class="bx bx-box"></i>
+        <h2 th:text="${totalInsumos}">0</h2>
         <p>Suministros</p>
       </div>
-    </div>
+    </div> <!-- ← AQUÍ SE CIERRA CORRECTO -->
 
-    <!-- GRIDS -->
-    <div class="grid mt-5">
-      <div class="card">
-        <h3>Tareas</h3><canvas id="tasksChart"></canvas>
+    <!-- ===================== -->
+    <!--   WIDGETS 2 COLUMNAS -->
+    <!-- ===================== -->
+    <div class="widgets-two-column">
+
+      <!-- Columna izquierda -->
+      <div class="widgets-left">
+
+        <!-- RELOJ -->
+        <div class="card widget-card time-widget">
+          <div class="widget-icon"><i class='bx bx-time-five'></i></div>
+          <div class="time-content">
+            <h2 id="live-clock">00:00:00</h2>
+            <p id="live-date">Cargando fecha...</p>
+          </div>
+        </div>
+
+        <!-- NOTAS -->
+        <div class="card widget-card notes-widget">
+          <div class="widget-header">
+            <h3><i class='bx bx-edit-alt'></i> Bloc de Notas</h3>
+            <span id="save-status"
+                  style="font-size: 0.8rem; color: green; opacity: 0; transition: opacity 0.5s;">
+              Guardado
+            </span>
+          </div>
+
+          <textarea id="quick-notes"
+            placeholder="Escribe recordatorios rápidos aquí... (Se guardan solos)"></textarea>
+        </div>
+
       </div>
-      <div class="card">
-        <h3>Empleados</h3><canvas id="employeesChart"></canvas>
+
+      <!-- Columna derecha -->
+      <div class="calendar-widget">
+        <div class="card widget-card calendar-widget">
+          <div class="widget-header" style="display:flex; align-items:center; justify-content:space-between;">
+            <h3 style="margin:0;"><i class='bx bx-calendar'></i> Calendario</h3>
+          </div>
+
+          <div id="mini-calendar" style="margin-top:8px;">
+            <div id="calendar-header">
+              <button id="prev-month" aria-label="Mes anterior">‹</button>
+              <h4 id="calendar-month">Mes Año</h4>
+              <button id="next-month" aria-label="Mes siguiente">›</button>
+            </div>
+
+            <div id="calendar-grid"></div>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <h3>Eventos</h3><canvas id="eventsChart"></canvas>
-      </div>
-      <div class="card">
-        <h3>Suministros</h3><canvas id="suppliesChart"></canvas>
-      </div>
-    </div>
-  </div>
 
-  <!-- JS: Charts -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      new Chart(tasksChart, { type: "bar", data: { labels: ["Pendientes", "Completadas"], datasets: [{ data: [7, 13], backgroundColor: ["#f8d794", "#b86830"] }] } });
-      new Chart(employeesChart, { type: "bar", data: { labels: ["Empleados", "Admins"], datasets: [{ data: [10, 2], backgroundColor: ["#284139", "#809076"] }] } });
-      new Chart(eventsChart, { type: "line", data: { labels: ["Pendientes", "Completados"], datasets: [{ data: [2, 3], borderColor: "#b86830", fill: false, tension: 0.3 }] } });
-      new Chart(suppliesChart, { type: "pie", data: { labels: ["Disponibles", "Agotados"], datasets: [{ data: [10, 5], backgroundColor: ["#284139", "#f1dea8"] }] } });
-    });
-  </script>
+    </div> 
+  </div> 
 
-  <!-- ALERTA DESAPARECE -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const alert = document.querySelector(".alert-success");
-      if (alert) setTimeout(() => alert.style.transition = "opacity 1s", alert.style.opacity = "0", 5000);
-    });
-  </script>
+  <!-- =============== SCRIPTS ================= -->
 
-  <!-- MENÚ HAMBURGUESA -->
-  <script>
-    const toggleBtn = document.querySelector(".menu-toggle");
-    const sidebar = document.querySelector(".sidebar");
-    toggleBtn.addEventListener("click", () => sidebar.classList.toggle("active"));
-  </script>
+   <script>
+      const events = /*[[${eventDates}]]*/[];
+      // Debe ser una lista de strings: ["2025-02-15","2025-02-20"]
 
-  <!-- CHATBOT -->
-  <script>
-    const chatBtn = document.getElementById("chatbot-btn");
-    const chatBox = document.getElementById("chatbox");
-    const closeBtn = document.getElementById("close-chat");
-    const sendBtn = document.getElementById("sendBtn");
-    const userInput = document.getElementById("userInput");
-    const messages = document.getElementById("messages");
+      const monthNames = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+      ];
 
-    // Comandos rápidos sugeridos
-    const quickCommands = [
-      { text: "Ver tareas", message: "Muéstrame mis tareas" },
-      { text: "Ver eventos", message: "Muéstrame mis eventos" },
-      { text: "Crear evento", message: "Quiero crear un evento" },
-      { text: "Ayuda", message: "Necesito ayuda" }
-    ];
+      let currentDate = new Date();
 
-    // Abrir chat
-    chatBtn.addEventListener("click", () => {
-      chatBox.classList.add("show");
-      if (!chatBox.dataset.initialized) {
-        appendMessageTyping("¡Hola! Soy Sienna, tu asistente en Planifest. ¿En qué puedo ayudarte hoy?", "bot", () => {
-          appendQuickButtons(quickCommands);
-        });
-        chatBox.dataset.initialized = "true";
-      }
-    });
+      function renderCalendar() {
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear();
 
-    // Cerrar chat
-    closeBtn.addEventListener("click", () => chatBox.classList.remove("show"));
+        document.getElementById("calendar-month").textContent =
+          `${monthNames[month]} ${year}`;
 
-    // Enviar mensaje con Enter o botón
-    sendBtn.addEventListener("click", sendMessage);
-    userInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
 
-    // Enviar mensaje al backend
-    async function sendMessage() {
-      const text = userInput.value.trim();
-      if (!text) return;
+        const grid = document.getElementById("calendar-grid");
+        grid.innerHTML = "";
 
-      appendMessage(text, "user");
-      userInput.value = "";
-
-      // Ocultar botones rápidos al enviar nueva consulta
-      removeQuickButtons();
-
-      try {
-        showTyping();
-        const response = await fetch("/chatbot/message", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
-        });
-        hideTyping();
-
-        if (!response.ok) throw new Error("Error del servidor");
-
-        const data = await response.json();
-        appendMessageTyping(data.reply, "bot", () => {
-          // Sugerir botones contextuales según la respuesta
-          appendQuickButtons(quickCommands);
+        const dayNames = ["L", "M", "M", "J", "V", "S", "D"];
+        dayNames.forEach(d => {
+          const div = document.createElement("div");
+          div.textContent = d;
+          div.className = "day-header";
+          grid.appendChild(div);
         });
 
-      } catch (err) {
-        console.error(err);
-        appendMessage("Error en el servidor.", "bot");
-        hideTyping();
-      }
-    }
-
-    // Función de mensaje normal
-    function appendMessage(text, type) {
-      const div = document.createElement("div");
-      div.textContent = text;
-      div.className = `msg ${type}`;
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-    }
-
-    // Función de mensaje con tipeo animado
-    function appendMessageTyping(text, type, callback) {
-      const div = document.createElement("div");
-      div.className = `msg ${type}`;
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-
-      let i = 0;
-      const interval = setInterval(() => {
-        div.textContent += text.charAt(i);
-        i++;
-        messages.scrollTop = messages.scrollHeight;
-        if (i >= text.length) {
-          clearInterval(interval);
-          if (callback) callback();
+        for (let i = 0; i < firstDay - 1; i++) {
+          grid.appendChild(document.createElement("div"));
         }
-      }, 15);
-    }
 
-    // Mostrar indicador de tipeo
-    function showTyping() {
-      const div = document.createElement("div");
-      div.id = "typing-indicator";
-      div.className = "msg bot";
-      div.textContent = "Sienna está escribiendo...";
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-    }
+        for (let day = 1; day <= lastDate; day++) {
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const div = document.createElement("div");
+          div.textContent = day;
 
-    // Ocultar indicador de tipeo
-    function hideTyping() {
-      const indicator = document.getElementById("typing-indicator");
-      if (indicator) indicator.remove();
-    }
+          if (events.includes(dateStr)) {
+            div.classList.add("event-day");
+            div.title = "Hay un evento programado";
+          }
 
-    // Agregar botones rápidos
-    function appendQuickButtons(buttons) {
-      const container = document.createElement("div");
-      container.className = "msg bot quick-buttons";
+          const today = new Date();
+          if (today.getDate() === day && today.getMonth() === month && today.getFullYear() === year) {
+            div.classList.add("today");
+          }
 
-      buttons.forEach(btn => {
-        const button = document.createElement("button");
-        button.textContent = btn.text;
-        button.onclick = () => {
-          userInput.value = btn.message;
-          sendMessage();
+          grid.appendChild(div);
+        }
+      }
+
+      document.getElementById("prev-month").onclick = () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+      };
+
+      document.getElementById("next-month").onclick = () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+      };
+
+      renderCalendar();
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const alert = document.querySelector(".alert-success");
+        if (!alert) return;
+
+        setTimeout(() => {
+          alert.style.transition = "opacity 1s";
+          alert.style.opacity = "0";
+        }, 5000);
+      });
+    </script>
+
+    <!-- RELOJ -->
+    <script>
+      function updateClock() {
+        const now = new Date();
+
+        const timeString = now.toLocaleTimeString('es-ES', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+
+        document.getElementById('live-clock').textContent = timeString;
+
+        const dateOptions = {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
         };
-        container.appendChild(button);
+
+        const dateString = now.toLocaleDateString('es-ES', dateOptions);
+        document.getElementById('live-date').textContent =
+          dateString.charAt(0).toUpperCase() + dateString.slice(1);
+      }
+
+      setInterval(updateClock, 1000);
+      updateClock();
+    </script>
+
+    <!-- NOTAS -->
+    <script>
+      const notesArea = document.getElementById('quick-notes');
+      const saveStatus = document.getElementById('save-status');
+
+      const savedNotes = localStorage.getItem('adminDashboardNotes');
+      if (savedNotes) {
+        notesArea.value = savedNotes;
+      }
+
+      notesArea.addEventListener('input', () => {
+        localStorage.setItem('adminDashboardNotes', notesArea.value);
+
+        saveStatus.style.opacity = '1';
+        setTimeout(() => {
+          saveStatus.style.opacity = '0';
+        }, 1500);
+      });
+    </script>
+
+    <!-- MENÚ HAMBURGUESA -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggleBtn = document.querySelector(".menu-toggle");
+        const sidebar = document.querySelector(".sidebar");
+
+        if (toggleBtn && sidebar) {
+          toggleBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("active");
+          });
+        }
+      });
+    </script>
+
+    <!-- CHATBOT -->
+    <script>
+      const chatBtn = document.getElementById("chatbot-btn");
+      const chatBox = document.getElementById("chatbox");
+      const closeBtn = document.getElementById("close-chat");
+      const sendBtn = document.getElementById("sendBtn");
+      const userInput = document.getElementById("userInput");
+      const messages = document.getElementById("messages");
+
+      const quickCommands = [
+        { text: "Ver tareas", message: "Muéstrame mis tareas" },
+        { text: "Ver eventos", message: "Muéstrame mis eventos" },
+        { text: "Crear evento", message: "Quiero crear un evento" },
+        { text: "Ayuda", message: "Necesito ayuda" }
+      ];
+
+      chatBtn.addEventListener("click", () => {
+        chatBox.classList.add("show");
+
+        if (!chatBox.dataset.initialized) {
+          appendMessageTyping("¡Hola! Soy Sienna, tu asistente en Planifest. ¿En qué puedo ayudarte hoy?", "bot", () => {
+            appendQuickButtons(quickCommands);
+          });
+          chatBox.dataset.initialized = "true";
+        }
       });
 
-      messages.appendChild(container);
-      messages.scrollTop = messages.scrollHeight;
-    }
+      closeBtn.addEventListener("click", () => {
+        chatBox.classList.remove("show");
+      });
 
-    // Remover botones rápidos al enviar nueva consulta
-    function removeQuickButtons() {
-      const quickButtons = document.querySelectorAll(".quick-buttons");
-      quickButtons.forEach(btn => btn.remove());
-    }
+      sendBtn.addEventListener("click", sendMessage);
+      userInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+      });
 
-  </script>
+      async function sendMessage() {
+        const text = userInput.value.trim();
+        if (!text) return;
 
+        appendMessage(text, "user");
+        userInput.value = "";
+
+        removeQuickButtons();
+
+        try {
+          showTyping();
+
+          const response = await fetch("/chatbot/message", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message: text })
+          });
+
+          hideTyping();
+
+          if (!response.ok) throw new Error("Error del servidor");
+
+          const data = await response.json();
+
+          appendMessageTyping(data.reply, "bot", () => {
+            appendQuickButtons(quickCommands);
+          });
+
+        } catch (err) {
+          console.error(err);
+          appendMessage("Error en el servidor.", "bot");
+          hideTyping();
+        }
+      }
+
+      function appendMessage(text, type) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        div.className = `msg ${type}`;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function appendMessageTyping(text, type, callback) {
+        const div = document.createElement("div");
+        div.className = `msg ${type}`;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+
+        let i = 0;
+        const interval = setInterval(() => {
+          div.textContent += text.charAt(i);
+          i++;
+          messages.scrollTop = messages.scrollHeight;
+
+          if (i >= text.length) {
+            clearInterval(interval);
+            if (callback) callback();
+          }
+        }, 15);
+      }
+
+      function showTyping() {
+        const div = document.createElement("div");
+        div.id = "typing-indicator";
+        div.className = "msg bot";
+        div.textContent = "Sienna está escribiendo...";
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function hideTyping() {
+        const indicator = document.getElementById("typing-indicator");
+        if (indicator) indicator.remove();
+      }
+
+      function appendQuickButtons(buttons) {
+        const container = document.createElement("div");
+        container.className = "msg bot quick-buttons";
+
+        buttons.forEach(btn => {
+          const button = document.createElement("button");
+          button.textContent = btn.text;
+          button.onclick = () => {
+            userInput.value = btn.message;
+            sendMessage();
+          };
+          container.appendChild(button);
+        });
+
+        messages.appendChild(container);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function removeQuickButtons() {
+        const quickButtons = document.querySelectorAll(".quick-buttons");
+        quickButtons.forEach(btn => btn.remove());
+      }
+    </script>
 </body>
-
 </html>
