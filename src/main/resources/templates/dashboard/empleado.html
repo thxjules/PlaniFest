@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
     <link rel="stylesheet" th:href="@{/css/empleado.css}">
     <link rel="icon" th:href="@{/images/planifest.png}" type="image/png">
+<<<<<<< HEAD
     <style>
         /* Ajustes rápidos para que la tabla y botones se vean uniformes */
         .table td, .table th { vertical-align: middle; text-align: center; }
@@ -25,6 +26,14 @@
 
 <body>
 <div class="dashboard-wrapper">
+=======
+</head>
+
+<body>
+
+<div class="dashboard-wrapper">
+
+>>>>>>> 5cddcdf901d0a05e35c6bbce36dbe056860186d8
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="brand text-center p-3">
@@ -33,6 +42,7 @@
                 <i class="bx bx-edit"></i> Editar perfil
             </a>
             <div class="logo text-center mt-3">
+<<<<<<< HEAD
                 <img th:src="@{/images/1.png}" alt="Logo Planifest" height="210" width="210">
             </div>
         </div>
@@ -40,6 +50,16 @@
             <form method="post" th:action="@{/logout}">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit" class="logout-button btn btn-outline-dark">
+=======
+                <img th:src="@{/images/1.png}" alt="Logo Planifest" height="210px" width="210px">
+            </div>
+        </div>
+
+        <div class="text-center mt-auto mb-3">
+            <form method="post" th:action="@{/logout}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="logout-button">
+>>>>>>> 5cddcdf901d0a05e35c6bbce36dbe056860186d8
                     <i class="bx bx-log-out"></i> Cerrar Sesión
                 </button>
             </form>
@@ -49,6 +69,7 @@
     <!-- Contenido principal -->
     <div id="content" class="main">
         <main class="p-4">
+<<<<<<< HEAD
             <h1 class="mb-4" th:text="${empleado.username}">Empleado</h1>
 
             <!-- Filtros -->
@@ -116,6 +137,83 @@
         });
         geocoder = new google.maps.Geocoder();
         filtrarTareas();
+=======
+
+            <h1 class="mb-4" th:text="${empleado.username}">Empleado</h1>
+
+            <!-- Filtros -->
+            <div class="row mb-4 justify-content-center">
+                <div class="col-md-3">
+                    <label for="fecha" class="form-label fw-semibold">Fecha</label>
+                    <input type="date" id="fecha" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="estado" class="form-label fw-semibold">Estado</label>
+                    <select id="estado" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="PENDING">Pendiente</option>
+                        <option value="IN_PROGRESS">En progreso</option>
+                        <option value="COMPLETED">Completado</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end gap-2">
+                    <button type="button" onclick="filtrarTareas()" class="btn btn-gold w-100">Filtrar</button>
+                    <button type="button" onclick="limpiarFiltros()" class="btn btn-secondary w-100">Limpiar</button>
+                </div>
+            </div>
+
+            <!-- Tabla de tareas -->
+            <div class="table-responsive bg-white rounded shadow p-3 mb-4">
+                <table class="table table-bordered table-hover">
+                    <thead class="text-center">
+                        <tr>
+                            <th>Área</th>
+                            <th>Ubicación</th>
+                            <th>Descripción</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-tareas-body">
+                        <tr th:each="tarea : ${tareasAsignadas}">
+                            <td th:text="${tarea.event.eventName}">Área</td>
+                            <td>
+                                <a href="javascript:void(0)"
+                                   th:text="${tarea.event.location}"
+                                   th:attr="onclick=|mostrarUbicacion('${tarea.event.location}')|">
+                                </a>
+                            </td>
+                            <td th:text="${tarea.event.description}">Descripción</td>
+                            <td th:text="${#temporals.format(tarea.event.date, 'yyyy-MM-dd')}">Fecha</td>
+                            <td th:text="${tarea.event.status}">Estado</td>
+                        </tr>
+
+                        <tr th:if="${tareasAsignadas == null or #lists.isEmpty(tareasAsignadas)}">
+                            <td colspan="5" class="text-center text-muted">No hay tareas asignadas</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mapa -->
+            <div id="map" style="width: 100%; height: 400px;"></div>
+
+        </main>
+    </div>
+</div>
+
+<script>
+    let map;
+    let geocoder;
+    let tareasOriginales = /*[[${tareasAsignadas}]]*/ [];
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 4.7110, lng: -74.0721 },
+            zoom: 12,
+        });
+        geocoder = new google.maps.Geocoder();
+>>>>>>> 5cddcdf901d0a05e35c6bbce36dbe056860186d8
     }
 
     function mostrarUbicacion(direccion) {
@@ -124,7 +222,11 @@
                 map.setCenter(results[0].geometry.location);
                 new google.maps.Marker({
                     map: map,
+<<<<<<< HEAD
                     position: results[0].geometry.location
+=======
+                    position: results[0].geometry.location,
+>>>>>>> 5cddcdf901d0a05e35c6bbce36dbe056860186d8
                 });
             } else {
                 alert("No se encontró la dirección: " + status);
@@ -137,8 +239,13 @@
         const estado = document.getElementById('estado').value;
 
         const tareasFiltradas = tareasOriginales.filter(t => {
+<<<<<<< HEAD
             const coincideFecha = !fecha || (t.eventDate && t.eventDate.startsWith(fecha));
             const coincideEstado = !estado || (t.status && t.status === estado);
+=======
+            const coincideFecha = !fecha || (t.event.date && t.event.date.startsWith(fecha));
+            const coincideEstado = !estado || (t.event.status && t.event.status === estado);
+>>>>>>> 5cddcdf901d0a05e35c6bbce36dbe056860186d8
             return coincideFecha && coincideEstado;
         });
 
@@ -151,6 +258,7 @@
         }
 
         tareasFiltradas.forEach(t => {
+<<<<<<< HEAD
             const fecha = t.eventDate ? t.eventDate.substring(0, 10) : '';
             tbody.innerHTML += `
                 <tr>
@@ -159,6 +267,16 @@
                     <td>${t.description || '-'}</td>
                     <td>${fecha}</td>
                     <td>${formatearEstado(t.status)}</td>
+=======
+            const fecha = t.event.date ? t.event.date.substring(0, 10) : '';
+            tbody.innerHTML += `
+                <tr>
+                    <td>${t.event.eventName}</td>
+                    <td><a href="javascript:void(0)" onclick="mostrarUbicacion('${t.event.location}')">${t.event.location}</a></td>
+                    <td>${t.event.description || '-'}</td>
+                    <td>${fecha}</td>
+                    <td>${formatearEstado(t.event.status)}</td>
+>>>>>>> 5cddcdf901d0a05e35c6bbce36dbe056860186d8
                 </tr>
             `;
         });
@@ -180,9 +298,16 @@
     }
 </script>
 
+<<<<<<< HEAD
 <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWLM8nzHgCHy6QLiGnuDcNAQf8SJAVPwY&callback=initMap">
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+=======
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgZPwudO2MG358I1CqrzctaVrIfclADcQ&callback=initMap"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+>>>>>>> 5cddcdf901d0a05e35c6bbce36dbe056860186d8
 </body>
 </html>
