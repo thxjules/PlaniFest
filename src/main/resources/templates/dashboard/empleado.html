@@ -93,7 +93,7 @@
 </div>
 
 <script th:inline="javascript">
-    let tareasOriginales = /*[[${tareasAsignadasDTO}]]*/ [];
+    let tareasOriginales = /*[[${#objects.toJson(tareasAsignadas)}]]*/ [];
 </script>
 
 <script>
