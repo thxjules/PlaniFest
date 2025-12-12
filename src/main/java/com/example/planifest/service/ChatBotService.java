@@ -182,7 +182,7 @@ public class ChatBotService {
 
             GenerateContentResponse response =
                 gemini.models.generateContent(
-                    "gemini-1.5-flash",
+                    "gemini-1.5-pro",
                     prompt,
                     null
                 );
