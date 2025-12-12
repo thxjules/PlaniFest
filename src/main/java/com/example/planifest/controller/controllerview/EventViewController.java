@@ -3,10 +3,11 @@ package com.example.planifest.controller.controllerview;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute; // ✅ agrega esta importación
+import org.springframework.web.bind.annotation.ModelAttribute; 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,9 +30,12 @@ public class EventViewController {
     private final ClientServiceImp clientService;
     private final SupplyServiceImp supplyService;
     private final MapService mapService;
-    private final PlaniServiceImp planiService; // ✅ agrega esta línea
+    private final PlaniServiceImp planiService;
 
-    // 🔧 Inyecta también planiService en el constructor
+    // 🔧 Inyecta la API Key de Google Maps desde application.properties
+    @Value("${google.maps.api.key}")
+    private String googleMapsApiKey;
+
     public EventViewController(EventServiceImp eventService,
                                ClientServiceImp clientService,
                                SupplyServiceImp supplyService,
@@ -41,7 +45,7 @@ public class EventViewController {
         this.clientService = clientService;
         this.supplyService = supplyService;
         this.mapService = mapService;
-        this.planiService = planiService; // ✅ asignación
+        this.planiService = planiService;
     }
 
     @GetMapping
@@ -77,47 +81,52 @@ public class EventViewController {
         model.addAttribute("eventos", eventos);
         model.addAttribute("clientes", clientService.getAll());
         model.addAttribute("suministros", supplyService.getAll());
-        model.addAttribute("allservicios", planiService.getAll()); // ✅ ahora sí muestra los servicios
+        model.addAttribute("allservicios", planiService.getAll());
+        model.addAttribute("googleMapsApiKey", googleMapsApiKey);
 
-        String mapUrl = mapService.getMapEmbed(event.getLocation());
+        // Genera la URL segura del mapa embebido
+        String mapUrl = (event.getLocation() != null && !event.getLocation().isBlank()) 
+                        ? "https://www.google.com/maps/embed/v1/place?key=" + googleMapsApiKey +
+                          "&q=" + event.getLocation().replace(" ", "+") 
+                        : null;
         model.addAttribute("mapUrl", mapUrl);
 
         return "events";
     }
 
-   @PostMapping("/save")
-public String guardarEvento(@ModelAttribute Event event, Model model, RedirectAttributes redirectAttributes) {
-    try {
-        // 🔧 Asegurarse de que todos los servicios estén persistidos
-        if (event.getPlaniServices() != null) {
-            List<PlaniService> serviciosPersistidos = event.getPlaniServices().stream()
-                .map(s -> planiService.getAll().stream()
-                    .filter(p -> p.getServiceId().equals(s.getServiceId()))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Servicio no encontrado: " + s.getName()))
-                )
-                .collect(Collectors.toList());
-            event.setPlaniServices(serviciosPersistidos);
-        }
+    @PostMapping("/save")
+    public String guardarEvento(@ModelAttribute Event event, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            if (event.getPlaniServices() != null) {
+                List<PlaniService> serviciosPersistidos = event.getPlaniServices().stream()
+                    .map(s -> planiService.getAll().stream()
+                        .filter(p -> p.getServiceId().equals(s.getServiceId()))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Servicio no encontrado: " + s.getName()))
+                    )
+                    .collect(Collectors.toList());
+                event.setPlaniServices(serviciosPersistidos);
+            }
 
-        if (event.getId() == null) {
-            eventService.create(event);
-            redirectAttributes.addFlashAttribute("successMessage", "Evento creado exitosamente.");
-        } else {
-            eventService.update(event);
-            redirectAttributes.addFlashAttribute("successMessage", "Evento actualizado correctamente.");
+            if (event.getId() == null) {
+                eventService.create(event);
+                redirectAttributes.addFlashAttribute("successMessage", "Evento creado exitosamente.");
+            } else {
+                eventService.update(event);
+                redirectAttributes.addFlashAttribute("successMessage", "Evento actualizado correctamente.");
+            }
+            return "redirect:/events-view";
+        } catch (RuntimeException ex) {
+            model.addAttribute("event", event);
+            model.addAttribute("eventos", eventService.getAll());
+            model.addAttribute("clientes", clientService.getAll());
+            model.addAttribute("suministros", supplyService.getAll());
+            model.addAttribute("allservicios", planiService.getAll());
+            model.addAttribute("errorMessage", ex.getMessage());
+            model.addAttribute("googleMapsApiKey", googleMapsApiKey);
+            return "events";
         }
-        return "redirect:/events-view";
-    } catch (RuntimeException ex) {
-        model.addAttribute("event", event);
-        model.addAttribute("eventos", eventService.getAll());
-        model.addAttribute("clientes", clientService.getAll());
-        model.addAttribute("suministros", supplyService.getAll());
-        model.addAttribute("allservicios", planiService.getAll());
-        model.addAttribute("errorMessage", ex.getMessage());
-        return "events";
     }
-}
 
     @GetMapping("/delete/{id}")
     public String eliminarEvento(@PathVariable Long id, RedirectAttributes redirectAttributes) {
