@@ -12,7 +12,7 @@ public class GeminiConfig {
     @Bean
     public Client googleAIClient(@Value("${gemini.api.key}") String apiKey) {
         return new Client.Builder()
-                .apiKey(apiKey)
+                .apiKey(apiKey.trim())  
                 .build();
     }
 }

@@ -41,7 +41,7 @@ public class UserSeeder implements CommandLineRunner {
             // Usuario 1
             User user1 = new User();
             user1.setUsername("Alice Johnson");
-            user1.setEmail("Alice@gmail.com");
+            user1.setEmail("alice@gmail.com");
             user1.setPassword(("Alice123"));
             user1.setPhoneNumber("1234567890");
             user1.setRole(Role.ADMIN);
@@ -60,7 +60,7 @@ public class UserSeeder implements CommandLineRunner {
             // Usuario 3
             User user3 = new User();
             user3.setUsername("Charlie Brown");
-            user3.setEmail("Charlie@gmail.com");
+            user3.setEmail("charlie@gmail.com");
             user3.setPassword(("Charlie123"));
             user3.setPhoneNumber("5574354354");
             user3.setRole(Role.STOCK_ADMIN);
@@ -69,7 +69,7 @@ public class UserSeeder implements CommandLineRunner {
             // Usuario 4
             User user4 = new User();
             user4.setUsername("Diana Prince");
-            user4.setEmail("Diana@gmail.com");
+            user4.setEmail("diana@gmail.com");
             user4.setPassword(("Diana123"));
             user4.setPhoneNumber("3114569872");
             user4.setRole(Role.EMPLOYEE);
@@ -79,7 +79,7 @@ public class UserSeeder implements CommandLineRunner {
             // Usuario 5
             User user5 = new User();
             user5.setUsername("Ethan Hunt");
-            user5.setEmail("Ethan@gmail.com");
+            user5.setEmail("ethan@gmail.com");
             user5.setPassword(("Ethan123"));
             user5.setPhoneNumber("3111234567");
             user5.setRole(Role.EMPLOYEE);
@@ -89,7 +89,7 @@ public class UserSeeder implements CommandLineRunner {
             // Usuario 6
             User user6 = new User();
             user6.setUsername("Camilo Gutierrez");
-            user6.setEmail("Gutierrez@gmail.com");
+            user6.setEmail("gutierrez@gmail.com");
             user6.setPassword(("Gutierrez123"));
             user6.setPhoneNumber("3111234567");
             user6.setRole(Role.EMPLOYEE);
