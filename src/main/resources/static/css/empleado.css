@@ -1,190 +1,61 @@
-/* === PALETA PLANIFEST === */
-:root {
-    --verde-oscuro: #0F2E2F;
-    --verde-medio: #395B50;
-    --beige: #F3EEDB;
-    --crema: #F1F2E8;
-    --dorado: #D8A04C;
-    --texto: #1B1B1B;
-}
-
-/* === ESTILOS GENERALES === */
 body {
-    background: var(--crema);
-    color: var(--texto);
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 0;
+  background-size: contain;
+  background-color: #032a20;
 }
 
-/* === CARDS DE ESTADÍSTICA === */
-.card-summary {
-    background: var(--beige);
-    border-radius: 14px;
-    padding: 22px;
-    box-shadow: 0px 6px 18px rgba(0,0,0,0.08);
-    transition: .3s ease;
-    margin-bottom: 20px;
+.logout-button {
+  background-color: #daa755;
+  color: #e49d9d;
+  font-weight: 600;
+  justify-content: center;
+  width: 100%;
+  border: none;
 }
 
-.card-summary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0px 10px 24px rgba(0,0,0,0.12);
+.sidebar a:hover,
+.logout-button:hover {
+  background-color: #daa755;
+  color: #032a20;
 }
 
-.card-summary i {
-    color: var(--dorado);
-    font-size: 28px;
+.main {
+  padding: 2rem;
+  background-color:#fdfdf5f1;
+  min-width: 0;
 }
 
-.card-summary h2 {
-    color: var(--verde-oscuro);
-    font-weight: 800;
+.main h1 {
+  font-size: 2rem;
+  color: #F1DEAB;
+  background: #213431;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 10px;
+  font-family: "Poppins", sans-serif;
+
 }
 
-/* === HEADER DEL PANEL === */
-.header-panel {
-    background: var(--verde-oscuro);
-    color: white;
-    padding: 18px;
-    border-radius: 10px;
-    font-weight: 700;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  margin-top: 2rem;
+  border-radius: 10px;
+  background-color: #F1DEAB;
+  color: #000;
+  font-weight: 600;
+  text-decoration: none;
+  justify-content: center;
 }
 
-/* === BOTONES GENERALES === */
-.btn {
-    background: var(--dorado);
-    border-color: var(--dorado);
-    font-weight: 600;
-    border-radius: 8px;
-    transition: .25s ease;
-    padding: 10px 20px;
-    cursor: pointer;
-    text-align: center;
+.logout-button:hover {
+  background-color: #daa755;
+  color: #000000;
 }
 
-.btn:hover {
-    background: var(--verde-medio);
-    border-color: var(--verde-medio);
-    color: white;
-}
-
-/* === BOTONES GRANDES (Guardar / Eliminar) === */
-.btn-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-}
-
-.btn-group .btn {
-    flex: 1;
-    min-width: 100px;
-    padding: 8px 12px;
-    font-size: 0.85rem;
-}
-
-/* === BOTÓN PEQUEÑO (Volver) === */
-.btn-volver {
-    padding: 4px 10px;       /* pequeño padding */
-    font-size: 0.8rem;       /* tamaño de fuente más pequeño */
-    border-radius: 4px;      /* bordes suaves */
-    width: auto;             /* no ocupa todo el ancho */
-    display: inline-block;   /* solo el tamaño del botón */
-    margin: 10px 0;          /* margen superior e inferior */
-}
-
-/* Contenedor para alinear a la izquierda */
-.btn-volver-container {
-    text-align: left;        /* alinea el botón a la izquierda */
-    margin-bottom: 10px;
-}
-
-/* === TABLAS === */
-.table {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--beige);
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table thead {
-    background: var(--verde-oscuro);
-    color: var(--beige);
-}
-
-.table tbody tr:hover {
-    background: var(--crema);
-}
-
-.table th, .table td {
-    padding: 12px 16px;
-    text-align: left;
-}
-
-/* === RESPONSIVE GENERAL === */
-
-/* Móviles */
-@media (max-width: 576px) {
-    /* Cards de estadística */
-    .card-summary {
-        padding: 16px;
-        text-align: center;
-    }
-
-    .card-summary h2 {
-        font-size: 1.5rem;
-    }
-
-    .card-summary i {
-        font-size: 24px;
-    }
-
-    /* Header panel */
-    .header-panel {
-        padding: 12px;
-        font-size: 1rem;
-        text-align: center;
-    }
-
-    /* Botones grandes: lado a lado si caben */
-    .btn-group {
-        gap: 8px;
-    }
-
-    .btn-group .btn {
-        flex: 1 1 48%; /* cada botón ocupa ~50% de la celda */
-        font-size: 0.8rem;
-        padding: 6px 10px;
-    }
-}
-
-/* Tablets */
-@media (min-width: 577px) and (max-width: 1024px) {
-    .card-summary {
-        padding: 18px;
-        margin-bottom: 18px;
-    }
-
-    .card-summary h2 {
-        font-size: 1.75rem;
-    }
-
-    .card-summary i {
-        font-size: 26px;
-    }
-
-    .btn-group .btn {
-        flex: 1;
-        padding: 10px 16px;
-        font-size: 0.85rem;
-    }
-
-    .header-panel {
-        font-size: 1.1rem;
-        padding: 16px;
-    }
+.btn-gold {
+  background-color: #F1DEAB;
+  color: #000;
+  border: none;
 }
